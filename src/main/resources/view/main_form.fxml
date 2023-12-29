@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootMain" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.GameCafe.controller.MainFormController">
+    <children>
+        <ImageView fitHeight="720.0" fitWidth="1280.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../icon/fredrick-tendong-HVYepJYeHdQ-unsplash(1)(1).jpg" />
+            </image>
+        </ImageView>
+      <AnchorPane fx:id="rootMainPane" layoutX="319.0" layoutY="30.0" opacity="0.92" prefHeight="660.0" prefWidth="907.0" style="-fx-background-color: white; -fx-background-radius: 20;" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="319.0" AnchorPane.rightAnchor="55.0" AnchorPane.topAnchor="30.0">
+         <children>
+            <Label fx:id="lblTime" layoutX="476.0" layoutY="25.0" prefHeight="62.0" prefWidth="358.0" textFill="#272a6b">
+               <font>
+                  <Font size="35.0" />
+               </font>
+            </Label>
+            <Label layoutX="261.0" layoutY="265.0" opacity="0.45" prefHeight="94.0" prefWidth="429.0" text="Game Arcade" textAlignment="CENTER" textFill="#1e1c63">
+               <font>
+                  <Font name="Berlin Sans FB Demi Bold" size="68.0" />
+               </font>
+            </Label>
+         </children></AnchorPane>
+      <AnchorPane layoutX="-34.0" opacity="0.76" prefHeight="720.0" prefWidth="282.0" style="-fx-background-color: white; -fx-background-radius: 40;">
+         <children>
+            <ImageView fitHeight="98.0" fitWidth="104.0" layoutX="110.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icon/img_4-removebg-preview.png" />
+               </image>
+            </ImageView>
+            <JFXButton buttonType="RAISED" layoutX="67.0" layoutY="613.0" onAction="#paymentOnAction" prefHeight="62.0" prefWidth="176.0" ripplerFill="#342f7b" style="-fx-background-color: #30336b; -fx-background-radius: 20; -fx-border-width: 2px 2px 2px 2px;" text="Payments" textFill="WHITE">
+               <font>
+                  <Font name="Berlin Sans FB" size="18.0" />
+               </font>
+               <padding>
+                  <Insets bottom="20.0" top="20.0" />
+               </padding>
+            </JFXButton>
+            <JFXButton buttonType="RAISED" layoutX="67.0" layoutY="267.0" onAction="#customerOnAction" prefHeight="62.0" prefWidth="176.0" ripplerFill="#342f7b" style="-fx-background-color: #30336b; -fx-background-radius: 20; -fx-border-width: 2px 2px 2px 2px;" text="Customers" textFill="WHITE">
+               <font>
+                  <Font name="Berlin Sans FB" size="18.0" />
+               </font>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+            </JFXButton>
+            <JFXButton buttonType="RAISED" layoutX="67.0" layoutY="528.0" onAction="#reservationsOnAction" prefHeight="62.0" prefWidth="176.0" ripplerFill="#342f7b" style="-fx-background-color: #30336b; -fx-background-radius: 20; -fx-border-width: 2px 2px 2px 2px;" text="Reservations" textFill="WHITE">
+               <font>
+                  <Font name="Berlin Sans FB" size="18.0" />
+               </font>
+               <padding>
+                  <Insets bottom="20.0" top="20.0" />
+               </padding>
+            </JFXButton>
+            <JFXButton buttonType="RAISED" layoutX="67.0" layoutY="442.0" onAction="#playstationOnAction" prefHeight="62.0" prefWidth="176.0" ripplerFill="#342f7b" style="-fx-background-color: #30336b; -fx-background-radius: 20; -fx-border-width: 2px 2px 2px 2px;" text="Play Stations" textFill="WHITE">
+               <font>
+                  <Font name="Berlin Sans FB" size="18.0" />
+               </font>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+            </JFXButton>
+            <JFXButton buttonType="RAISED" layoutX="67.0" layoutY="356.0" onAction="#employeeOnAction" prefHeight="62.0" prefWidth="176.0" ripplerFill="#342f7b" style="-fx-background-color: #30336b; -fx-background-radius: 20; -fx-border-width: 2px 2px 2px 2px;" text="Employee" textFill="WHITE">
+               <font>
+                  <Font name="Berlin Sans FB" size="18.0" />
+               </font>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+            </JFXButton>
+            <JFXButton buttonType="RAISED" layoutX="43.0" layoutY="14.0" onAction="#btnBackOnAction" prefHeight="38.0" prefWidth="45.0" ripplerFill="#0c0b1b" style="-fx-background-color: black; -fx-background-radius: 20; -fx-border-width: 2px 2px 2px 2px;" text="&lt;" textFill="WHITE">
+               <font>
+                  <Font name="Berlin Sans FB Bold" size="13.0" />
+               </font>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+            </JFXButton>
+            <JFXButton buttonType="RAISED" layoutX="66.0" layoutY="182.0" onAction="#btnHomeOnAction" prefHeight="62.0" prefWidth="176.0" ripplerFill="#342f7b" style="-fx-background-color: #30336b; -fx-background-radius: 20; -fx-border-width: 2px 2px 2px 2px;" text="Home" textFill="WHITE">
+               <font>
+                  <Font name="Berlin Sans FB" size="18.0" />
+               </font>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+            </JFXButton>
+         </children>
+      </AnchorPane>
+    </children>
+</AnchorPane>

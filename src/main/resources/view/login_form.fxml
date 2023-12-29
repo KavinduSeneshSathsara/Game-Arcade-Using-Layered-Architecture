@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="root" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.GameCafe.controller.LoginFormController">
+   <children>
+      <ImageView fitHeight="720.0" fitWidth="1280.0" layoutX="1.0" opacity="0.93" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../icon/fredrick-tendong-HVYepJYeHdQ-unsplash(1)(1).jpg" />
+         </image>
+      </ImageView>
+      <Pane layoutX="610.0" layoutY="28.0" opacity="0.72" prefHeight="663.0" prefWidth="602.0" style="-fx-background-color: white; -fx-background-radius: 50;" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="40.0">
+         <children>
+            <Label layoutX="68.0" layoutY="53.0" prefHeight="77.0" prefWidth="165.0" text="Login">
+               <font>
+                  <Font name="Berlin Sans FB Bold" size="56.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtUsername" layoutX="56.0" layoutY="240.0" opacity="0.66" prefHeight="54.0" prefWidth="431.0" promptText="Username" styleClass="lablebtn">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </TextField>
+            <Label layoutX="56.0" layoutY="188.0" prefHeight="52.0" prefWidth="210.0" text=" Username">
+               <font>
+                  <Font name="Calibri Bold" size="22.0" />
+               </font>
+            </Label>
+            <Label layoutX="56.0" layoutY="306.0" prefHeight="52.0" prefWidth="210.0" text="Password">
+               <font>
+                  <Font name="Calibri Bold" size="22.0" />
+               </font>
+            </Label>
+            <Label layoutX="231.0" layoutY="545.0" prefHeight="29.0" prefWidth="89.0" text="New User ?">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <PasswordField fx:id="txtPassword" layoutX="56.0" layoutY="358.0" opacity="0.74" prefHeight="54.0" prefWidth="431.0" promptText="Password" styleClass="lablebtn">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </PasswordField>
+            <Text layoutX="67.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To Get Started" wrappingWidth="244.53668212890625">
+               <font>
+                  <Font name="Berlin Sans FB" size="32.0" />
+               </font>
+            </Text>
+            <JFXButton buttonType="RAISED" layoutX="166.0" layoutY="470.0" onAction="#btnContinueOnAction" prefHeight="52.0" prefWidth="270.0" style="-fx-background-color: #30336b; -fx-background-radius: 20;" text="Continue" textFill="#fcfcfc">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </JFXButton>
+            <Label layoutX="56.0" layoutY="425.0" onMouseClicked="#lblForgotPasswordOnAction" prefHeight="29.0" prefWidth="124.0" text="Forgot Password ?" textFill="#0b0707" underline="true">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <JFXButton layoutX="301.0" layoutY="544.0" onAction="#btnRegisterOnAction" opacity="0.83" text="Register" textFill="#1e1313">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+               <effect>
+                  <Glow />
+               </effect>
+            </JFXButton>
+         </children>
+      </Pane>
+      </children>
+</AnchorPane>
