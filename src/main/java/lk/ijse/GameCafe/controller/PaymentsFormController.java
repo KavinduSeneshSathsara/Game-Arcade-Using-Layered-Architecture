@@ -1,76 +1,276 @@
 package lk.ijse.GameCafe.controller;
 
+import com.jfoenix.controls.JFXButton;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
+import lk.ijse.GameCafe.db.DbConnection;
+import lk.ijse.GameCafe.dto.BookingDto;
+import lk.ijse.GameCafe.dto.CustomerDto;
+import lk.ijse.GameCafe.dto.PaymentDto;
+import lk.ijse.GameCafe.dto.tm.PaymentTm;
+import lk.ijse.GameCafe.model.BookingModel;
+import lk.ijse.GameCafe.model.CustomerModel;
+import lk.ijse.GameCafe.model.PaymentModel;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
-public class PaymentsFormController {
+import java.io.InputStream;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.Properties;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
-    @FXML
-    private TableColumn<?, ?> colEmpAddress;
+import static lk.ijse.GameCafe.controller.ForgotPasswordFormController.otp;
 
-    @FXML
-    private TableColumn<?, ?> colEmpContactNum;
-
-    @FXML
-    private TableColumn<?, ?> colEmpId;
-
-    @FXML
-    private TableColumn<?, ?> colEmpName;
-
-    @FXML
-    private TableColumn<?, ?> colEmpSalary;
+public class PaymentsFormController implements Initializable {
 
     @FXML
     private Pane pane;
 
     @FXML
-    private TableView<?> tblPayment;
-
-    @FXML
-    private TextField txtAmount;
-
-    @FXML
     private TextField txtBookingId;
-
-    @FXML
-    private TextField txtDate;
-
-    @FXML
-    private TextField txtPaymentId;
 
     @FXML
     private TextField txtSearchBar;
 
     @FXML
-    private TextField txtTime;
+    private Text lblDate;
 
     @FXML
-    void ButtonDeleteOnAction(ActionEvent event) {
+    private Text lblTime;
 
-    }
+    @FXML
+    private TableView<PaymentTm> tblPayment;
+
+    @FXML
+    private TableColumn<?, ?> colPaymentId;
+
+    @FXML
+    private TableColumn<?, ?> colBookingId;
+
+    @FXML
+    private TableColumn<?, ?> colDate;
+
+    @FXML
+    private TableColumn<?, ?> colTime;
+
+    @FXML
+    private TableColumn<?, ?> colAmount;
+
+    @FXML
+    private TextField txtAmount;
+
+    @FXML
+    private TextField txtCustomer;
+
+    @FXML
+    private Label lblAmount;
+
+    @FXML
+    private Label lblCustomerName;
+
+    @FXML
+    private Text lblPaymentID;
+
+    @FXML
+    private JFXButton btnPay;
+
+    PaymentModel paymentModel = new PaymentModel();
+    BookingModel bookingModel = new BookingModel();
+    CustomerModel customerModel = new CustomerModel();
+    CustomerDto customerDto = new CustomerDto();
 
     @FXML
     void btnClearOnAction(ActionEvent event) {
+        txtBookingId.clear();
+        lblCustomerName.setText("");
+        lblAmount.setText("");
+    }
 
+    public void initialize(){
+        setCellValueFactory();
+        loadAllPayments();
+        time();
+        setPaymentId();
+    }
+
+    private void setCellValueFactory() {
+        colPaymentId.setCellValueFactory(new PropertyValueFactory<>("paymentId"));
+        colBookingId.setCellValueFactory(new PropertyValueFactory<>("bookingId"));
+        colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+        colTime.setCellValueFactory(new PropertyValueFactory<>("time"));
+        colAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
     }
 
     @FXML
-    void btnSaveOnAction(ActionEvent event) {
+    void btnPayOnAction(ActionEvent event) throws SQLException, MessagingException {
+        Connection connection = null;
+        try {
+            connection = DbConnection.getInstance( ).getConnection( );
+            connection.setAutoCommit( false );
 
+            boolean savePayment = paymentModel.savePayment( new PaymentDto(
+                    lblPaymentID.getText( ),
+                    txtBookingId.getText( ),
+                    Date.valueOf( LocalDate.now( ) ),
+                    Time.valueOf( LocalTime.now( ) ),
+                    Double.parseDouble( lblAmount.getText( ) )
+            ) );
+
+            if ( savePayment ) {
+                boolean isUpdated = bookingModel.updateStatus( txtBookingId.getText( ) );
+                loadAllPayments();
+
+                if ( isUpdated ) {
+                    connection.commit();
+                    new Alert( Alert.AlertType.CONFIRMATION, "Payment Saved" ).show();
+                    setPaymentId();
+                    loadAllPayments();
+//                    EmailController.sendEmail(customerDto.getCusEmail(), "Payment Confirmation", "Thank you for your payment!");
+                } else {
+                    new Alert( Alert.AlertType.ERROR , "Something Went Wrong" ).show();
+                }
+            } else {
+                new Alert( Alert.AlertType.ERROR , "Something Went Wrong" ).show();
+            }
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+            connection.rollback();
+        } finally {
+            connection.setAutoCommit( true );
+        }
+    }
+
+    private void loadAllPayments() {
+
+        PaymentModel paymentModel = new PaymentModel();
+
+        ObservableList<PaymentTm> obList = FXCollections.observableArrayList();
+
+        try{
+            List<PaymentDto> list = paymentModel.getAllPayments();
+
+            for (PaymentDto dto: list){
+                PaymentTm paymentTm = new PaymentTm(
+                        dto.getPaymentId(),
+                        dto.getBookingId(),
+                        dto.getDate(),
+                        dto.getTime(),
+                        dto.getAmount()
+                );
+
+                obList.add(paymentTm);
+            }
+            tblPayment.setItems(obList);
+        }catch (SQLException e){
+            new Alert(Alert.AlertType.ERROR,e.getMessage()).show();
+        }
+        System.out.println("loading");
     }
 
     @FXML
-    void btnSearchOnAction(ActionEvent event) {
+    void txtBookingIdOnAction(ActionEvent event) {
+        try {
+            BookingDto bookingData = bookingModel.getBookingData( txtBookingId.getText() );
 
+            if ( bookingData != null && bookingData.getStatus().equals( "Not Paid" ) ) {
+
+                CustomerDto dto = customerModel.SearchModel( bookingData.getCus_id() );
+                lblCustomerName.setText( dto.getCusName() );
+                lblAmount.setText( String.valueOf( bookingData.getTotal() ) );
+                btnPay.setDisable( false );
+            } else {
+                new Alert( Alert.AlertType.ERROR, "Already Paid !" ).show();
+                btnPay.setDisable( true );
+            }
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
     }
+
+//    @FXML
+//    void btnSearchOnAction(ActionEvent event) {
+//        String id = txtSearchBar.getText();
+//        var model = new PaymentModel();
+//        try {
+//
+//            var dto = model.SearchModel(id);
+//            if (dto != null){
+//                fillField(dto);
+//            }else {
+//                new Alert(Alert.AlertType.INFORMATION,"Customer not found").show();
+//            }
+//        } catch (SQLException e) {
+//            new Alert(Alert.AlertType.ERROR,e.getMessage()).show();
+//        }
+//    }
+
+//    private void fillField(PaymentDto dto) {
+//
+//        txtBookingId.setText(dto.getBookingId());
+//        txtCustomer.setText(dto1.getCusName());
+//        txtAmount.setText(String.valueOf(dto.getAmount()));
+//    }
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event) {
-
+    void btnReportOnAction(ActionEvent event) throws JRException, SQLException {
+            InputStream resourceAsStream = getClass().getResourceAsStream("/reports/paymentReport.jrxml");
+            JasperDesign jasperDesign = JRXmlLoader.load(resourceAsStream);
+            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, DbConnection.getInstance().getConnection());
+            JasperViewer.viewReport(jasperPrint,false);
     }
 
+    private void time() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
+        Timeline timeline = new Timeline(new KeyFrame(javafx.util.Duration.ZERO, e -> {
+
+            lblTime.setText(timeFormat.format(new java.util.Date()));
+            lblDate.setText(dateFormat.format(new java.util.Date()));
+        }), new KeyFrame( Duration.seconds(1)));
+        timeline.setCycleCount( Animation.INDEFINITE);
+
+        timeline.play();
+    }
+
+    public void setPaymentId() {
+        try {
+            lblPaymentID.setText( paymentModel.generateNextId() );
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+       setPaymentId();
+       time();
+    }
+
+    public void btnSearchOnAction(ActionEvent actionEvent) {
+    }
 }

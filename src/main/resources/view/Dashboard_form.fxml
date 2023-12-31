@@ -1,22 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<Pane fx:id="pane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="662.0" prefWidth="913.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.GameCafe.controller.DashboardFormController">
+<Pane fx:id="pane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="662.0" prefWidth="913.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.GameCafe.controller.DashboardFormController">
     <children>
         <ImageView fitHeight="662.0" fitWidth="925.0" opacity="0.7" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../icon/cropForMainForm(1).png" />
             </image>
         </ImageView>
-        <Text fontSmoothingType="LCD" layoutX="310.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DASHBOARD">
+        <TableView fx:id="tblDashboard" fixedCellSize="20.0" layoutX="267.0" layoutY="239.0" prefHeight="379.0" prefWidth="396.0">
+            <columns>
+                <TableColumn fx:id="colBookingId" prefWidth="137.8577880859375" text="Booking ID" />
+                <TableColumn fx:id="colCustomerId" prefWidth="140.71484375" text="Customer ID" />
+                <TableColumn fx:id="colTotal" prefWidth="115.99884033203125" text="Total" />
+            </columns>
+        </TableView>
+        <Label fx:id="txtCustomerCount" layoutX="133.0" layoutY="118.0" prefHeight="40.0" prefWidth="110.0" text="15" textFill="#103476">
             <font>
-                <Font name="Calibri Bold" size="43.0" />
+                <Font name="System Bold" size="42.0" />
             </font>
-        </Text>
+        </Label>
+        <Label fx:id="txtEmployeeCount" layoutX="440.0" layoutY="117.0" text="20" textFill="#103476">
+            <font>
+                <Font name="System Bold" size="42.0" />
+            </font>
+        </Label>
+        <Label fx:id="txtBookingCount" layoutX="746.0" layoutY="117.0" text="40" textFill="#103476">
+            <font>
+                <Font name="System Bold Italic" size="42.0" />
+            </font>
+        </Label>
+      <Label layoutX="70.0" layoutY="77.0" prefHeight="35.0" prefWidth="197.0" text="Customer Count">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="685.0" layoutY="77.0" prefHeight="35.0" prefWidth="191.0" text="Booking Count">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="377.0" layoutY="77.0" prefHeight="35.0" prefWidth="197.0" text="Employee Count">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
     </children>
 </Pane>

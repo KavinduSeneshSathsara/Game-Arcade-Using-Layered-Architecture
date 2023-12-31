@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS payment (
                                        booking_id VARCHAR(15) NOT NULL,
                                        payment_date DATE NULL,
                                        payment_time TIME NULL,
-                                       amount VARCHAR(20) NOT NULL,
+                                       amount DECIMAL NOT NULL,
                                        FOREIGN KEY (booking_id) REFERENCES booking (booking_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 

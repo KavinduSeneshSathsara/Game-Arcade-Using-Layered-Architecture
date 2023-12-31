@@ -1,7 +1,6 @@
 package lk.ijse.GameCafe.controller;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,7 +11,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import lk.ijse.GameCafe.dto.CustomerDto;
 import lk.ijse.GameCafe.dto.PlayStationDto;
+import lk.ijse.GameCafe.dto.tm.CustomerTm;
 import lk.ijse.GameCafe.dto.tm.PlayStationTm;
 import lk.ijse.GameCafe.model.PlayStationModel;
 
@@ -60,6 +61,24 @@ public class PlayStationFormController {
     public void initialize(){
         setCellValueFactory();
         loadAllPlayStations();
+
+        tblPlayStation.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 1) {
+                // Single-click detected, get the selected row
+                PlayStationTm selectPlayStation = tblPlayStation.getSelectionModel().getSelectedItem();
+
+                // If a row is selected, fill the fields with its data
+                if (selectPlayStation != null) {
+                    fillFields(selectPlayStation);
+                }
+            }
+        });
+    }
+
+    private void fillFields(PlayStationTm tm) {
+        txtPlayStationId.setText(tm.getPlayStationId());
+        txtPlayStationNumber.setText(tm.getPlayStationNumber());
+        txtRate.setText(String.valueOf(tm.getRate()));
     }
 
     private void setCellValueFactory() {
@@ -71,13 +90,14 @@ public class PlayStationFormController {
 
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
+        PlayStationTm selectPlayStation = tblPlayStation.getSelectionModel().getSelectedItem();
 
-
+    if (selectPlayStation != null) {
         String id = txtPlayStationId.getText();
         PlayStationModel playStationModel = new PlayStationModel();
 
         try {
-            boolean isDeleted = playStationModel.delePlayStation(id);
+            boolean isDeleted = playStationModel.deletePlayStation(id);
 
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Play Station Deleted Successfully").show();
@@ -86,7 +106,9 @@ public class PlayStationFormController {
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
-        new Alert(Alert.AlertType.INFORMATION, "Please select a customer to delete. ");
+    }else{
+            new Alert(Alert.AlertType.INFORMATION, "Please select a Play Station to delete. ");
+        }
     }
 
     private void loadAllPlayStations() {
@@ -135,7 +157,7 @@ public class PlayStationFormController {
         String playStation = txtPlayStationId.getText();
         String playStationNum = txtPlayStationNumber.getText();
         String status = "Free";
-        int rate= Integer.parseInt(txtRate.getText());
+        double rate= Double.parseDouble(txtRate.getText());
 
         try {
             boolean isSaved = playStationModel.savePlayStation(new PlayStationDto(playStation, playStationNum, status,rate));
@@ -171,12 +193,46 @@ public class PlayStationFormController {
 
     @FXML
     void btnSearchOnAction(ActionEvent event) {
+        String id = txtSearchBar.getText();
+        var model = new PlayStationModel();
 
+        try {
+            PlayStationDto dto = model.searchModel(id);
+            if (dto != null){
+                fillField(dto);
+            }else {
+                new Alert(Alert.AlertType.INFORMATION,"PlayStation not found").show();
+            }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR,e.getMessage()).show();
+        }
+    }
+
+    private void fillField(PlayStationDto dto) {
+        txtPlayStationId.setText(dto.getPlayStationId());
+        txtPlayStationNumber.setText(dto.getPlayStationNumber());
+        txtRate.setText(String.valueOf(dto.getRate()));
     }
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event) {
+    void btnUpdateOnAction(ActionEvent event)  {
+        String playStationId = txtPlayStationId.getText();
+        String playStationNum = txtPlayStationNumber.getText();
+        String status = "Free";
+        double rate= Double.parseDouble((txtRate.getText()));
 
+        PlayStationDto dto = new PlayStationDto(playStationId, playStationNum, status, rate);
+        PlayStationModel playStationModel = new PlayStationModel();
+
+        try{
+            boolean isUpdated = playStationModel.updatePlayStation(dto);
+            if (isUpdated){
+                new Alert(Alert.AlertType.CONFIRMATION, "PlayStation Updated Successfully");
+
+                loadAllPlayStations();
+            }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
     }
-
 }

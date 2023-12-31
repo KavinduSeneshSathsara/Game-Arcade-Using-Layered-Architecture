@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2023-12-01T13:23:39 -->
+<!-- 2023-12-31T09:56:13 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4_1" pageWidth="421" pageHeight="595" columnWidth="381" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e9146ab8-1b94-4e76-a94a-ad8bf37d919a">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter (3)"/>
@@ -38,9 +38,9 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch">
+		<band height="116" splitType="Stretch">
 			<staticText>
-				<reportElement x="90" y="40" width="172" height="30" forecolor="#1E2D70" backcolor="#9798B8" uuid="84b867ab-984a-4703-8739-7c8a6443b277"/>
+				<reportElement x="110" y="80" width="172" height="30" forecolor="#1E2D70" backcolor="#9798B8" uuid="84b867ab-984a-4703-8739-7c8a6443b277"/>
 				<textElement>
 					<font fontName="Berlin Sans FB" size="24"/>
 				</textElement>
@@ -52,8 +52,32 @@
 			</textField>
 			<textField pattern="HH:mm">
 				<reportElement x="280" y="20" width="100" height="30" forecolor="#303561" uuid="11e8e161-fb64-4a16-b8aa-de598c91d089"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="-11" y="-10" width="141" height="30" forecolor="#1E2D70" backcolor="#9798B8" uuid="4b4ce6e9-2da8-4621-aabc-cb635331c4be"/>
+				<textElement>
+					<font fontName="Berlin Sans FB" size="20"/>
+				</textElement>
+				<text><![CDATA[Game Arcade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-11" y="20" width="141" height="30" forecolor="#1E2D70" backcolor="#9798B8" uuid="af7d9e19-0a13-425a-ba3a-225e51888ff1"/>
+				<textElement>
+					<font fontName="Berlin Sans FB" size="10"/>
+				</textElement>
+				<text><![CDATA[gamearcade44444@gmail.com]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-10" y="50" width="141" height="30" forecolor="#1E2D70" backcolor="#9798B8" uuid="e043e557-b933-4706-a0db-f75f12c776d0"/>
+				<textElement>
+					<font fontName="Berlin Sans FB" size="10"/>
+				</textElement>
+				<text><![CDATA[0760500554]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>

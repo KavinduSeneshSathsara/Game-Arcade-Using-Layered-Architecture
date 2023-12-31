@@ -156,4 +156,16 @@ public class CustomerModel {
         return dto;
     }
 
+    public String totalCustomerCount() throws SQLException {
+        Connection connection = DbConnection.getInstance().getConnection();
+
+        String sql = "SELECT COUNT(*) AS CustomerCount FROM customer";
+        ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
+
+
+        if (resultSet.next()) {
+            return resultSet.getString(1);
+        }
+        return null;
+    }
 }

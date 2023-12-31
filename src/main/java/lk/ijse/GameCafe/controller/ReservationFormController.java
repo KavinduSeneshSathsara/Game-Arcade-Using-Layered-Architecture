@@ -1,11 +1,13 @@
 package lk.ijse.GameCafe.controller;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
@@ -13,23 +15,27 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import lk.ijse.GameCafe.db.DbConnection;
+import lk.ijse.GameCafe.dto.BookingDetailsDto;
 import lk.ijse.GameCafe.dto.BookingDto;
 import lk.ijse.GameCafe.dto.CustomerDto;
 import lk.ijse.GameCafe.dto.PlayStationDto;
 import lk.ijse.GameCafe.dto.tm.CartTm;
+import lk.ijse.GameCafe.model.BookingDetailModel;
 import lk.ijse.GameCafe.model.BookingModel;
 import lk.ijse.GameCafe.model.CustomerModel;
 import lk.ijse.GameCafe.model.PlayStationModel;
 
-import java.sql.Date;
-import java.sql.SQLException;
-import java.sql.Time;
+import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ReservationFormController {
     @FXML
@@ -69,6 +75,12 @@ public class ReservationFormController {
     private Text lblDate;
 
     @FXML
+    private Label lblCustomerEmail;
+
+    @FXML
+    private Label lblCustomerName;
+
+    @FXML
     private DatePicker datePicker;
 
     @FXML
@@ -92,10 +104,14 @@ public class ReservationFormController {
     @FXML
     private Text lblOrderId;
 
+    @FXML
+    private JFXButton btnAddToList;
+
     private PlayStationModel stationModel = new PlayStationModel();
     private final ObservableList<CartTm> cart = FXCollections.observableArrayList();
     private BookingModel bookingModel = new BookingModel();
     private CustomerModel customerModel = new CustomerModel();
+    BookingDetailModel bookingDetailModel = new BookingDetailModel();
 
     public void initialize() {
         setCellValueFactory();
@@ -106,8 +122,17 @@ public class ReservationFormController {
         time();
         lblNetTotal.setText("");
         lblRate.setText("");
+        loadOrderId();
+        loadAllStations();
     }
 
+    public void loadOrderId() {
+        try {
+            lblOrderId.setText( bookingModel.generateNextId() );
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
+    }
     private void time() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
         SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
@@ -232,32 +257,48 @@ public class ReservationFormController {
     }
 
     @FXML
-    void btnBookOnAction(ActionEvent event) throws ParseException {
-        Date nowDate = Date.valueOf(LocalDate.now());
+    void btnBookOnAction(ActionEvent event) throws ParseException, SQLException {
+        Date nowDate = Date.valueOf( datePicker.getValue() );
         Time nowTime = Time.valueOf(LocalTime.now());
         Time startTime = makeTime(cmbStartTime.getValue());
         Time endTime = makeTime(cmbEndTime.getValue());
+
+        Connection connection = null;
+
         try {
+
             CustomerDto customerDto = customerModel.getCustomer(txtContact.getText());
-            boolean isSaved = bookingModel.saveBooking(new BookingDto(bookingModel.generateNextId(), customerDto.getCusId(), nowDate, nowTime, startTime, endTime, "Pending", Double.parseDouble(lblNetTotal.getText())));
+
+            connection = DbConnection.getInstance( ).getConnection( );
+            connection.setAutoCommit( false );
+
+            boolean isSaved = bookingModel.saveBooking(new BookingDto(bookingModel.generateNextId(), customerDto.getCusId(), nowDate, nowTime, startTime, endTime, "Not Paid", Double.parseDouble(lblNetTotal.getText())));
             if (isSaved) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Saved Successfully").show();
+                boolean saved = bookingDetailModel.saveDetails( tblCart.getItems().stream().map(tm -> new BookingDetailsDto(lblOrderId.getText(), tm.getId())).collect(Collectors.toList()));
+
+                if ( saved ) {
+                    connection.commit();
+                    new Alert(Alert.AlertType.CONFIRMATION, "Saved Successfully").show();
+                    loadOrderId();
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            connection.rollback();
+        } finally {
+            connection.setAutoCommit( true );
         }
     }
 
     @FXML
     void cmbEndTimeOnAction(ActionEvent event) {
-        loadAllStations();
         cmbStation.setDisable(false);
     }
 
     private void loadAllStations() {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<PlayStationDto> dtos = stationModel.getAllStationNotInThisTime(makeTime(cmbStartTime.getValue()),makeTime(cmbEndTime.getValue()));
+            List<PlayStationDto> dtos = stationModel.getAll( );
             for (PlayStationDto dto : dtos) {
                 obList.add(dto.getPlayStationId());
             }
@@ -295,15 +336,69 @@ public class ReservationFormController {
         cmbStartTime.setDisable(false);
     }
 
+//    @FXML
+//    void txtContactOnAction(ActionEvent event) {
+//        try {
+//            CustomerDto customerDto = customerModel.getCustomer(txtContact.getText());
+//            txtCustName.setText(customerDto.getCusName());
+//            txtCustMail.setText(customerDto.getCusEmail());
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+
     @FXML
-    void txtContactOnAction(ActionEvent event) {
+    void txtContactOnFocusLost(Event event) {
         try {
             CustomerDto customerDto = customerModel.getCustomer(txtContact.getText());
-            txtCustName.setText(customerDto.getCusName());
-            txtCustMail.setText(customerDto.getCusEmail());
+            lblCustomerName.setText(customerDto.getCusName());
+            lblCustomerEmail.setText(customerDto.getCusEmail());
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
+//    @FXML
+//    void cmbStationOnAction(Event event) {
+//        try {
+//            PlayStationDto playStationDto;
+//            playStationDto = stationModel.getRate(cmbStation.getId());
+//            lblRate.setText(String.valueOf(playStationDto.getRate()));
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+    @FXML
+    void cmbStationOnAction(ActionEvent event) {
+        try {
+            ArrayList<BookingDto> allBookings = bookingModel.getAllBookings( cmbStation.getValue( ), Date.valueOf( datePicker.getValue( ) ) );
+
+            boolean overlap = isOverlap( allBookings, makeTime( cmbStartTime.getValue() + " " + cmbTimeZone.getValue() ).toLocalTime(), makeTime( cmbEndTime.getValue() + " " + cmbTimeZone.getValue() ).toLocalTime() );
+
+            if ( overlap ) {
+                new Alert( Alert.AlertType.ERROR, "Play station is already booked for this time" ).show();
+                btnAddToList.setDisable( true );
+            } else {
+                btnAddToList.setDisable( false );
+            }
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isOverlap(List<BookingDto> existingBookings, LocalTime newBookingStartTime, LocalTime newBookingEndTime) {
+        for (BookingDto existingBooking : existingBookings) {
+
+            if (isOverlapTime( newBookingStartTime, newBookingEndTime, existingBooking.getStartTime().toLocalTime(), existingBooking.getEndTime().toLocalTime() )) {
+                return true;  // Overlap found
+            }
+        }
+        return false;  // No overlap found
+    }
+
+    public boolean isOverlapTime(LocalTime newStartTime, LocalTime newEndTime, LocalTime startTime, LocalTime endTime) {
+        return (startTime.isBefore(newEndTime) && endTime.isAfter(newStartTime));
     }
 }

@@ -25,30 +25,31 @@ public class LoginFormController {
     @FXML
     private TextField txtUsername;
 
-//    @FXML
-//    void btnContinueOnAction(ActionEvent event) throws IOException {
-//       if (UserModel.verifyCredential(txtUsername.getText(),txtPassword.getText())){
-//
-//           try {
-//               AnchorPane anchorPane = FXMLLoader.load(this.getClass().getResource("/view/main_form.fxml"));
-//                    Scene scene = new Scene(anchorPane);
-//                    Stage stage = (Stage) root.getScene().getWindow();
-//                    stage.setScene(scene);
-//                    stage.setTitle("Main Form");
-//                    stage.centerOnScreen();
-//           }catch (IOException e){
-//               throw new RuntimeException(e);
-//           }
-//       }
-//    }
     @FXML
     void btnContinueOnAction(ActionEvent event) throws IOException {
-        AnchorPane anchorPane = FXMLLoader.load(this.getClass().getResource("/view/main_form.fxml"));
-        Scene scene = new Scene(anchorPane);
-        Stage stage = (Stage) root.getScene().getWindow();
-        stage.setScene(scene);
-        stage.setTitle("Signup Form");
+       if (UserModel.verifyCredential(txtUsername.getText(),txtPassword.getText())){
+
+           try {
+               AnchorPane anchorPane = FXMLLoader.load(this.getClass().getResource("/view/main_form.fxml"));
+                    Scene scene = new Scene(anchorPane);
+                    Stage stage = (Stage) root.getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.setTitle("Main Form");
+                    stage.centerOnScreen();
+           }catch (IOException e){
+               throw new RuntimeException(e);
+           }
+       }
     }
+//    @FXML
+//    void btnContinueOnAction(ActionEvent event) throws IOException {
+//        AnchorPane anchorPane = FXMLLoader.load(this.getClass().getResource("/view/main_form.fxml"));
+//        Scene scene = new Scene(anchorPane);
+//        Stage stage = (Stage) root.getScene().getWindow();
+//        stage.setScene(scene);
+//        stage.setTitle("Signup Form");
+//    }
+
     @FXML
     void btnRegisterOnAction(ActionEvent event) throws IOException {
         AnchorPane anchorPane = FXMLLoader.load(this.getClass().getResource("/view/signup_form.fxml"));

@@ -11,5 +11,5 @@ public class PlayStationDto {
     private String PlayStationId;
     private String playStationNumber;
     private String Status;
-    private int rate;
+    private double rate;
 }

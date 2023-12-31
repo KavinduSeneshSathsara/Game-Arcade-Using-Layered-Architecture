@@ -100,7 +100,7 @@ public class EmployeeFormController {
         String address = txtEmpAddress.getText();
         String salary = txtEmpSalary.getText();
 
-        EmployeeDto dto = new EmployeeDto(id, name, contactNum, address, salary);
+        EmployeeDto dto = new EmployeeDto(id, name, contactNum, salary, address);
         EmployeeModel employeeModel = new EmployeeModel();
 
         try {
@@ -138,8 +138,8 @@ public class EmployeeFormController {
         txtEmpId.setText(tm.getEmpId());
         txtEmpName.setText(tm.getEmpName());
         txtEmpContactNum.setText(tm.getEmpContactNum());
-        txtEmpAddress.setText(tm.getEmpAddress());
         txtEmpSalary.setText(tm.getEmpSalary());
+        txtEmpAddress.setText(tm.getEmpAddress());
     }
     private void setCellValueFactory() {
         colEmpId.setCellValueFactory(new PropertyValueFactory<>("empId"));
