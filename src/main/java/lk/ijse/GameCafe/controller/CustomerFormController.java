@@ -10,6 +10,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import lk.ijse.GameCafe.dao.custom.CustomerDAO;
+import lk.ijse.GameCafe.dao.custom.impl.CustomerDAOImpl;
 import lk.ijse.GameCafe.db.DbConnection;
 import lk.ijse.GameCafe.dto.CustomerDto;
 import lk.ijse.GameCafe.dto.tm.CustomerTm;
@@ -66,16 +68,19 @@ public class CustomerFormController {
     @FXML
     private TextField txtSearchBar;
 
+    CustomerDAO customerDAO = new CustomerDAOImpl();
+
     @FXML
-    void ButtonDeleteOnAction(ActionEvent event) {
+    void ButtonDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
         CustomerTm selectedCustomer = tblCustomer.getSelectionModel().getSelectedItem();
 
         if (selectedCustomer != null) {
             String id = txtCusId.getText();
-            CustomerModel customerModel = new CustomerModel();
+//            CustomerModel customerModel = new CustomerModel();
 
             try {
-                boolean isDeleted = customerModel.deleteEmployee(id);
+//                boolean isDeleted = customerModel.deleteEmployee(id);
+                boolean isDeleted = customerDAO.deleteCustomer(id);
 
                 if (isDeleted) {
                     new Alert(Alert.AlertType.CONFIRMATION, "Customer Deleted Successfully").show();
@@ -112,7 +117,7 @@ public class CustomerFormController {
     }
 
     @FXML
-    void btnSaveOnAction(ActionEvent event) {
+    void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
 
         boolean isCustomerValidated = ValidateCustomer();
 
@@ -127,10 +132,12 @@ public class CustomerFormController {
         String cusAddress = txtCusAddress.getText();
 
         CustomerDto dto = new CustomerDto(cusId, cusContactNum, cusEmail, cusName, cusAddress);
-        CustomerModel customerModel = new CustomerModel();
+//        CustomerModel customerModel = new CustomerModel();
 
         try{
-            boolean isSaved = customerModel.saveCustomer(dto);
+//            boolean isSaved = customerModel.saveCustomer(dto);
+            boolean isSaved = customerDAO.saveCustomer(dto);
+
             if (isSaved){
                 new Alert(Alert.AlertType.CONFIRMATION, "Customer Saved Successfully").show();
                 loadAllCustomers();
@@ -141,16 +148,18 @@ public class CustomerFormController {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
-    private void generateCustomerId() {
+    private void generateCustomerId() throws ClassNotFoundException {
         try {
             CustomerModel customerModel = new CustomerModel();
-            String newCustomerId = customerModel.generateNewCustomerId();
+//            String newCustomerId = customerModel.generateNewCustomerId();
+            String newCustomerId = customerDAO.generateNewCustomerId();
+
             txtCusId.setText(newCustomerId);
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
-    public void initialize(){
+    public void initialize() throws ClassNotFoundException {
         setCellValueFactory();
         loadAllCustomers();
         generateCustomerId();
@@ -247,7 +256,7 @@ public class CustomerFormController {
         }
 
         String CusAddressText = txtCusAddress.getText();
-        boolean isCustomerAddressValidated = Pattern.matches("[A-Za-z](.*)", CusAddressText);
+        boolean isCustomerAddressValidated = Pattern.matches("^[a-zA-Z0-9\\s.,#-]+$", CusAddressText);
 
         if (!isCustomerAddressValidated) {
             new Alert(Alert.AlertType.ERROR, "Invalid Customer Address!!").show();

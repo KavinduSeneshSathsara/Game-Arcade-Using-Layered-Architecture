@@ -190,10 +190,10 @@ public class EmployeeFormController {
             return false;
         }
 
-        String empEmailText = txtEmpContactNum.getText();
-        boolean isEmpEmailAddressValidated = Pattern.matches("[0-9]{10}", empEmailText  );
+        String EmpContactNumText = txtEmpContactNum.getText();
+        boolean isEmpContactNumberValidated = Pattern.matches("[0-9]{10}", EmpContactNumText  );
 
-        if(!isEmpEmailAddressValidated){
+        if(!isEmpContactNumberValidated){
             new Alert(Alert.AlertType.ERROR, "invalid Employee Contact Number!").show();
             return false;
 
@@ -208,10 +208,10 @@ public class EmployeeFormController {
 
         }
 
-        String empContactNumText = txtEmpAddress.getText();
-        boolean isEmpContactNumValidated = Pattern.matches("[A-Za-z]+(.*)", empContactNumText);
+        String empAddressText = txtEmpAddress.getText();
+        boolean isEmpAddressValidated = Pattern.matches("[A-Za-z]+(.*)", empAddressText);
 
-        if(!isEmpContactNumValidated){
+        if(!isEmpAddressValidated){
             new Alert(Alert.AlertType.ERROR, "invalid Employee Address!").show();
             return false;
 
