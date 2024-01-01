@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -19,7 +20,6 @@
             <Image url="@../icon/cropForMainForm(1).png" />
          </image>
       </ImageView>
-      <TextField fx:id="txtBookingId" layoutX="100.0" layoutY="160.0" onAction="#txtBookingIdOnAction" opacity="0.64" prefHeight="30.0" prefWidth="173.0" promptText="Booking id" style="-fx-background-radius: 20;" />
       <TextField fx:id="txtSearchBar" alignment="CENTER" layoutX="274.0" layoutY="48.0" opacity="0.08" prefHeight="30.0" prefWidth="483.0" promptText="Search Payment" style="-fx-background-color: white; -fx-background-radius: 15;">
          <font>
             <Font name="System Bold" size="13.0" />
@@ -94,5 +94,6 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </JFXButton>
+      <ComboBox fx:id="cmbBookingId" layoutX="100.0" layoutY="169.0" onAction="#cmbBookingIdOnAction" opacity="0.7" prefWidth="150.0" promptText="Booking Id" />
    </children>
 </Pane>
