@@ -64,12 +64,12 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </JFXButton>
-      <JFXButton fx:id="btnPay" buttonType="RAISED" layoutX="221.0" layoutY="229.0" onAction="#btnPayOnAction" prefHeight="40.0" prefWidth="151.0" style="-fx-background-color: #30336b; -fx-background-radius: 50;" text="Pay" textFill="WHITE">
+      <JFXButton fx:id="btnPay" buttonType="RAISED" layoutX="175.0" layoutY="223.0" onAction="#btnPayOnAction" prefHeight="40.0" prefWidth="151.0" style="-fx-background-color: #30336b; -fx-background-radius: 50;" text="Pay" textFill="WHITE">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </JFXButton>
-      <JFXButton buttonType="RAISED" layoutX="518.0" layoutY="223.0" onAction="#btnClearOnAction" prefHeight="40.0" prefWidth="151.0" style="-fx-background-color: #30336b; -fx-background-radius: 50;" text="Clear" textFill="WHITE">
+      <JFXButton buttonType="RAISED" layoutX="609.0" layoutY="223.0" onAction="#btnClearOnAction" prefHeight="40.0" prefWidth="151.0" style="-fx-background-color: #30336b; -fx-background-radius: 50;" text="Clear" textFill="WHITE">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -94,6 +94,11 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </JFXButton>
-      <ComboBox fx:id="cmbBookingId" layoutX="100.0" layoutY="169.0" onAction="#cmbBookingIdOnAction" opacity="0.7" prefWidth="150.0" promptText="Booking Id" />
+      <ComboBox fx:id="cmbBookingId" layoutX="100.0" layoutY="169.0" onAction="#cmbBookingIdOnAction" opacity="0.74" prefWidth="150.0" promptText="Booking Id" />
+      <JFXButton buttonType="RAISED" layoutX="390.0" layoutY="223.0" onAction="#btnDeleteOnAction" prefHeight="40.0" prefWidth="151.0" style="-fx-background-color: #30336b; -fx-background-radius: 50;" text="Delete" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </JFXButton>
    </children>
 </Pane>

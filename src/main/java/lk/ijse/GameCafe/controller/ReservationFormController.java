@@ -17,15 +17,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import lk.ijse.GameCafe.db.DbConnection;
-import lk.ijse.GameCafe.dto.BookingDetailsDto;
-import lk.ijse.GameCafe.dto.BookingDto;
-import lk.ijse.GameCafe.dto.CustomerDto;
-import lk.ijse.GameCafe.dto.PlayStationDto;
+import lk.ijse.GameCafe.dto.*;
 import lk.ijse.GameCafe.dto.tm.CartTm;
-import lk.ijse.GameCafe.model.BookingDetailModel;
-import lk.ijse.GameCafe.model.BookingModel;
-import lk.ijse.GameCafe.model.CustomerModel;
-import lk.ijse.GameCafe.model.PlayStationModel;
+import lk.ijse.GameCafe.model.*;
 
 import java.net.URL;
 import java.sql.*;
@@ -62,9 +56,6 @@ public class ReservationFormController implements Initializable{
 
     @FXML
     private ComboBox<String> cmbCusNumbers;
-
-    @FXML
-    private TextField txtContact;
 
     @FXML
     private TextField txtCustMail;
@@ -129,35 +120,6 @@ public class ReservationFormController implements Initializable{
 //        loadOrderId();
 //        loadAllStations();
 //    }
-        @Override
-        public void initialize(URL location, ResourceBundle resources) {
-            setCellValueFactory();
-            cmbStartTime.setDisable(true);
-            cmbEndTime.setDisable(true);
-            cmbStation.setDisable(true);
-            loadTimeZone();
-            time();
-            lblNetTotal.setText("");
-            lblRate.setText("");
-            loadOrderId();
-            loadAllStations();
-            loadAllNumbers();
-
-            tblCart.setItems(cart);
-        }
-
-    private void loadAllNumbers() {
-        ObservableList<String> obList = FXCollections.observableArrayList();
-        try {
-            List<CustomerDto> dtos = customerModel.getAllCustomers();
-            for (CustomerDto dto : dtos) {
-                obList.add(dto.getCusContactNum());
-            }
-            cmbCusNumbers.setItems(obList);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public void loadOrderId() {
         try {
@@ -216,7 +178,7 @@ public class ReservationFormController implements Initializable{
         });
         double total=0;
         try {
-             total= getHours(cmbStartTime.getValue(), cmbEndTime.getValue()).doubleValue() * stationModel.getRate(station);
+            total= getHours(cmbStartTime.getValue(), cmbEndTime.getValue()).doubleValue() * stationModel.getRate(station);
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -241,6 +203,8 @@ public class ReservationFormController implements Initializable{
         datePicker.setDisable(true);
         cmbTimeZone.setDisable(true);
     }
+
+
 
     private Double getHours(String startTime , String endTime) {
         String time1 = startTime + " " + cmbTimeZone.getValue();
@@ -300,7 +264,7 @@ public class ReservationFormController implements Initializable{
 
         try {
 
-            CustomerDto customerDto = customerModel.getCustomer(txtContact.getText());
+            CustomerDto customerDto = customerModel.getCustomer(String.valueOf(cmbCusNumbers.getValue()));
 
             connection = DbConnection.getInstance( ).getConnection( );
             connection.setAutoCommit( false );
@@ -382,9 +346,9 @@ public class ReservationFormController implements Initializable{
 //    }
 
     @FXML
-    void txtContactOnFocusLost(Event event) {
+    void cmbCusNumbersOnAction(Event event) {
         try {
-            CustomerDto customerDto = customerModel.getCustomer(txtContact.getText());
+            CustomerDto customerDto = customerModel.getCustomer(String.valueOf(cmbCusNumbers.getValue()));
             lblCustomerName.setText(customerDto.getCusName());
             lblCustomerEmail.setText(customerDto.getCusEmail());
         } catch (SQLException e) {
@@ -392,7 +356,7 @@ public class ReservationFormController implements Initializable{
         }
     }
 
-//    @FXML
+    //    @FXML
 //    void cmbStationOnAction(Event event) {
 //        try {
 //            PlayStationDto playStationDto;
@@ -435,13 +399,33 @@ public class ReservationFormController implements Initializable{
         return (startTime.isBefore(newEndTime) && endTime.isAfter(newStartTime));
     }
 
-    public void cmbCusNumbersOnAction(ActionEvent actionEvent) {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setCellValueFactory();
+        cmbStartTime.setDisable(true);
+        cmbEndTime.setDisable(true);
+        cmbStation.setDisable(true);
+        loadTimeZone();
+        time();
+        lblNetTotal.setText("");
+        lblRate.setText("");
+        loadOrderId();
+        loadAllStations();
+        loadAllNumbers();
+
+        tblCart.setItems(cart);
+    }
+
+    private void loadAllNumbers() {
+        ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            CustomerDto customerDto = customerModel.getCustomer(String.valueOf(cmbCusNumbers.getValue()));
-            lblCustomerName.setText(customerDto.getCusName());
-            lblCustomerEmail.setText(customerDto.getCusEmail());
+            List<CustomerDto> dtos = customerModel.getAllCustomers();
+            for (CustomerDto dto : dtos) {
+                obList.add(dto.getCusContactNum());
+            }
+            cmbCusNumbers.setItems(obList);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }
