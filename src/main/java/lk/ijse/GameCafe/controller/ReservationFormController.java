@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -26,18 +27,18 @@ import lk.ijse.GameCafe.model.BookingModel;
 import lk.ijse.GameCafe.model.CustomerModel;
 import lk.ijse.GameCafe.model.PlayStationModel;
 
+import java.net.URL;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class ReservationFormController {
+public class ReservationFormController implements Initializable{
     @FXML
     private Pane pane;
 
@@ -58,6 +59,9 @@ public class ReservationFormController {
 
     @FXML
     private TableColumn<?, ?> colAction;
+
+    @FXML
+    private ComboBox<String> cmbCusNumbers;
 
     @FXML
     private TextField txtContact;
@@ -113,17 +117,46 @@ public class ReservationFormController {
     private CustomerModel customerModel = new CustomerModel();
     BookingDetailModel bookingDetailModel = new BookingDetailModel();
 
-    public void initialize() {
-        setCellValueFactory();
-        cmbStartTime.setDisable(true);
-        cmbEndTime.setDisable(true);
-        cmbStation.setDisable(true);
-        loadTimeZone();
-        time();
-        lblNetTotal.setText("");
-        lblRate.setText("");
-        loadOrderId();
-        loadAllStations();
+//    public void initialize() {
+//        setCellValueFactory();
+//        cmbStartTime.setDisable(true);
+//        cmbEndTime.setDisable(true);
+//        cmbStation.setDisable(true);
+//        loadTimeZone();
+//        time();
+//        lblNetTotal.setText("");
+//        lblRate.setText("");
+//        loadOrderId();
+//        loadAllStations();
+//    }
+        @Override
+        public void initialize(URL location, ResourceBundle resources) {
+            setCellValueFactory();
+            cmbStartTime.setDisable(true);
+            cmbEndTime.setDisable(true);
+            cmbStation.setDisable(true);
+            loadTimeZone();
+            time();
+            lblNetTotal.setText("");
+            lblRate.setText("");
+            loadOrderId();
+            loadAllStations();
+            loadAllNumbers();
+
+            tblCart.setItems(cart);
+        }
+
+    private void loadAllNumbers() {
+        ObservableList<String> obList = FXCollections.observableArrayList();
+        try {
+            List<CustomerDto> dtos = customerModel.getAllCustomers();
+            for (CustomerDto dto : dtos) {
+                obList.add(dto.getCusContactNum());
+            }
+            cmbCusNumbers.setItems(obList);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void loadOrderId() {
@@ -400,5 +433,15 @@ public class ReservationFormController {
 
     public boolean isOverlapTime(LocalTime newStartTime, LocalTime newEndTime, LocalTime startTime, LocalTime endTime) {
         return (startTime.isBefore(newEndTime) && endTime.isAfter(newStartTime));
+    }
+
+    public void cmbCusNumbersOnAction(ActionEvent actionEvent) {
+        try {
+            CustomerDto customerDto = customerModel.getCustomer(String.valueOf(cmbCusNumbers.getValue()));
+            lblCustomerName.setText(customerDto.getCusName());
+            lblCustomerEmail.setText(customerDto.getCusEmail());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
