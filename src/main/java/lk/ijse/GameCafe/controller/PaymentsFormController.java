@@ -110,12 +110,12 @@ public class PaymentsFormController implements Initializable {
         lblAmount.setText("");
     }
 
-    public void initialize(){
-        setCellValueFactory();
-        loadAllPayments();
-        time();
-        setPaymentId();
-    }
+//    public void initialize(){
+//        setCellValueFactory();
+//        loadAllPayments();
+//        time();
+//        setPaymentId();
+//    }
 
     private void setCellValueFactory() {
         colPaymentId.setCellValueFactory(new PropertyValueFactory<>("paymentId"));
@@ -267,8 +267,12 @@ public class PaymentsFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-       setPaymentId();
-       time();
+        setPaymentId();
+        time();
+        setCellValueFactory();
+        loadAllPayments();
+        time();
+        setPaymentId();
     }
 
     public void btnSearchOnAction(ActionEvent actionEvent) {
