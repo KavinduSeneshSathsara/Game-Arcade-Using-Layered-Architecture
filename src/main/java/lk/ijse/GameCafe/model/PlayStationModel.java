@@ -12,7 +12,7 @@ public class PlayStationModel {
     public double getRate(String id) throws SQLException {
         Connection connection = DbConnection.getInstance().getConnection();
 
-        String sql = "SELECT rate  FROM play_station WHERE play_station_id=?";
+        String sql = "SELECT rate FROM play_station WHERE play_station_id=?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1,id);
         ResultSet resultSet = ps.executeQuery();
@@ -113,5 +113,20 @@ public class PlayStationModel {
             dto = new PlayStationDto(playStationId, playStationNumber, status, rate);
         }
         return dto;
+    }
+
+    public String generateNewPlaystationId() throws SQLException {
+        Connection connection = DbConnection.getInstance().getConnection();
+        String sql = "SELECT CONCAT('P', LPAD(IFNULL(MAX(SUBSTRING(play_station_id, 2)), 0) + 1, 4, '0')) FROM play_station";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet resultSet = ps.executeQuery()) {
+
+            if (resultSet.next()) {
+                return resultSet.getString(1);
+            }
+
+            return null; // Return null if something goes wrong
+        }
     }
 }

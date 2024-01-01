@@ -112,4 +112,21 @@ public class PaymentModel {
         }
         return dto;
     }
+
+    public String generateNewPlaystationId() throws SQLException {
+        Connection connection = DbConnection.getInstance().getConnection();
+        String sql = "SELECT CONCAT('P', LPAD(IFNULL(MAX(SUBSTRING(play_station_id, 2)), 0) + 1, 4, '0')) FROM play_station";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet resultSet = ps.executeQuery()) {
+
+            if (resultSet.next()) {
+                return resultSet.getString(1);
+            }
+
+            return null; // Return null if something goes wrong
+        }
+
+    }
+
 }

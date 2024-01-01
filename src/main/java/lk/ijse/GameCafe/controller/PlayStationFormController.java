@@ -61,6 +61,7 @@ public class PlayStationFormController {
     public void initialize(){
         setCellValueFactory();
         loadAllPlayStations();
+        generatePlayStationId();
 
         tblPlayStation.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {
@@ -73,6 +74,16 @@ public class PlayStationFormController {
                 }
             }
         });
+    }
+
+    private void generatePlayStationId() {
+        try {
+            PlayStationModel playstationModel = new PlayStationModel();
+            String newPlaystationId = playstationModel.generateNewPlaystationId();
+            txtPlayStationId.setText(newPlaystationId);
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
     }
 
     private void fillFields(PlayStationTm tm) {

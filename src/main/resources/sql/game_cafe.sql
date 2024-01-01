@@ -47,10 +47,10 @@ CREATE TABLE IF NOT EXISTS booking (
 );
 
 CREATE TABLE IF NOT EXISTS booking_Details(
-                                             booking_id VARCHAR(15) ,
-                                             play_station_id VARCHAR(15) NOT NULL,
-                                             FOREIGN KEY (booking_id) REFERENCES booking(booking_id),
-                                             FOREIGN KEY (play_station_id) REFERENCES play_station(play_station_id) ON UPDATE CASCADE ON DELETE CASCADE
+                                              booking_id VARCHAR(15) ,
+                                              play_station_id VARCHAR(15) NOT NULL,
+                                              FOREIGN KEY (booking_id) REFERENCES booking(booking_id),
+                                              FOREIGN KEY (play_station_id) REFERENCES play_station(play_station_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS payment (
