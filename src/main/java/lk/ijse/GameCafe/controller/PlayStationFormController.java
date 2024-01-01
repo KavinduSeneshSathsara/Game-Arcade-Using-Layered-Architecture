@@ -188,6 +188,14 @@ public class PlayStationFormController {
             return false;
         }
 
+        String rate= txtRate.getText();
+        boolean isRateValidated = Pattern.matches("[1-9][0-9]*.?[0-9]*", rate);
+
+        if (!isRateValidated) {
+            new Alert(Alert.AlertType.ERROR, "Invalid rate!!").show();
+            return false;
+        }
+
         return true;
     }
 
