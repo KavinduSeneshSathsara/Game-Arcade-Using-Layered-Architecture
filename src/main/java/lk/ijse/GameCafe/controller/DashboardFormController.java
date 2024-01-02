@@ -9,6 +9,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import lk.ijse.GameCafe.dao.custom.DashBoardDAO;
+import lk.ijse.GameCafe.dao.custom.impl.DashBoardDAOImpl;
 import lk.ijse.GameCafe.dto.DashboardTableDto;
 import lk.ijse.GameCafe.model.BookingModel;
 import lk.ijse.GameCafe.model.CustomerModel;
@@ -49,6 +51,8 @@ public class DashboardFormController {
 
     private static DashboardFormController controller;
 
+    DashBoardDAO dashBoardDAO = new DashBoardDAOImpl();
+
     public DashboardFormController() {
 
         controller = this;
@@ -59,11 +63,11 @@ public class DashboardFormController {
         return controller;
     }
 
-    public void initialize(){
+    public void initialize() throws ClassNotFoundException {
         start();
     }
 
-    public void start() {
+    public void start() throws ClassNotFoundException {
 
         EmployeeModel employeeModel = new EmployeeModel();
         CustomerModel customerModel = new CustomerModel();
@@ -91,11 +95,13 @@ public class DashboardFormController {
         loadAllData();
     }
 
-    private void loadAllData() {
+    private void loadAllData() throws ClassNotFoundException {
          DashBoardModel dashBoardModel = new DashBoardModel();
         ObservableList<DashboardTableDto> obList = FXCollections.observableArrayList();
         try {
-            List<DashboardTableDto> list = dashBoardModel.dashbaordTableData();
+//            List<DashboardTableDto> list = dashBoardModel.dashbaordTableData();
+            List<DashboardTableDto> list = dashBoardDAO.dashbaordTableData();
+
             for (DashboardTableDto dto : list){
                 DashboardTableDto  dashboardTableDto = new DashboardTableDto(dto.getBookingId(),
                         dto.getCusId(),

@@ -103,8 +103,6 @@ public class PaymentsFormController implements Initializable {
     CustomerModel customerModel = new CustomerModel();
     CustomerDto customerDto = new CustomerDto();
 
-
-
     @FXML
     void btnClearOnAction(ActionEvent event) {
         cmbBookingId.getItems().clear();

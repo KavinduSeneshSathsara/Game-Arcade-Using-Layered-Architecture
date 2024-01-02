@@ -95,9 +95,9 @@ public class CustomerFormController {
     }
 
     @FXML
-    void btnClearOnAction(ActionEvent event) {
+    void btnClearOnAction(ActionEvent event) throws ClassNotFoundException {
         clearFields();
-
+        generateCustomerId();
     }
     private void clearFields() {
 

@@ -148,6 +148,7 @@ public class PlayStationFormController {
     @FXML
     void btnClearOnAction(ActionEvent event) {
         clearFields();
+        generatePlayStationId();
     }
 
     private void clearFields() {
@@ -175,6 +176,8 @@ public class PlayStationFormController {
             if (isSaved){
                 new Alert(Alert.AlertType.CONFIRMATION,"Saved Successfully").show();
                 loadAllPlayStations();
+                clearFields();
+                generatePlayStationId();
             }
         } catch (SQLException e) {
             e.printStackTrace();
