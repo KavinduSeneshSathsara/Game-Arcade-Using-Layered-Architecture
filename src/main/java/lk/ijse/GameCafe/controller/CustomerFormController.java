@@ -166,10 +166,9 @@ public class CustomerFormController {
 
         tblCustomer.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {
-                // Single-click detected, get the selected row
+
                 CustomerTm selectedCustomer = tblCustomer.getSelectionModel().getSelectedItem();
 
-                // If a row is selected, fill the fields with its data
                 if (selectedCustomer != null) {
                     fillFields(selectedCustomer);
                 }
@@ -193,14 +192,15 @@ public class CustomerFormController {
         colCusAddress.setCellValueFactory(new PropertyValueFactory<>("cusAddress"));
     }
 
-    private void loadAllCustomers() {
+    private void loadAllCustomers() throws ClassNotFoundException {
 
         CustomerModel model = new CustomerModel();
 
         ObservableList<CustomerTm> obList = FXCollections.observableArrayList();
 
          try{
-             List <CustomerDto> list = model.getAllCustomers();
+//             List <CustomerDto> list = model.getAllCustomers();
+             List <CustomerDto> list = customerDAO.getAllCustomers();
 
              for (CustomerDto dto : list){
                  CustomerTm customerTm = new CustomerTm(
@@ -268,12 +268,12 @@ public class CustomerFormController {
     }
 
         @FXML
-        void btnSearchOnAction (ActionEvent event){
+        void btnSearchOnAction (ActionEvent event) throws ClassNotFoundException {
             String id = txtSearchBar.getText();
-            var model = new CustomerModel();
+//            var model = new CustomerModel();
             try {
 
-                CustomerDto dto = model.SearchModel(id);
+                CustomerDto dto = customerDAO.SearchCustomer(id);
                 if (dto != null){
                     fillField(dto);
                 }else {
@@ -285,7 +285,7 @@ public class CustomerFormController {
         }
 
         @FXML
-        void btnUpdateOnAction (ActionEvent event){
+        void btnUpdateOnAction (ActionEvent event) throws ClassNotFoundException {
 
             String cusId = txtCusId.getText();
             String cusContactNum = txtCusContactNum.getText();
@@ -297,7 +297,8 @@ public class CustomerFormController {
             CustomerModel customerModel = new CustomerModel();
 
             try {
-                boolean isUpdated = customerModel.updateCustomer(dto);
+//                boolean isUpdated = customerModel.updateCustomer(dto);
+                boolean isUpdated = customerDAO.updateCustomer(dto);
                 if (isUpdated){
                     new Alert(Alert.AlertType.CONFIRMATION, "Customer Updated Successfully");
 

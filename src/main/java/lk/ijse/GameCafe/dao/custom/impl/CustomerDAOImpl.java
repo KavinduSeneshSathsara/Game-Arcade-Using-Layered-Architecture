@@ -6,6 +6,8 @@ import lk.ijse.GameCafe.util.SQLUtil;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class CustomerDAOImpl implements CustomerDAO {
@@ -34,5 +36,53 @@ public class CustomerDAOImpl implements CustomerDAO {
         }
 
         return null;
+    }
+
+    @Override
+    public List<CustomerDto> getAllCustomers() throws SQLException, ClassNotFoundException {
+        ResultSet rst = SQLUtil.execute("SELECT * FROM customer");
+
+        List <CustomerDto> list = new ArrayList<>();
+
+        while (rst.next()){
+
+            CustomerDto  customerDto = new CustomerDto(
+                    rst.getString(1),
+                    rst.getString(2),
+                    rst.getString(3),
+                    rst.getString(4),
+                    rst.getString(5)
+            );
+            list.add(customerDto);
+        }
+
+        return list;
+    }
+
+    @Override
+    public CustomerDto SearchCustomer(String id) throws SQLException, ClassNotFoundException {
+        ResultSet rst = SQLUtil.execute("SELECT * FROM customer WHERE cus_id = ?" , (id + ""));
+
+        if(rst.next()){
+            return new CustomerDto(
+                rst.getString(1),
+                rst.getString(2),
+                rst.getString(3),
+                rst.getString(4),
+                rst.getString(5)
+            );
+        }
+        return null;
+    }
+
+    @Override
+    public boolean updateCustomer(CustomerDto dto) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("UPDATE customer SET contact_num = ?, email = ?, cus_name = ?, customer_address = ? WHERE cus_id = ?",
+                dto.getCusContactNum(),
+                dto.getCusEmail(),
+                dto.getCusName(),
+                dto.getCusAddress(),
+                dto.getCusId()
+        );
     }
 }
