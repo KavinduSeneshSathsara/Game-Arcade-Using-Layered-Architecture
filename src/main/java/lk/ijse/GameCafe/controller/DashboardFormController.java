@@ -96,7 +96,7 @@ public class DashboardFormController {
     }
 
     private void loadAllData() throws ClassNotFoundException {
-         DashBoardModel dashBoardModel = new DashBoardModel();
+//         DashBoardModel dashBoardModel = new DashBoardModel();
         ObservableList<DashboardTableDto> obList = FXCollections.observableArrayList();
         try {
 //            List<DashboardTableDto> list = dashBoardModel.dashbaordTableData();

@@ -10,6 +10,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import lk.ijse.GameCafe.dao.custom.EmployeeDAO;
+import lk.ijse.GameCafe.dao.custom.impl.EmployeeDAOImpl;
 import lk.ijse.GameCafe.dto.EmployeeDto;
 import lk.ijse.GameCafe.dto.tm.CustomerTm;
 import lk.ijse.GameCafe.dto.tm.EmployeeTm;
@@ -60,16 +62,19 @@ public class EmployeeFormController {
         @FXML
         private TextField txtSearchBar;
 
+        EmployeeDAO employeeDAO = new EmployeeDAOImpl();
+
     @FXML
-    void btnClearOnAction(ActionEvent event) {
+    void btnClearOnAction(ActionEvent event) throws ClassNotFoundException {
         clearFields();
         generateEmployeeId();
     }
 
-    private void generateEmployeeId() {
+    private void generateEmployeeId() throws ClassNotFoundException {
         try {
-            EmployeeModel employeeModel = new EmployeeModel();
-            String newCustomerId = employeeModel.generateNewEmpId();
+//            EmployeeModel employeeModel = new EmployeeModel();
+            String newCustomerId = employeeDAO.generateNewEmpId();
+
             txtEmpId.setText(newCustomerId);
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -86,7 +91,7 @@ public class EmployeeFormController {
     }
 
     @FXML
-    void btnSaveOnAction(ActionEvent event) {
+    void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
 
         boolean isEmployeeValidated = ValidateEmployee();
 
@@ -101,10 +106,9 @@ public class EmployeeFormController {
         String salary = txtEmpSalary.getText();
 
         EmployeeDto dto = new EmployeeDto(id, name, contactNum, salary, address);
-        EmployeeModel employeeModel = new EmployeeModel();
-
+//        EmployeeModel employeeModel = new EmployeeModel();
         try {
-            boolean isSaved = employeeModel.saveEmployee(dto);
+            boolean isSaved = employeeDAO.saveEmployee(dto);
 
             if (isSaved){
                 new Alert(Alert.AlertType.CONFIRMATION, "Employee Saved Successfully");
@@ -119,7 +123,7 @@ public class EmployeeFormController {
 
     }
 
-    public void initialize(){
+    public void initialize() throws ClassNotFoundException {
         setCellValueFactory();
         loadAllEmployees();
         generateEmployeeId();
@@ -149,13 +153,12 @@ public class EmployeeFormController {
         colEmpAddress.setCellValueFactory(new PropertyValueFactory<>("empAddress"));
     }
 
-    private void loadAllEmployees() {
-        EmployeeModel model = new EmployeeModel();
-
+    private void loadAllEmployees() throws ClassNotFoundException {
+//        EmployeeModel model = new EmployeeModel();
         ObservableList<EmployeeTm> obList = FXCollections.observableArrayList();
 
         try {
-            List<EmployeeDto> list = model.getAllEmployees();
+            List<EmployeeDto> list = employeeDAO.getAllEmployees();
 
             for (EmployeeDto dto : list){
                 EmployeeTm  employeeTm = new EmployeeTm(dto.getEmpId(),
@@ -221,13 +224,11 @@ public class EmployeeFormController {
     }
 
     @FXML
-    void btnDeleteOnAction(ActionEvent event) {
+    void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
         String id = txtEmpId.getText();
-
-        EmployeeModel model = new EmployeeModel();
-
+//        EmployeeModel employeeModel = new EmployeeModel();
         try {
-            boolean isDeleted = model.deleteEmployee(id);
+            boolean isDeleted = employeeDAO.deleteEmployee(id);
             if(isDeleted){
                 new Alert(Alert.AlertType.CONFIRMATION,"Patient Deleted Successfully").show();
                 loadAllEmployees();
@@ -239,17 +240,17 @@ public class EmployeeFormController {
     }
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event) {
+    void btnUpdateOnAction(ActionEvent event) throws ClassNotFoundException {
         String id = txtEmpId.getText();
         String name = txtEmpName.getText();
         String email = txtEmpContactNum.getText();
         String contactNo = txtEmpSalary.getText();
         String address = txtEmpAddress.getText();
-        EmployeeDto dto = new EmployeeDto(id,name,email,contactNo,address);
 
-        EmployeeModel model = new EmployeeModel();
+        EmployeeDto dto = new EmployeeDto(id,name,email,contactNo,address);
+//        EmployeeModel EmployeeModel = new EmployeeModel();
         try {
-            boolean isUpdated = model.updateEmployee(dto);
+            boolean isUpdated = employeeDAO.updateEmployee(dto);
             if(isUpdated){
                 new Alert(Alert.AlertType.CONFIRMATION,"Employee Updated Successfully").show();
                 loadAllEmployees();
@@ -260,12 +261,12 @@ public class EmployeeFormController {
     }
 
     @FXML
-    void btnSearchOnAction(ActionEvent event) {
+    void btnSearchOnAction(ActionEvent event) throws ClassNotFoundException {
         String id = txtSearchBar.getText();
         var model = new EmployeeModel();
         try {
 
-            EmployeeDto dto = model.SearchModel(id);
+            EmployeeDto dto = employeeDAO.SearchModel(id);
             if (dto != null){
                 fillField(dto);
             }else {

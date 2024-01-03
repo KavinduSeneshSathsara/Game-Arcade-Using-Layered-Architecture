@@ -77,7 +77,6 @@ public class CustomerFormController {
         if (selectedCustomer != null) {
             String id = txtCusId.getText();
 //            CustomerModel customerModel = new CustomerModel();
-
             try {
 //                boolean isDeleted = customerModel.deleteEmployee(id);
                 boolean isDeleted = customerDAO.deleteCustomer(id);
@@ -133,7 +132,6 @@ public class CustomerFormController {
 
         CustomerDto dto = new CustomerDto(cusId, cusContactNum, cusEmail, cusName, cusAddress);
 //        CustomerModel customerModel = new CustomerModel();
-
         try{
 //            boolean isSaved = customerModel.saveCustomer(dto);
             boolean isSaved = customerDAO.saveCustomer(dto);
@@ -150,7 +148,7 @@ public class CustomerFormController {
     }
     private void generateCustomerId() throws ClassNotFoundException {
         try {
-            CustomerModel customerModel = new CustomerModel();
+//            CustomerModel customerModel = new CustomerModel();
 //            String newCustomerId = customerModel.generateNewCustomerId();
             String newCustomerId = customerDAO.generateNewCustomerId();
 
@@ -194,10 +192,8 @@ public class CustomerFormController {
 
     private void loadAllCustomers() throws ClassNotFoundException {
 
-        CustomerModel model = new CustomerModel();
-
+//        CustomerModel model = new CustomerModel();
         ObservableList<CustomerTm> obList = FXCollections.observableArrayList();
-
          try{
 //             List <CustomerDto> list = model.getAllCustomers();
              List <CustomerDto> list = customerDAO.getAllCustomers();
@@ -272,7 +268,6 @@ public class CustomerFormController {
             String id = txtSearchBar.getText();
 //            var model = new CustomerModel();
             try {
-
                 CustomerDto dto = customerDAO.SearchCustomer(id);
                 if (dto != null){
                     fillField(dto);
@@ -294,8 +289,7 @@ public class CustomerFormController {
             String cusAddress = txtCusAddress.getText();
 
             CustomerDto dto = new CustomerDto(cusId, cusContactNum, cusEmail, cusName, cusAddress);
-            CustomerModel customerModel = new CustomerModel();
-
+//            CustomerModel customerModel = new CustomerModel();
             try {
 //                boolean isUpdated = customerModel.updateCustomer(dto);
                 boolean isUpdated = customerDAO.updateCustomer(dto);
