@@ -1,5 +1,8 @@
 package lk.ijse.GameCafe.controller;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -9,6 +12,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 import lk.ijse.GameCafe.dao.custom.DashBoardDAO;
 import lk.ijse.GameCafe.dao.custom.impl.DashBoardDAOImpl;
 import lk.ijse.GameCafe.dto.DashboardTableDto;
@@ -18,6 +22,7 @@ import lk.ijse.GameCafe.model.DashBoardModel;
 import lk.ijse.GameCafe.model.EmployeeModel;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class DashboardFormController {
@@ -49,6 +54,12 @@ public class DashboardFormController {
     @FXML
     private Label txtEmployeeCount;
 
+    @FXML
+    private Label lblTime;
+
+    @FXML
+    private Label lblDate;
+
     private static DashboardFormController controller;
 
     DashBoardDAO dashBoardDAO = new DashBoardDAOImpl();
@@ -65,6 +76,7 @@ public class DashboardFormController {
 
     public void initialize() throws ClassNotFoundException {
         start();
+        time();
     }
 
     public void start() throws ClassNotFoundException {
@@ -114,6 +126,19 @@ public class DashboardFormController {
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR,e.getMessage()).show();
         }
+    }
+
+    private void time() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
+        Timeline timeline = new Timeline(new KeyFrame(javafx.util.Duration.ZERO, e -> {
+
+            lblTime.setText(timeFormat.format(new java.util.Date()));
+            lblDate.setText(dateFormat.format(new java.util.Date()));
+        }), new KeyFrame(Duration.seconds(1)));
+        timeline.setCycleCount(Animation.INDEFINITE);
+
+        timeline.play();
     }
 
     private void setCellValueFactory() {

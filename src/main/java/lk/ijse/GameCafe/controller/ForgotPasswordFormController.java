@@ -3,9 +3,13 @@ package lk.ijse.GameCafe.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import lk.ijse.GameCafe.dao.custom.UserDAO;
+import lk.ijse.GameCafe.dao.custom.impl.UserDAOImpl;
 import lk.ijse.GameCafe.dto.UserDto;
 import lk.ijse.GameCafe.model.UserModel;
 import lk.ijse.GameCafe.util.Navigation;
@@ -18,7 +22,7 @@ import java.util.Random;
 public class ForgotPasswordFormController {
 
     @FXML
-    private AnchorPane ForgotPane;
+    private AnchorPane root;
 
     @FXML
     private Button btnBack;
@@ -32,22 +36,28 @@ public class ForgotPasswordFormController {
     static String username;
     static int otp;
 
-    @FXML
-    void btnBackOnAction(ActionEvent event) {
+    UserDAO userDAO = new UserDAOImpl();
 
+    @FXML
+    void btnBackOnAction(ActionEvent event) throws IOException {
+        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/login_form.fxml"));
+        Scene scene = new Scene(anchorPane);
+        Stage stage = (Stage) root.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("Login Form");
+        stage.centerOnScreen();
     }
 
     @FXML
-    void btnResetOnAction(ActionEvent event) throws SQLException, MessagingException, IOException {
+    void btnResetOnAction(ActionEvent event) throws SQLException, MessagingException, IOException, ClassNotFoundException {
         username = txtUsername.getText();
-
-        UserModel userModel = new UserModel();
+//        UserModel userModel = new UserModel();
         Random random = new Random();
 
         otp = random.nextInt(9000);
         otp += 1000;
 
-        UserDto userDto = userModel.getEmail(username);
+        UserDto userDto = userDAO.getEmail(username);
         System.out.println(userDto.getEmail());
 
         EmailController.sendEmail(userDto.getEmail(), "Verification Code for Password Reset", otp + "");
