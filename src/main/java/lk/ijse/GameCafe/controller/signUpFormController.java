@@ -11,6 +11,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.GameCafe.dao.custom.UserDAO;
+import lk.ijse.GameCafe.dao.custom.impl.UserDAOImpl;
 import lk.ijse.GameCafe.dto.UserDto;
 import lk.ijse.GameCafe.model.UserModel;
 
@@ -36,6 +38,8 @@ public class signUpFormController {
     @FXML
     private JFXButton btnSignUp;
 
+    UserDAO userDAO = new UserDAOImpl();
+
     @FXML
     public void initialize() {
         // Bind the disable property of the signup button to the not selected property of the checkbox
@@ -43,7 +47,7 @@ public class signUpFormController {
     }
 
     @FXML
-    public void btnSignupOnAction(ActionEvent actionEvent) throws MessagingException {
+    public void btnSignupOnAction(ActionEvent actionEvent) throws MessagingException, ClassNotFoundException {
         boolean isUserValidated = ValidateUser();
 
         if (!isUserValidated){
@@ -64,11 +68,11 @@ public class signUpFormController {
         UserModel userModel = new UserModel();
 
         try {
-            boolean isSaved = userModel.saveUser(dto);
+            boolean isSaved = userDAO.saveUser(dto);
             if (isSaved) {
                 if (txtTerms.isSelected()) {
 //                     sendConfirmationEmail(email);
-                    new Alert(Alert.AlertType.INFORMATION, "A confirmation email has been sent to your address.").show();
+                    new Alert(Alert.AlertType.INFORMATION, "A confirmation email has been sent to your Email address.").show();
                 }
 
                 AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/login_form.fxml"));

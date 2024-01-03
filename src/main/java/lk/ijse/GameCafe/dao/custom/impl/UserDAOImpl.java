@@ -23,4 +23,18 @@ public class UserDAOImpl implements UserDAO {
         }
         return null;
     }
+
+    @Override
+    public boolean updatePassword(String username, String newPassword) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("UPDATE user SET password = ? WHERE username = ?", username, newPassword);
+    }
+
+    @Override
+    public boolean saveUser(UserDto dto) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("INSERT into user VALUES (?,?,?)",
+                dto.getUserName(),
+                dto.getPassword(),
+                dto.getEmail()
+        );
+    }
 }

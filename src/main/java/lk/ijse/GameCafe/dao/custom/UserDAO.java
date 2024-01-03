@@ -6,4 +6,8 @@ import java.sql.SQLException;
 
 public interface UserDAO {
     UserDto getEmail(String username) throws SQLException, ClassNotFoundException;
+
+    boolean updatePassword(String username, String text) throws SQLException, ClassNotFoundException;
+
+    boolean saveUser(UserDto dto) throws SQLException, ClassNotFoundException;
 }
