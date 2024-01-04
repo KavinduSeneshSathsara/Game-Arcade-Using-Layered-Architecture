@@ -17,4 +17,6 @@ public interface PlayStationDAO {
     PlayStationDto searchModel(String id) throws SQLException, ClassNotFoundException;
 
     boolean updatePlayStation(PlayStationDto dto) throws SQLException, ClassNotFoundException;
+
+    double getRate(String station) throws SQLException, ClassNotFoundException;
 }

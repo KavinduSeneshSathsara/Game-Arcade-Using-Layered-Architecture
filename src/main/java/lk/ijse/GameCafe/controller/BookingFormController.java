@@ -16,6 +16,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import lk.ijse.GameCafe.dao.custom.BookingDAO;
+import lk.ijse.GameCafe.dao.custom.BookingDetailDAO;
+import lk.ijse.GameCafe.dao.custom.CustomerDAO;
+import lk.ijse.GameCafe.dao.custom.PlayStationDAO;
+import lk.ijse.GameCafe.dao.custom.impl.BookingDAOImpl;
+import lk.ijse.GameCafe.dao.custom.impl.BookingDetailDAOImpl;
+import lk.ijse.GameCafe.dao.custom.impl.CustomerDAOImpl;
+import lk.ijse.GameCafe.dao.custom.impl.PlayStationDAOImpl;
 import lk.ijse.GameCafe.db.DbConnection;
 import lk.ijse.GameCafe.dto.*;
 import lk.ijse.GameCafe.dto.tm.CartTm;
@@ -32,7 +40,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class ReservationFormController implements Initializable{
+public class BookingFormController implements Initializable{
     @FXML
     private Pane pane;
 
@@ -108,22 +116,14 @@ public class ReservationFormController implements Initializable{
     private CustomerModel customerModel = new CustomerModel();
     BookingDetailModel bookingDetailModel = new BookingDetailModel();
 
-//    public void initialize() {
-//        setCellValueFactory();
-//        cmbStartTime.setDisable(true);
-//        cmbEndTime.setDisable(true);
-//        cmbStation.setDisable(true);
-//        loadTimeZone();
-//        time();
-//        lblNetTotal.setText("");
-//        lblRate.setText("");
-//        loadOrderId();
-//        loadAllStations();
-//    }
+    CustomerDAO customerDAO = new CustomerDAOImpl();
+    BookingDAO bookingDAO = new BookingDAOImpl();
+    PlayStationDAO playStationDAO = new PlayStationDAOImpl();
+    BookingDetailDAO bookingDetailDAO = new BookingDetailDAOImpl();
 
-    public void loadOrderId() {
+    public void loadOrderId() throws ClassNotFoundException {
         try {
-            lblOrderId.setText( bookingModel.generateNextId() );
+            lblOrderId.setText( bookingDAO.generateNextId() );
         } catch ( SQLException e ) {
             e.printStackTrace();
         }
@@ -158,7 +158,7 @@ public class ReservationFormController implements Initializable{
     }
 
     @FXML
-    void btnAddToListOnAction(ActionEvent event) {
+    void btnAddToListOnAction(ActionEvent event) throws ClassNotFoundException {
         String station = cmbStation.getValue();
 
         Button btn = new Button("remove");
@@ -171,14 +171,19 @@ public class ReservationFormController implements Initializable{
             Optional<ButtonType> type = new Alert(Alert.AlertType.INFORMATION, "Are you sure to remove?", yes, no).showAndWait();
 
             if (type.orElse(no) == yes) {
-                int index = tblCart.getSelectionModel().getSelectedIndex();
-                cart.remove(index);
+//                int index = tblCart.getSelectionModel().getSelectedIndex();
+                CartTm selectedCartItem = tblCart.getSelectionModel().getSelectedItem();
+                cart.remove(selectedCartItem);
+//                cart.remove(index);
                 tblCart.refresh();
+                calculateNetTotal();
             }
         });
+
         double total=0;
+
         try {
-            total= getHours(cmbStartTime.getValue(), cmbEndTime.getValue()).doubleValue() * stationModel.getRate(station);
+            total= getHours(cmbStartTime.getValue(), cmbEndTime.getValue()).doubleValue() * playStationDAO.getRate(station);
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -187,7 +192,7 @@ public class ReservationFormController implements Initializable{
             cart.add(new CartTm(
                     station,
                     getHours(cmbStartTime.getValue(),cmbEndTime.getValue()),
-                    stationModel.getRate(station),
+                    playStationDAO.getRate(station),
                     total,
                     btn
             ));
@@ -254,7 +259,7 @@ public class ReservationFormController implements Initializable{
     }
 
     @FXML
-    void btnBookOnAction(ActionEvent event) throws ParseException, SQLException {
+    void btnBookOnAction(ActionEvent event) throws ParseException, SQLException, ClassNotFoundException {
         Date nowDate = Date.valueOf( datePicker.getValue() );
         Time nowTime = Time.valueOf(LocalTime.now());
         Time startTime = makeTime(cmbStartTime.getValue());
@@ -264,14 +269,14 @@ public class ReservationFormController implements Initializable{
 
         try {
 
-            CustomerDto customerDto = customerModel.getCustomer(String.valueOf(cmbCusNumbers.getValue()));
+            CustomerDto customerDto = customerDAO.getCustomer(String.valueOf(cmbCusNumbers.getValue()));
 
             connection = DbConnection.getInstance( ).getConnection( );
             connection.setAutoCommit( false );
 
-            boolean isSaved = bookingModel.saveBooking(new BookingDto(bookingModel.generateNextId(), customerDto.getCusId(), nowDate, nowTime, startTime, endTime, "Not Paid", Double.parseDouble(lblNetTotal.getText())));
+            boolean isSaved = bookingDAO.saveBooking(new BookingDto(bookingDAO.generateNextId(), customerDto.getCusId(), nowDate, nowTime, startTime, endTime, "Not Paid", Double.parseDouble(lblNetTotal.getText())));
             if (isSaved) {
-                boolean saved = bookingDetailModel.saveDetails( tblCart.getItems().stream().map(tm -> new BookingDetailsDto(lblOrderId.getText(), tm.getId())).collect(Collectors.toList()));
+                boolean saved = bookingDetailDAO.saveDetails( tblCart.getItems().stream().map(tm -> new BookingDetailsDto(lblOrderId.getText(), tm.getId())).collect(Collectors.toList()));
 
                 if ( saved ) {
                     connection.commit();
@@ -332,7 +337,6 @@ public class ReservationFormController implements Initializable{
         cmbEndTime.setDisable(false);
         cmbStartTime.setDisable(false);
     }
-
 //    @FXML
 //    void txtContactOnAction(ActionEvent event) {
 //        try {
@@ -344,7 +348,6 @@ public class ReservationFormController implements Initializable{
 //        }
 //
 //    }
-
     @FXML
     void cmbCusNumbersOnAction(Event event) {
         try {
@@ -355,8 +358,7 @@ public class ReservationFormController implements Initializable{
             e.printStackTrace();
         }
     }
-
-    //    @FXML
+//        @FXML
 //    void cmbStationOnAction(Event event) {
 //        try {
 //            PlayStationDto playStationDto;
@@ -366,7 +368,6 @@ public class ReservationFormController implements Initializable{
 //            e.printStackTrace();
 //        }
 //    }
-//
     @FXML
     void cmbStationOnAction(ActionEvent event) {
         try {
@@ -409,7 +410,13 @@ public class ReservationFormController implements Initializable{
         time();
         lblNetTotal.setText("");
         lblRate.setText("");
-        loadOrderId();
+
+        try {
+            loadOrderId();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         loadAllStations();
         loadAllNumbers();
 

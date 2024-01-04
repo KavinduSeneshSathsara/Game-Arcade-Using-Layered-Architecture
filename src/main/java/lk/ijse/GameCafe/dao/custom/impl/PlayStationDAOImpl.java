@@ -79,4 +79,15 @@ public class PlayStationDAOImpl implements PlayStationDAO {
                 dto.getPlayStationId()
         );
     }
+
+    @Override
+    public double getRate(String station) throws SQLException, ClassNotFoundException {
+        ResultSet rst = SQLUtil.execute("SELECT rate FROM play_station WHERE play_station_id = ?", station);
+
+        if (rst.next()) {
+            return rst.getDouble("rate");
+        }
+        return 0.0;
+    }
+
 }

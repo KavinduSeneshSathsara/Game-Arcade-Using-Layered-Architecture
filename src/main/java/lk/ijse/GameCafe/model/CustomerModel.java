@@ -140,10 +140,13 @@ public class CustomerModel {
 
     public CustomerDto getCustomer(String contact) throws SQLException {
         Connection connection = DbConnection.getInstance().getConnection();
+
         PreparedStatement pstm = connection.prepareStatement("SELECT * FROM customer WHERE contact_num=?");
         pstm.setString(1,contact);
         ResultSet resultSet = pstm.executeQuery();
+
         CustomerDto dto =null;
+
         if (resultSet.next()){
             dto=new CustomerDto(
                     resultSet.getString(1),

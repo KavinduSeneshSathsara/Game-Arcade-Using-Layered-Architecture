@@ -5,11 +5,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import lk.ijse.GameCafe.model.CustomerModel;
 
 import java.io.IOException;
 
@@ -70,7 +68,7 @@ public class MainFormController {
 
     @FXML
     void reservationsOnAction(ActionEvent event) throws IOException {
-        Pane newLoadedPane = FXMLLoader.load(getClass().getResource("/view/Reservation_form.fxml"));
+        Pane newLoadedPane = FXMLLoader.load(getClass().getResource("/view/Booking_form.fxml"));
         rootMainPane.getChildren().add(newLoadedPane);
     }
 }
