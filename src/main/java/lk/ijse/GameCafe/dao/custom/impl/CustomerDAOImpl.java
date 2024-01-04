@@ -42,7 +42,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     public List<CustomerDto> getAllCustomers() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM customer");
 
-        List <CustomerDto> list = new ArrayList<>();
+        List<CustomerDto> list = new ArrayList<>();
 
         while (rst.next()){
 

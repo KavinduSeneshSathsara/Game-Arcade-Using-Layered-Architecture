@@ -65,8 +65,10 @@ public class PlayStationModel {
 
         String sql = "SELECT *  FROM play_station";
         PreparedStatement ps = connection.prepareStatement(sql);
-        List<PlayStationDto> list=new ArrayList<>();
+
+        List<PlayStationDto> list = new ArrayList<>();
         ResultSet resultSet = ps.executeQuery();
+
         while (resultSet.next()){
             list.add(new PlayStationDto(
                     resultSet.getString(1),

@@ -11,6 +11,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import lk.ijse.GameCafe.dao.custom.PlayStationDAO;
+import lk.ijse.GameCafe.dao.custom.impl.PlayStationDAOImpl;
 import lk.ijse.GameCafe.dto.CustomerDto;
 import lk.ijse.GameCafe.dto.PlayStationDto;
 import lk.ijse.GameCafe.dto.tm.CustomerTm;
@@ -58,7 +60,9 @@ public class PlayStationFormController {
 
     PlayStationModel playStationModel = new PlayStationModel();
 
-    public void initialize(){
+    PlayStationDAO playStationDAO = new PlayStationDAOImpl();
+
+    public void initialize() throws ClassNotFoundException {
         setCellValueFactory();
         loadAllPlayStations();
         generatePlayStationId();
@@ -76,11 +80,10 @@ public class PlayStationFormController {
         });
     }
 
-    private void generatePlayStationId() {
+    private void generatePlayStationId() throws ClassNotFoundException {
         try {
-            PlayStationModel playstationModel = new PlayStationModel();
-
-            String newPlaystationId = playstationModel.generateNewPlaystationId();
+//            PlayStationModel playstationModel = new PlayStationModel();
+            String newPlaystationId = playStationDAO.generateNewPlaystationId();
 
             txtPlayStationId.setText(newPlaystationId);
         } catch (SQLException e) {
@@ -102,15 +105,14 @@ public class PlayStationFormController {
     }
 
     @FXML
-    void btnDeleteOnAction(ActionEvent event) {
+    void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
         PlayStationTm selectPlayStation = tblPlayStation.getSelectionModel().getSelectedItem();
 
     if (selectPlayStation != null) {
         String id = txtPlayStationId.getText();
-        PlayStationModel playStationModel = new PlayStationModel();
-
+//        PlayStationModel playStationModel = new PlayStationModel();
         try {
-            boolean isDeleted = playStationModel.deletePlayStation(id);
+            boolean isDeleted = playStationDAO.deletePlayStation(id);
 
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Play Station Deleted Successfully").show();
@@ -124,12 +126,12 @@ public class PlayStationFormController {
         }
     }
 
-    private void loadAllPlayStations() {
+    private void loadAllPlayStations() throws ClassNotFoundException {
 
         ObservableList<PlayStationTm> obList = FXCollections.observableArrayList();
 
         try {
-            List<PlayStationDto> dtoList = playStationModel.getAll();
+            List<PlayStationDto> dtoList = playStationDAO.getAllPlayStations();
 
             for(PlayStationDto dto : dtoList) {
                 obList.add(
@@ -148,7 +150,7 @@ public class PlayStationFormController {
     }
 
     @FXML
-    void btnClearOnAction(ActionEvent event) {
+    void btnClearOnAction(ActionEvent event) throws ClassNotFoundException {
         clearFields();
         generatePlayStationId();
     }
@@ -160,7 +162,7 @@ public class PlayStationFormController {
     }
 
     @FXML
-    void btnSaveOnAction(ActionEvent event) {
+    void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
 
         boolean isPlaystationValidated = ValidatePlaystation();
 
@@ -174,7 +176,7 @@ public class PlayStationFormController {
         double rate= Double.parseDouble(txtRate.getText());
 
         try {
-            boolean isSaved = playStationModel.savePlayStation(new PlayStationDto(playStation, playStationNum, status,rate));
+            boolean isSaved = playStationDAO.savePlayStation(new PlayStationDto(playStation, playStationNum, status,rate));
             if (isSaved){
                 new Alert(Alert.AlertType.CONFIRMATION,"Saved Successfully").show();
                 loadAllPlayStations();
@@ -216,12 +218,11 @@ public class PlayStationFormController {
     }
 
     @FXML
-    void btnSearchOnAction(ActionEvent event) {
+    void btnSearchOnAction(ActionEvent event) throws ClassNotFoundException {
         String id = txtSearchBar.getText();
-        var model = new PlayStationModel();
-
+//        var model = new PlayStationModel();
         try {
-            PlayStationDto dto = model.searchModel(id);
+            PlayStationDto dto = playStationDAO.searchModel(id);
             if (dto != null){
                 fillField(dto);
             }else {
@@ -239,17 +240,16 @@ public class PlayStationFormController {
     }
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event)  {
+    void btnUpdateOnAction(ActionEvent event) throws ClassNotFoundException {
         String playStationId = txtPlayStationId.getText();
         String playStationNum = txtPlayStationNumber.getText();
         String status = "Free";
         double rate= Double.parseDouble((txtRate.getText()));
 
         PlayStationDto dto = new PlayStationDto(playStationId, playStationNum, status, rate);
-        PlayStationModel playStationModel = new PlayStationModel();
-
+//        PlayStationModel playStationModel = new PlayStationModel();
         try{
-            boolean isUpdated = playStationModel.updatePlayStation(dto);
+            boolean isUpdated = playStationDAO.updatePlayStation(dto);
             if (isUpdated){
                 new Alert(Alert.AlertType.CONFIRMATION, "PlayStation Updated Successfully");
 
