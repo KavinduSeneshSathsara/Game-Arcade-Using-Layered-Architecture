@@ -14,10 +14,8 @@ import javafx.stage.Stage;
 import lk.ijse.GameCafe.dao.custom.UserDAO;
 import lk.ijse.GameCafe.dao.custom.impl.UserDAOImpl;
 import lk.ijse.GameCafe.dto.UserDto;
-import lk.ijse.GameCafe.model.UserModel;
 
 import javax.mail.MessagingException;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -65,13 +63,11 @@ public class signUpFormController {
         }
 
         UserDto dto = new UserDto(username, password, email);
-        UserModel userModel = new UserModel();
 
         try {
             boolean isSaved = userDAO.saveUser(dto);
             if (isSaved) {
                 if (txtTerms.isSelected()) {
-//                     sendConfirmationEmail(email);
                     new Alert(Alert.AlertType.INFORMATION, "A confirmation email has been sent to your Email address.").show();
                 }
 
@@ -100,14 +96,12 @@ public class signUpFormController {
             new Alert(Alert.AlertType.ERROR, "Invalid username. It should be 3-20 characters and can contain letters, numbers, and underscores.").show();
             return false;
         }
-
         // Validate password
         boolean isPasswordValid = password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$");
         if (!isPasswordValid) {
             new Alert(Alert.AlertType.ERROR, "Invalid password. It should be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one digit.").show();
             return false;
         }
-
         // Validate email
         boolean isEmailValid = email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
         if (!isEmailValid) {
@@ -127,8 +121,4 @@ public class signUpFormController {
         stage.setTitle("Login Form");
         stage.centerOnScreen();
     }
-
-//    @FXML
-//    public void checkBoxONMouseClicked(javafx.scene.input.MouseEvent mouseEvent) {
-//    }
 }

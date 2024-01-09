@@ -14,16 +14,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import lk.ijse.GameCafe.dao.custom.BookingDAO;
+import lk.ijse.GameCafe.dao.custom.CustomerDAO;
+import lk.ijse.GameCafe.dao.custom.PaymentDAO;
+import lk.ijse.GameCafe.dao.custom.impl.BookingDAOImpl;
+import lk.ijse.GameCafe.dao.custom.impl.CustomerDAOImpl;
+import lk.ijse.GameCafe.dao.custom.impl.PaymentDAOImpl;
 import lk.ijse.GameCafe.db.DbConnection;
 import lk.ijse.GameCafe.dto.BookingDto;
 import lk.ijse.GameCafe.dto.CustomerDto;
 import lk.ijse.GameCafe.dto.PaymentDto;
-import lk.ijse.GameCafe.dto.tm.CustomerTm;
-import lk.ijse.GameCafe.dto.tm.EmployeeTm;
 import lk.ijse.GameCafe.dto.tm.PaymentTm;
-import lk.ijse.GameCafe.model.BookingModel;
-import lk.ijse.GameCafe.model.CustomerModel;
-import lk.ijse.GameCafe.model.PaymentModel;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
@@ -43,15 +44,6 @@ import java.util.ResourceBundle;
 import javax.mail.*;
 
 public class PaymentsFormController implements Initializable {
-
-    @FXML
-    private Pane pane;
-
-//    @FXML
-//    private TextField txtBookingId;
-
-    @FXML
-    private TextField txtSearchBar;
 
     @FXML
     private Text lblDate;
@@ -81,12 +73,6 @@ public class PaymentsFormController implements Initializable {
     private ComboBox<String> cmbBookingId;
 
     @FXML
-    private TextField txtAmount;
-
-    @FXML
-    private TextField txtCustomer;
-
-    @FXML
     private Label lblAmount;
 
     @FXML
@@ -98,11 +84,9 @@ public class PaymentsFormController implements Initializable {
     @FXML
     private JFXButton btnPay;
 
-    PaymentModel paymentModel = new PaymentModel();
-    BookingModel bookingModel = new BookingModel();
-    CustomerModel customerModel = new CustomerModel();
-    CustomerDto customerDto = new CustomerDto();
-
+    PaymentDAO paymentDAO = new PaymentDAOImpl();
+    BookingDAO bookingDAO = new BookingDAOImpl();
+    CustomerDAO customerDAO = new CustomerDAOImpl();
     @FXML
     void btnClearOnAction(ActionEvent event) {
         cmbBookingId.getItems().clear();
@@ -119,13 +103,13 @@ public class PaymentsFormController implements Initializable {
     }
 
     @FXML
-    void btnPayOnAction(ActionEvent event) throws SQLException, MessagingException {
+    void btnPayOnAction(ActionEvent event) throws SQLException, MessagingException, ClassNotFoundException {
         Connection connection = null;
         try {
             connection = DbConnection.getInstance( ).getConnection( );
             connection.setAutoCommit( false );
 
-            boolean savePayment = paymentModel.savePayment( new PaymentDto(
+            boolean savePayment = paymentDAO.savePayment( new PaymentDto(
                     lblPaymentID.getText( ),
                     cmbBookingId.getValue(),
                     Date.valueOf( LocalDate.now( ) ),
@@ -134,7 +118,7 @@ public class PaymentsFormController implements Initializable {
             ) );
 
             if ( savePayment ) {
-                boolean isUpdated = bookingModel.updateStatus(String.valueOf(cmbBookingId.getValue( )));
+                boolean isUpdated = bookingDAO.updateStatus(String.valueOf(cmbBookingId.getValue( )));
                 loadAllPayments();
 
                 if ( isUpdated ) {
@@ -142,7 +126,6 @@ public class PaymentsFormController implements Initializable {
                     new Alert( Alert.AlertType.CONFIRMATION, "Payment Saved" ).show();
                     setPaymentId();
                     loadAllPayments();
-//                    EmailController.sendEmail(customerDto.getCusEmail(), "Payment Confirmation", "Thank you for your payment!");
                 } else {
                     new Alert( Alert.AlertType.ERROR , "Something Went Wrong" ).show();
                 }
@@ -157,14 +140,12 @@ public class PaymentsFormController implements Initializable {
         }
     }
 
-    private void loadAllPayments() {
+    private void loadAllPayments() throws ClassNotFoundException {
         System.out.println("load");
-        PaymentModel paymentModel = new PaymentModel();
-
         ObservableList<PaymentTm> obList = FXCollections.observableArrayList();
 
         try{
-            List<PaymentDto> list = paymentModel.getAllPayments();
+            List<PaymentDto> list = paymentDAO.getAllPayments();
 
             for (PaymentDto dto: list){
                 PaymentTm paymentTm = new PaymentTm(
@@ -185,13 +166,13 @@ public class PaymentsFormController implements Initializable {
     }
 
     @FXML
-    void cmbBookingIdOnAction(ActionEvent event) {
+    void cmbBookingIdOnAction(ActionEvent event) throws ClassNotFoundException {
         try {
-            BookingDto bookingData = bookingModel.getBookingData((String) cmbBookingId.getValue());
+            BookingDto bookingData = bookingDAO.getBookingData((String) cmbBookingId.getValue());
 
             if ( bookingData != null && bookingData.getStatus().equals( "Not Paid" ) ) {
 
-                CustomerDto dto = customerModel.SearchModel( bookingData.getCus_id() );
+                CustomerDto dto = customerDAO.SearchModel( bookingData.getCus_id() );
                 lblCustomerName.setText( dto.getCusName() );
                 lblAmount.setText( String.valueOf( bookingData.getTotal() ) );
                 btnPay.setDisable( false );
@@ -203,30 +184,6 @@ public class PaymentsFormController implements Initializable {
             e.printStackTrace();
         }
     }
-
-//    @FXML
-//    void btnSearchOnAction(ActionEvent event) {
-//        String id = txtSearchBar.getText();
-//        var model = new PaymentModel();
-//        try {
-//
-//            var dto = model.SearchModel(id);
-//            if (dto != null){
-//                fillField(dto);
-//            }else {
-//                new Alert(Alert.AlertType.INFORMATION,"Customer not found").show();
-//            }
-//        } catch (SQLException e) {
-//            new Alert(Alert.AlertType.ERROR,e.getMessage()).show();
-//        }
-//    }
-
-//    private void fillField(PaymentDto dto) {
-//
-//        txtBookingId.setText(dto.getBookingId());
-//        txtCustomer.setText(dto1.getCusName());
-//        txtAmount.setText(String.valueOf(dto.getAmount()));
-//    }
 
     @FXML
     void btnReportOnAction(ActionEvent event) throws JRException, SQLException {
@@ -250,9 +207,9 @@ public class PaymentsFormController implements Initializable {
         timeline.play();
     }
 
-    public void setPaymentId() {
+    public void setPaymentId() throws ClassNotFoundException {
         try {
-            lblPaymentID.setText( paymentModel.generateNextId() );
+            lblPaymentID.setText( paymentDAO.generateNextId() );
         } catch ( SQLException e ) {
             e.printStackTrace();
         }
@@ -260,21 +217,43 @@ public class PaymentsFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        setPaymentId();
+
+        try {
+            setPaymentId();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         time();
         setCellValueFactory();
-        loadAllPayments();
+
+        try {
+            loadAllPayments();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         time();
-        setPaymentId();
-        loadAllBookingId();
+
+        try {
+            setPaymentId();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            loadAllBookingId();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
 
-    private void loadAllBookingId() {
+    private void loadAllBookingId() throws ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<BookingDto> dtos = bookingModel.getAllBooking();
+            List<BookingDto> dtos = bookingDAO.getAllBooking();
             for (BookingDto dto : dtos) {
                 obList.add(dto.getBookingId());
             }
@@ -284,18 +263,17 @@ public class PaymentsFormController implements Initializable {
         }
     }
 
-    public void btnSearchOnAction(ActionEvent actionEvent) {
-    }
+    public void btnSearchOnAction(ActionEvent actionEvent) {}
 
     @FXML
-    void btnDeleteOnAction(ActionEvent actionEvent) {
+    void btnDeleteOnAction(ActionEvent actionEvent) throws ClassNotFoundException {
         PaymentTm selectedPayment = tblPayment.getSelectionModel().getSelectedItem();
 
         if (selectedPayment != null) {
             String id = selectedPayment.getPaymentId();
 
             try {
-                boolean isDeleted = paymentModel.deletePayment(id);
+                boolean isDeleted = paymentDAO.deletePayment(id);
 
                 if (isDeleted) {
                     new Alert(Alert.AlertType.CONFIRMATION, "Payment Deleted Successfully").show();

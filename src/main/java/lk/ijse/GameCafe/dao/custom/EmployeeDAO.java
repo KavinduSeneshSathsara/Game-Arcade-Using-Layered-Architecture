@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface EmployeeDAO {
+    String totalEmployeeCount() throws SQLException, ClassNotFoundException;
+
     boolean updateEmployee(EmployeeDto dto) throws SQLException, ClassNotFoundException;
 
     String generateNewEmpId() throws SQLException, ClassNotFoundException;

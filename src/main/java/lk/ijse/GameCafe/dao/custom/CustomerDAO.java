@@ -20,4 +20,8 @@ public interface CustomerDAO {
     boolean updateCustomer(CustomerDto dto) throws SQLException, ClassNotFoundException;
 
     CustomerDto getCustomer(String s) throws SQLException, ClassNotFoundException;
+
+    CustomerDto SearchModel(String cusId) throws SQLException, ClassNotFoundException;
+
+    String totalCustomerCount() throws SQLException, ClassNotFoundException;
 }

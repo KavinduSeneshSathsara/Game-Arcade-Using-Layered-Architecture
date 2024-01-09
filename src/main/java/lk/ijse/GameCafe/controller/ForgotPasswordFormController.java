@@ -11,7 +11,6 @@ import javafx.stage.Stage;
 import lk.ijse.GameCafe.dao.custom.UserDAO;
 import lk.ijse.GameCafe.dao.custom.impl.UserDAOImpl;
 import lk.ijse.GameCafe.dto.UserDto;
-import lk.ijse.GameCafe.model.UserModel;
 import lk.ijse.GameCafe.util.Navigation;
 
 import javax.mail.MessagingException;
@@ -25,14 +24,10 @@ public class ForgotPasswordFormController {
     private AnchorPane root;
 
     @FXML
-    private Button btnBack;
-
-    @FXML
     private Button btnReset;
 
     @FXML
     private TextField txtUsername;
-
     static String username;
     static int otp;
 
@@ -51,7 +46,6 @@ public class ForgotPasswordFormController {
     @FXML
     void btnResetOnAction(ActionEvent event) throws SQLException, MessagingException, IOException, ClassNotFoundException {
         username = txtUsername.getText();
-//        UserModel userModel = new UserModel();
         Random random = new Random();
 
         otp = random.nextInt(9000);

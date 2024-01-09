@@ -13,7 +13,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import lk.ijse.GameCafe.dao.custom.BookingDAO;
@@ -27,23 +26,18 @@ import lk.ijse.GameCafe.dao.custom.impl.PlayStationDAOImpl;
 import lk.ijse.GameCafe.db.DbConnection;
 import lk.ijse.GameCafe.dto.*;
 import lk.ijse.GameCafe.dto.tm.CartTm;
-import lk.ijse.GameCafe.model.*;
 
 import java.net.URL;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class BookingFormController implements Initializable{
-    @FXML
-    private Pane pane;
-
     @FXML
     private TableView<CartTm> tblCart;
 
@@ -64,12 +58,6 @@ public class BookingFormController implements Initializable{
 
     @FXML
     private ComboBox<String> cmbCusNumbers;
-
-    @FXML
-    private TextField txtCustMail;
-
-    @FXML
-    private TextField txtCustName;
 
     @FXML
     private Text lblTime;
@@ -110,11 +98,7 @@ public class BookingFormController implements Initializable{
     @FXML
     private JFXButton btnAddToList;
 
-    private PlayStationModel stationModel = new PlayStationModel();
     private final ObservableList<CartTm> cart = FXCollections.observableArrayList();
-    private BookingModel bookingModel = new BookingModel();
-    private CustomerModel customerModel = new CustomerModel();
-    BookingDetailModel bookingDetailModel = new BookingDetailModel();
 
     CustomerDAO customerDAO = new CustomerDAOImpl();
     BookingDAO bookingDAO = new BookingDAOImpl();
@@ -149,7 +133,6 @@ public class BookingFormController implements Initializable{
         colAction.setCellValueFactory(new PropertyValueFactory<>("btn"));
     }
 
-
     private void loadTimeZone() {
         ObservableList<String> timeList = FXCollections.observableArrayList();
         timeList.add("AM");
@@ -171,10 +154,8 @@ public class BookingFormController implements Initializable{
             Optional<ButtonType> type = new Alert(Alert.AlertType.INFORMATION, "Are you sure to remove?", yes, no).showAndWait();
 
             if (type.orElse(no) == yes) {
-//                int index = tblCart.getSelectionModel().getSelectedIndex();
                 CartTm selectedCartItem = tblCart.getSelectionModel().getSelectedItem();
                 cart.remove(selectedCartItem);
-//                cart.remove(index);
                 tblCart.refresh();
                 calculateNetTotal();
             }
@@ -245,10 +226,8 @@ public class BookingFormController implements Initializable{
     private Time makeTime(String rawTime) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("h.mm aa");
-
             // Parse the string to get a Date object
             java.util.Date date = sdf.parse(rawTime + " " + cmbTimeZone.getValue());
-
             // Convert the Date object to a Time object
             System.out.println(new Time(date.getTime()));
             return new Time(date.getTime());
@@ -297,10 +276,10 @@ public class BookingFormController implements Initializable{
         cmbStation.setDisable(false);
     }
 
-    private void loadAllStations() {
+    private void loadAllStations() throws ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<PlayStationDto> dtos = stationModel.getAll( );
+            List<PlayStationDto> dtos = playStationDAO.getAllPlayStations( );
             for (PlayStationDto dto : dtos) {
                 obList.add(dto.getPlayStationId());
             }
@@ -311,9 +290,7 @@ public class BookingFormController implements Initializable{
     }
 
     @FXML
-    void cmbStartTimeOnAction(ActionEvent event) {
-
-    }
+    void cmbStartTimeOnAction(ActionEvent event) {}
 
     @FXML
     void cmbTimeZoneOnAcion(ActionEvent event) {
@@ -337,41 +314,22 @@ public class BookingFormController implements Initializable{
         cmbEndTime.setDisable(false);
         cmbStartTime.setDisable(false);
     }
-//    @FXML
-//    void txtContactOnAction(ActionEvent event) {
-//        try {
-//            CustomerDto customerDto = customerModel.getCustomer(txtContact.getText());
-//            txtCustName.setText(customerDto.getCusName());
-//            txtCustMail.setText(customerDto.getCusEmail());
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
+
     @FXML
-    void cmbCusNumbersOnAction(Event event) {
+    void cmbCusNumbersOnAction(Event event) throws ClassNotFoundException {
         try {
-            CustomerDto customerDto = customerModel.getCustomer(String.valueOf(cmbCusNumbers.getValue()));
+            CustomerDto customerDto = customerDAO.getCustomer(String.valueOf(cmbCusNumbers.getValue()));
             lblCustomerName.setText(customerDto.getCusName());
             lblCustomerEmail.setText(customerDto.getCusEmail());
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-//        @FXML
-//    void cmbStationOnAction(Event event) {
-//        try {
-//            PlayStationDto playStationDto;
-//            playStationDto = stationModel.getRate(cmbStation.getId());
-//            lblRate.setText(String.valueOf(playStationDto.getRate()));
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
+
     @FXML
-    void cmbStationOnAction(ActionEvent event) {
+    void cmbStationOnAction(ActionEvent event) throws ClassNotFoundException {
         try {
-            ArrayList<BookingDto> allBookings = bookingModel.getAllBookings( cmbStation.getValue( ), Date.valueOf( datePicker.getValue( ) ) );
+            List<BookingDto> allBookings = bookingDAO.getAllBookings( cmbStation.getValue( ), Date.valueOf( datePicker.getValue( ) ) );
 
             boolean overlap = isOverlap( allBookings, makeTime( cmbStartTime.getValue() + " " + cmbTimeZone.getValue() ).toLocalTime(), makeTime( cmbEndTime.getValue() + " " + cmbTimeZone.getValue() ).toLocalTime() );
 
@@ -417,16 +375,25 @@ public class BookingFormController implements Initializable{
             throw new RuntimeException(e);
         }
 
-        loadAllStations();
-        loadAllNumbers();
+        try {
+            loadAllStations();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            loadAllNumbers();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
         tblCart.setItems(cart);
     }
 
-    private void loadAllNumbers() {
+    private void loadAllNumbers() throws ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<CustomerDto> dtos = customerModel.getAllCustomers();
+            List<CustomerDto> dtos = customerDAO.getAllCustomers();
             for (CustomerDto dto : dtos) {
                 obList.add(dto.getCusContactNum());
             }

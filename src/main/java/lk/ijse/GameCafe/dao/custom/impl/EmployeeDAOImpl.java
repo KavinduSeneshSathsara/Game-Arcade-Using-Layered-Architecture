@@ -11,6 +11,16 @@ import java.util.List;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
     @Override
+    public String totalEmployeeCount() throws SQLException, ClassNotFoundException {
+        ResultSet rst = SQLUtil.execute("SELECT COUNT(*) AS EmployeeCount FROM Employee");
+
+        if (rst.next()){
+            return rst.getString(1);
+        }
+        return null;
+    }
+
+    @Override
     public boolean updateEmployee(EmployeeDto dto) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("UPDATE employee SET emp_name = ?, emp_contact_num = ?, emp_salary = ?, emp_address = ? WHERE emp_id = ?",
             dto.getEmpName(),

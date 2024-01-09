@@ -15,13 +15,11 @@ import lk.ijse.GameCafe.dao.custom.impl.CustomerDAOImpl;
 import lk.ijse.GameCafe.db.DbConnection;
 import lk.ijse.GameCafe.dto.CustomerDto;
 import lk.ijse.GameCafe.dto.tm.CustomerTm;
-import lk.ijse.GameCafe.model.CustomerModel;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
@@ -43,9 +41,6 @@ public class CustomerFormController {
 
     @FXML
     private TableColumn<?, ?> colCusAddress;
-
-    @FXML
-    private Pane pane;
 
     @FXML
     private TableView<CustomerTm> tblCustomer;
@@ -76,9 +71,7 @@ public class CustomerFormController {
 
         if (selectedCustomer != null) {
             String id = txtCusId.getText();
-//            CustomerModel customerModel = new CustomerModel();
             try {
-//                boolean isDeleted = customerModel.deleteEmployee(id);
                 boolean isDeleted = customerDAO.deleteCustomer(id);
 
                 if (isDeleted) {
@@ -131,9 +124,7 @@ public class CustomerFormController {
         String cusAddress = txtCusAddress.getText();
 
         CustomerDto dto = new CustomerDto(cusId, cusContactNum, cusEmail, cusName, cusAddress);
-//        CustomerModel customerModel = new CustomerModel();
         try{
-//            boolean isSaved = customerModel.saveCustomer(dto);
             boolean isSaved = customerDAO.saveCustomer(dto);
 
             if (isSaved){
@@ -148,8 +139,6 @@ public class CustomerFormController {
     }
     private void generateCustomerId() throws ClassNotFoundException {
         try {
-//            CustomerModel customerModel = new CustomerModel();
-//            String newCustomerId = customerModel.generateNewCustomerId();
             String newCustomerId = customerDAO.generateNewCustomerId();
 
             txtCusId.setText(newCustomerId);
@@ -192,10 +181,8 @@ public class CustomerFormController {
 
     private void loadAllCustomers() throws ClassNotFoundException {
 
-//        CustomerModel model = new CustomerModel();
         ObservableList<CustomerTm> obList = FXCollections.observableArrayList();
          try{
-//             List <CustomerDto> list = model.getAllCustomers();
              List <CustomerDto> list = customerDAO.getAllCustomers();
 
              for (CustomerDto dto : list){
@@ -262,11 +249,9 @@ public class CustomerFormController {
         return true;
         
     }
-
         @FXML
         void btnSearchOnAction (ActionEvent event) throws ClassNotFoundException {
             String id = txtSearchBar.getText();
-//            var model = new CustomerModel();
             try {
                 CustomerDto dto = customerDAO.SearchCustomer(id);
                 if (dto != null){
@@ -289,9 +274,7 @@ public class CustomerFormController {
             String cusAddress = txtCusAddress.getText();
 
             CustomerDto dto = new CustomerDto(cusId, cusContactNum, cusEmail, cusName, cusAddress);
-//            CustomerModel customerModel = new CustomerModel();
             try {
-//                boolean isUpdated = customerModel.updateCustomer(dto);
                 boolean isUpdated = customerDAO.updateCustomer(dto);
                 if (isUpdated){
                     new Alert(Alert.AlertType.CONFIRMATION, "Customer Updated Successfully");

@@ -13,9 +13,6 @@ import java.io.IOException;
 public class OtpFormController {
 
     @FXML
-    private AnchorPane OtpForm;
-
-    @FXML
     private Button btnBack;
 
     @FXML

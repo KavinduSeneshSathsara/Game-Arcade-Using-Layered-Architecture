@@ -101,4 +101,30 @@ public class CustomerDAOImpl implements CustomerDAO {
         }
         return null;
     }
+
+    @Override
+    public CustomerDto SearchModel(String cusId) throws SQLException, ClassNotFoundException {
+        ResultSet rst = SQLUtil.execute("SELECT * FROM customer WHERE cus_id = ?", cusId);
+
+        if (rst.next()){
+            return new CustomerDto(
+              rst.getString(1),
+              rst.getString(2),
+              rst.getString(3),
+              rst.getString(4),
+              rst.getString(5)
+            );
+        }
+        return null;
+    }
+
+    @Override
+    public String totalCustomerCount() throws SQLException, ClassNotFoundException {
+        ResultSet rst = SQLUtil.execute("SELECT COUNT(*) AS CustomerCount FROM customer");
+
+        if (rst.next()){
+            return rst.getString(1);
+        }
+        return null;
+    }
 }

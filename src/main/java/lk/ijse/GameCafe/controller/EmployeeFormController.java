@@ -9,13 +9,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Pane;
 import lk.ijse.GameCafe.dao.custom.EmployeeDAO;
 import lk.ijse.GameCafe.dao.custom.impl.EmployeeDAOImpl;
 import lk.ijse.GameCafe.dto.EmployeeDto;
-import lk.ijse.GameCafe.dto.tm.CustomerTm;
 import lk.ijse.GameCafe.dto.tm.EmployeeTm;
-import lk.ijse.GameCafe.model.EmployeeModel;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -37,9 +34,6 @@ public class EmployeeFormController {
 
         @FXML
         private TableColumn<?, ?> colEmpSalary;
-
-        @FXML
-        private Pane pane;
 
         @FXML
         private TableView<EmployeeTm> tblEmployee;
@@ -72,7 +66,6 @@ public class EmployeeFormController {
 
     private void generateEmployeeId() throws ClassNotFoundException {
         try {
-//            EmployeeModel employeeModel = new EmployeeModel();
             String newCustomerId = employeeDAO.generateNewEmpId();
 
             txtEmpId.setText(newCustomerId);
@@ -106,7 +99,6 @@ public class EmployeeFormController {
         String salary = txtEmpSalary.getText();
 
         EmployeeDto dto = new EmployeeDto(id, name, contactNum, salary, address);
-//        EmployeeModel employeeModel = new EmployeeModel();
         try {
             boolean isSaved = employeeDAO.saveEmployee(dto);
 
@@ -119,8 +111,6 @@ public class EmployeeFormController {
         }catch (SQLException e){
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
-
-
     }
 
     public void initialize() throws ClassNotFoundException {
@@ -154,7 +144,6 @@ public class EmployeeFormController {
     }
 
     private void loadAllEmployees() throws ClassNotFoundException {
-//        EmployeeModel model = new EmployeeModel();
         ObservableList<EmployeeTm> obList = FXCollections.observableArrayList();
 
         try {
@@ -226,7 +215,6 @@ public class EmployeeFormController {
     @FXML
     void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
         String id = txtEmpId.getText();
-//        EmployeeModel employeeModel = new EmployeeModel();
         try {
             boolean isDeleted = employeeDAO.deleteEmployee(id);
             if(isDeleted){
@@ -248,7 +236,6 @@ public class EmployeeFormController {
         String address = txtEmpAddress.getText();
 
         EmployeeDto dto = new EmployeeDto(id,name,email,contactNo,address);
-//        EmployeeModel EmployeeModel = new EmployeeModel();
         try {
             boolean isUpdated = employeeDAO.updateEmployee(dto);
             if(isUpdated){
@@ -263,7 +250,6 @@ public class EmployeeFormController {
     @FXML
     void btnSearchOnAction(ActionEvent event) throws ClassNotFoundException {
         String id = txtSearchBar.getText();
-        var model = new EmployeeModel();
         try {
 
             EmployeeDto dto = employeeDAO.SearchModel(id);

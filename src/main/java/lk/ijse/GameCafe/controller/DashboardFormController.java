@@ -13,13 +13,15 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import lk.ijse.GameCafe.dao.custom.BookingDAO;
+import lk.ijse.GameCafe.dao.custom.CustomerDAO;
 import lk.ijse.GameCafe.dao.custom.DashBoardDAO;
+import lk.ijse.GameCafe.dao.custom.EmployeeDAO;
+import lk.ijse.GameCafe.dao.custom.impl.BookingDAOImpl;
+import lk.ijse.GameCafe.dao.custom.impl.CustomerDAOImpl;
 import lk.ijse.GameCafe.dao.custom.impl.DashBoardDAOImpl;
+import lk.ijse.GameCafe.dao.custom.impl.EmployeeDAOImpl;
 import lk.ijse.GameCafe.dto.DashboardTableDto;
-import lk.ijse.GameCafe.model.BookingModel;
-import lk.ijse.GameCafe.model.CustomerModel;
-import lk.ijse.GameCafe.model.DashBoardModel;
-import lk.ijse.GameCafe.model.EmployeeModel;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -35,12 +37,6 @@ public class DashboardFormController {
 
     @FXML
     private TableColumn<?, ?> colTotal;
-
-    @FXML
-    private Pane pane;
-
-    @FXML
-    private TableView<?> tblUpcomingAppoinment;
 
     @FXML
     private TableView<DashboardTableDto> tblDashboard;
@@ -63,6 +59,9 @@ public class DashboardFormController {
     private static DashboardFormController controller;
 
     DashBoardDAO dashBoardDAO = new DashBoardDAOImpl();
+    EmployeeDAO employeeDAO = new EmployeeDAOImpl();
+    CustomerDAO customerDAO = new CustomerDAOImpl();
+    BookingDAO bookingDAO = new BookingDAOImpl();
 
     public DashboardFormController() {
 
@@ -81,24 +80,20 @@ public class DashboardFormController {
 
     public void start() throws ClassNotFoundException {
 
-        EmployeeModel employeeModel = new EmployeeModel();
-        CustomerModel customerModel = new CustomerModel();
-        BookingModel bookingModel = new BookingModel();
-
         try {
-            txtEmployeeCount.setText(employeeModel.totalEmployeeCount());
+            txtEmployeeCount.setText(employeeDAO.totalEmployeeCount());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
         try {
-            txtCustomerCount.setText(customerModel.totalCustomerCount());
+            txtCustomerCount.setText(customerDAO.totalCustomerCount());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
         try {
-            txtBookingCount.setText(bookingModel.totalBookingCount());
+            txtBookingCount.setText(bookingDAO.totalBookingCount());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -108,10 +103,8 @@ public class DashboardFormController {
     }
 
     private void loadAllData() throws ClassNotFoundException {
-//         DashBoardModel dashBoardModel = new DashBoardModel();
         ObservableList<DashboardTableDto> obList = FXCollections.observableArrayList();
         try {
-//            List<DashboardTableDto> list = dashBoardModel.dashbaordTableData();
             List<DashboardTableDto> list = dashBoardDAO.dashbaordTableData();
 
             for (DashboardTableDto dto : list){

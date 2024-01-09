@@ -6,7 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import lk.ijse.GameCafe.dao.custom.UserDAO;
 import lk.ijse.GameCafe.dao.custom.impl.UserDAOImpl;
-import lk.ijse.GameCafe.model.UserModel;
 import lk.ijse.GameCafe.util.Navigation;
 
 
@@ -14,12 +13,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class ResetPasswordController {
-
-    @FXML
-    private Button btnLogin;
-
-    @FXML
-    private Button btnReset;
 
     @FXML
     private TextField txtConfirmPassword;
@@ -35,7 +28,6 @@ public class ResetPasswordController {
 
     @FXML
     void btnResetPasswordOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
-//        UserModel userModel = new UserModel();
         if(txtPassword.getText().equals(txtConfirmPassword.getText())) {
 
             boolean isUpdated = userDAO.updatePassword(ForgotPasswordFormController.username, txtPassword.getText());

@@ -13,23 +13,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import lk.ijse.GameCafe.dao.custom.PlayStationDAO;
 import lk.ijse.GameCafe.dao.custom.impl.PlayStationDAOImpl;
-import lk.ijse.GameCafe.dto.CustomerDto;
 import lk.ijse.GameCafe.dto.PlayStationDto;
-import lk.ijse.GameCafe.dto.tm.CustomerTm;
 import lk.ijse.GameCafe.dto.tm.PlayStationTm;
-import lk.ijse.GameCafe.model.PlayStationModel;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class PlayStationFormController {
-
-    @FXML
-    private JFXButton btnSave;
-
-    @FXML
-    private Pane pane;
 
     @FXML
     private TableView<PlayStationTm> tblPlayStation;
@@ -58,8 +49,6 @@ public class PlayStationFormController {
     @FXML
     private TextField txtRate;
 
-    PlayStationModel playStationModel = new PlayStationModel();
-
     PlayStationDAO playStationDAO = new PlayStationDAOImpl();
 
     public void initialize() throws ClassNotFoundException {
@@ -82,7 +71,6 @@ public class PlayStationFormController {
 
     private void generatePlayStationId() throws ClassNotFoundException {
         try {
-//            PlayStationModel playstationModel = new PlayStationModel();
             String newPlaystationId = playStationDAO.generateNewPlaystationId();
 
             txtPlayStationId.setText(newPlaystationId);
@@ -110,7 +98,6 @@ public class PlayStationFormController {
 
     if (selectPlayStation != null) {
         String id = txtPlayStationId.getText();
-//        PlayStationModel playStationModel = new PlayStationModel();
         try {
             boolean isDeleted = playStationDAO.deletePlayStation(id);
 
@@ -220,7 +207,6 @@ public class PlayStationFormController {
     @FXML
     void btnSearchOnAction(ActionEvent event) throws ClassNotFoundException {
         String id = txtSearchBar.getText();
-//        var model = new PlayStationModel();
         try {
             PlayStationDto dto = playStationDAO.searchModel(id);
             if (dto != null){
@@ -247,7 +233,6 @@ public class PlayStationFormController {
         double rate= Double.parseDouble((txtRate.getText()));
 
         PlayStationDto dto = new PlayStationDto(playStationId, playStationNum, status, rate);
-//        PlayStationModel playStationModel = new PlayStationModel();
         try{
             boolean isUpdated = playStationDAO.updatePlayStation(dto);
             if (isUpdated){

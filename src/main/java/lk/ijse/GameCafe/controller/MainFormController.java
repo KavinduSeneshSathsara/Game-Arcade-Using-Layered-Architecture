@@ -19,9 +19,6 @@ public class MainFormController {
     @FXML
     private AnchorPane rootMainPane;
 
-    @FXML
-    private Label lblTime;
-
     public void initialize() throws IOException {
         Pane newLoadedPane = FXMLLoader.load(getClass().getResource("/view/Dashboard_form.fxml"));
         rootMainPane.getChildren().add(newLoadedPane);
