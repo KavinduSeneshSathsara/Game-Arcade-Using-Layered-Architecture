@@ -8,6 +8,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.GameCafe.bo.custom.UserBO;
+import lk.ijse.GameCafe.bo.custom.impl.UserBOImpl;
+import lk.ijse.GameCafe.dao.custom.UserDAO;
+import lk.ijse.GameCafe.dao.custom.impl.UserDAOImpl;
 
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -23,9 +27,13 @@ public class LoginFormController {
     @FXML
     private TextField txtUsername;
 
+    UserDAO userDAO = new UserDAOImpl();
+
+    UserBO userBO = new UserBOImpl();
+
 //    @FXML
 //    void btnContinueOnAction(ActionEvent event) throws IOException {
-//       if (UserModel.verifyCredential(txtUsername.getText(),txtPassword.getText())){
+//       if (userBO.verifyCredential(txtUsername.getText(),txtPassword.getText())){
 //
 //           try {
 //               AnchorPane anchorPane = FXMLLoader.load(this.getClass().getResource("/view/main_form.fxml"));

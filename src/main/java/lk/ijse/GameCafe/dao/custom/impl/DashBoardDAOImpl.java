@@ -2,7 +2,7 @@ package lk.ijse.GameCafe.dao.custom.impl;
 
 import lk.ijse.GameCafe.dao.custom.DashBoardDAO;
 import lk.ijse.GameCafe.dto.DashboardTableDto;
-import lk.ijse.GameCafe.util.SQLUtil;
+import lk.ijse.GameCafe.dao.SQLUtil;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

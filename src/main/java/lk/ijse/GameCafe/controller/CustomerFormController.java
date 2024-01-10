@@ -10,6 +10,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import lk.ijse.GameCafe.bo.custom.CustomerBO;
+import lk.ijse.GameCafe.bo.custom.impl.CustomerBOImpl;
 import lk.ijse.GameCafe.dao.custom.CustomerDAO;
 import lk.ijse.GameCafe.dao.custom.impl.CustomerDAOImpl;
 import lk.ijse.GameCafe.db.DbConnection;
@@ -64,6 +66,7 @@ public class CustomerFormController {
     private TextField txtSearchBar;
 
     CustomerDAO customerDAO = new CustomerDAOImpl();
+    CustomerBO customerBO = new CustomerBOImpl();
 
     @FXML
     void ButtonDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
@@ -72,7 +75,7 @@ public class CustomerFormController {
         if (selectedCustomer != null) {
             String id = txtCusId.getText();
             try {
-                boolean isDeleted = customerDAO.deleteCustomer(id);
+                boolean isDeleted = customerBO.deleteCustomer(id);
 
                 if (isDeleted) {
                     new Alert(Alert.AlertType.CONFIRMATION, "Customer Deleted Successfully").show();
@@ -125,7 +128,7 @@ public class CustomerFormController {
 
         CustomerDto dto = new CustomerDto(cusId, cusContactNum, cusEmail, cusName, cusAddress);
         try{
-            boolean isSaved = customerDAO.saveCustomer(dto);
+            boolean isSaved = customerBO.saveCustomer(dto);
 
             if (isSaved){
                 new Alert(Alert.AlertType.CONFIRMATION, "Customer Saved Successfully").show();
@@ -139,7 +142,7 @@ public class CustomerFormController {
     }
     private void generateCustomerId() throws ClassNotFoundException {
         try {
-            String newCustomerId = customerDAO.generateNewCustomerId();
+            String newCustomerId = customerBO.generateCustomerId();
 
             txtCusId.setText(newCustomerId);
         } catch (SQLException e) {
@@ -183,7 +186,7 @@ public class CustomerFormController {
 
         ObservableList<CustomerTm> obList = FXCollections.observableArrayList();
          try{
-             List <CustomerDto> list = customerDAO.getAllCustomers();
+             List <CustomerDto> list = customerBO.getAllCustomers();
 
              for (CustomerDto dto : list){
                  CustomerTm customerTm = new CustomerTm(
@@ -253,7 +256,7 @@ public class CustomerFormController {
         void btnSearchOnAction (ActionEvent event) throws ClassNotFoundException {
             String id = txtSearchBar.getText();
             try {
-                CustomerDto dto = customerDAO.SearchCustomer(id);
+                CustomerDto dto = customerBO.searchCustomer(id);
                 if (dto != null){
                     fillField(dto);
                 }else {
@@ -275,7 +278,7 @@ public class CustomerFormController {
 
             CustomerDto dto = new CustomerDto(cusId, cusContactNum, cusEmail, cusName, cusAddress);
             try {
-                boolean isUpdated = customerDAO.updateCustomer(dto);
+                boolean isUpdated = customerBO.updateCustomer(dto);
                 if (isUpdated){
                     new Alert(Alert.AlertType.CONFIRMATION, "Customer Updated Successfully");
 

@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import lk.ijse.GameCafe.bo.custom.UserBO;
+import lk.ijse.GameCafe.bo.custom.impl.UserBOImpl;
 import lk.ijse.GameCafe.dao.custom.UserDAO;
 import lk.ijse.GameCafe.dao.custom.impl.UserDAOImpl;
 import lk.ijse.GameCafe.util.Navigation;
@@ -21,6 +23,8 @@ public class ResetPasswordController {
     private TextField txtPassword;
 
     UserDAO userDAO = new UserDAOImpl();
+
+    UserBO userBO = new UserBOImpl();
     @FXML
     void btnLoginOnAction(ActionEvent event) throws IOException {
         Navigation.switchNavigation("login_form.fxml",event);
@@ -30,7 +34,7 @@ public class ResetPasswordController {
     void btnResetPasswordOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         if(txtPassword.getText().equals(txtConfirmPassword.getText())) {
 
-            boolean isUpdated = userDAO.updatePassword(ForgotPasswordFormController.username, txtPassword.getText());
+            boolean isUpdated = userBO.updatePassword(ForgotPasswordFormController.username, txtPassword.getText());
 
             if (isUpdated) {
                 System.out.println("OK");

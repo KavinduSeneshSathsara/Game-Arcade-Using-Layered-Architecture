@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.GameCafe.bo.custom.UserBO;
+import lk.ijse.GameCafe.bo.custom.impl.UserBOImpl;
 import lk.ijse.GameCafe.dao.custom.UserDAO;
 import lk.ijse.GameCafe.dao.custom.impl.UserDAOImpl;
 import lk.ijse.GameCafe.dto.UserDto;
@@ -32,7 +34,7 @@ public class ForgotPasswordFormController {
     static int otp;
 
     UserDAO userDAO = new UserDAOImpl();
-
+    UserBO userBO = new UserBOImpl();
     @FXML
     void btnBackOnAction(ActionEvent event) throws IOException {
         AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/login_form.fxml"));
@@ -51,7 +53,7 @@ public class ForgotPasswordFormController {
         otp = random.nextInt(9000);
         otp += 1000;
 
-        UserDto userDto = userDAO.getEmail(username);
+        UserDto userDto = userBO.getEmail(username);
         System.out.println(userDto.getEmail());
 
         EmailController.sendEmail(userDto.getEmail(), "Verification Code for Password Reset", otp + "");

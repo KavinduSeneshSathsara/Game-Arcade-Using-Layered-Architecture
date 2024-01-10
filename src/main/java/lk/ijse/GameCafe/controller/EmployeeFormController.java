@@ -9,6 +9,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import lk.ijse.GameCafe.bo.custom.EmployeeBO;
+import lk.ijse.GameCafe.bo.custom.impl.EmployeeBOImpl;
 import lk.ijse.GameCafe.dao.custom.EmployeeDAO;
 import lk.ijse.GameCafe.dao.custom.impl.EmployeeDAOImpl;
 import lk.ijse.GameCafe.dto.EmployeeDto;
@@ -58,6 +60,8 @@ public class EmployeeFormController {
 
         EmployeeDAO employeeDAO = new EmployeeDAOImpl();
 
+        EmployeeBO employeeBO = new EmployeeBOImpl();
+
     @FXML
     void btnClearOnAction(ActionEvent event) throws ClassNotFoundException {
         clearFields();
@@ -66,7 +70,7 @@ public class EmployeeFormController {
 
     private void generateEmployeeId() throws ClassNotFoundException {
         try {
-            String newCustomerId = employeeDAO.generateNewEmpId();
+            String newCustomerId = employeeBO.generateEmployeeId();
 
             txtEmpId.setText(newCustomerId);
         } catch (SQLException e) {
@@ -100,7 +104,7 @@ public class EmployeeFormController {
 
         EmployeeDto dto = new EmployeeDto(id, name, contactNum, salary, address);
         try {
-            boolean isSaved = employeeDAO.saveEmployee(dto);
+            boolean isSaved = employeeBO.saveEmployee(dto);
 
             if (isSaved){
                 new Alert(Alert.AlertType.CONFIRMATION, "Employee Saved Successfully");
@@ -147,7 +151,7 @@ public class EmployeeFormController {
         ObservableList<EmployeeTm> obList = FXCollections.observableArrayList();
 
         try {
-            List<EmployeeDto> list = employeeDAO.getAllEmployees();
+            List<EmployeeDto> list = employeeBO.getAllEmployees();
 
             for (EmployeeDto dto : list){
                 EmployeeTm  employeeTm = new EmployeeTm(dto.getEmpId(),
@@ -216,7 +220,7 @@ public class EmployeeFormController {
     void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
         String id = txtEmpId.getText();
         try {
-            boolean isDeleted = employeeDAO.deleteEmployee(id);
+            boolean isDeleted = employeeBO.deleteEmployee(id);
             if(isDeleted){
                 new Alert(Alert.AlertType.CONFIRMATION,"Patient Deleted Successfully").show();
                 loadAllEmployees();
@@ -237,7 +241,7 @@ public class EmployeeFormController {
 
         EmployeeDto dto = new EmployeeDto(id,name,email,contactNo,address);
         try {
-            boolean isUpdated = employeeDAO.updateEmployee(dto);
+            boolean isUpdated = employeeBO.updateEmployee(dto);
             if(isUpdated){
                 new Alert(Alert.AlertType.CONFIRMATION,"Employee Updated Successfully").show();
                 loadAllEmployees();
@@ -252,7 +256,7 @@ public class EmployeeFormController {
         String id = txtSearchBar.getText();
         try {
 
-            EmployeeDto dto = employeeDAO.SearchModel(id);
+            EmployeeDto dto = employeeBO.searchEmployee(id);
             if (dto != null){
                 fillField(dto);
             }else {

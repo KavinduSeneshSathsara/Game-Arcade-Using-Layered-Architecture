@@ -1,12 +1,12 @@
-package lk.ijse.GameCafe.dao.custom;
+package lk.ijse.GameCafe.bo.custom;
 
-import lk.ijse.GameCafe.dao.CrudDAO;
 import lk.ijse.GameCafe.dto.UserDto;
 
 import java.sql.SQLException;
 
-public interface UserDAO extends CrudDAO<UserDto> {
+public interface UserBO {
     UserDto getEmail(String username) throws SQLException, ClassNotFoundException;
     boolean updatePassword(String username, String text) throws SQLException, ClassNotFoundException;
+    boolean saveUser(UserDto dto) throws SQLException, ClassNotFoundException;
     boolean verifyCredential(String UserName, String Password);
 }

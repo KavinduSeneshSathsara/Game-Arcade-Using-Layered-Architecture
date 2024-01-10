@@ -2,7 +2,7 @@ package lk.ijse.GameCafe.dao.custom.impl;
 
 import lk.ijse.GameCafe.dao.custom.PlayStationDAO;
 import lk.ijse.GameCafe.dto.PlayStationDto;
-import lk.ijse.GameCafe.util.SQLUtil;
+import lk.ijse.GameCafe.dao.SQLUtil;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +12,7 @@ import java.util.List;
 public class PlayStationDAOImpl implements PlayStationDAO {
 
     @Override
-    public String generateNewPlaystationId() throws SQLException, ClassNotFoundException {
+    public String generateId() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT CONCAT('P', LPAD(IFNULL(MAX(SUBSTRING(play_station_id, 2)), 0) + 1, 4, '0')) FROM play_station");
 
         if (rst.next()){
@@ -22,12 +22,12 @@ public class PlayStationDAOImpl implements PlayStationDAO {
     }
 
     @Override
-    public boolean deletePlayStation(String id) throws SQLException, ClassNotFoundException {
+    public boolean delete(String id) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("DELETE FROM play_station WHERE play_station_id = ?", id);
     }
 
     @Override
-    public List<PlayStationDto> getAllPlayStations() throws SQLException, ClassNotFoundException {
+    public List<PlayStationDto> getAll() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM play_station");
 
         List<PlayStationDto> list = new ArrayList<>();
@@ -46,7 +46,7 @@ public class PlayStationDAOImpl implements PlayStationDAO {
     }
 
     @Override
-    public boolean savePlayStation(PlayStationDto playStationDto) throws SQLException, ClassNotFoundException {
+    public boolean save(PlayStationDto playStationDto) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("INSERT INTO play_station VALUES (?,?,?,?)",
                 playStationDto.getPlayStationId(),
                 playStationDto.getPlayStationNumber(),
@@ -56,7 +56,7 @@ public class PlayStationDAOImpl implements PlayStationDAO {
     }
 
     @Override
-    public PlayStationDto searchModel(String id) throws SQLException, ClassNotFoundException {
+    public PlayStationDto search(String id) throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM play_station WHERE play_station_id = ?", id);
 
         if (rst.next()){
@@ -71,7 +71,7 @@ public class PlayStationDAOImpl implements PlayStationDAO {
     }
 
     @Override
-    public boolean updatePlayStation(PlayStationDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(PlayStationDto dto) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("UPDATE play_station SET play_station_number = ?, status = ?, rate = ? WHERE play_station_id = ?",
                 dto.getPlayStationNumber(),
                 dto.getStatus(),

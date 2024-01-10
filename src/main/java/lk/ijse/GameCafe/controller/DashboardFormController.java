@@ -13,6 +13,14 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import lk.ijse.GameCafe.bo.custom.BookingBO;
+import lk.ijse.GameCafe.bo.custom.CustomerBO;
+import lk.ijse.GameCafe.bo.custom.DashboardBO;
+import lk.ijse.GameCafe.bo.custom.EmployeeBO;
+import lk.ijse.GameCafe.bo.custom.impl.BookingBOImpl;
+import lk.ijse.GameCafe.bo.custom.impl.CustomerBOImpl;
+import lk.ijse.GameCafe.bo.custom.impl.DashboardBOImpl;
+import lk.ijse.GameCafe.bo.custom.impl.EmployeeBOImpl;
 import lk.ijse.GameCafe.dao.custom.BookingDAO;
 import lk.ijse.GameCafe.dao.custom.CustomerDAO;
 import lk.ijse.GameCafe.dao.custom.DashBoardDAO;
@@ -63,6 +71,11 @@ public class DashboardFormController {
     CustomerDAO customerDAO = new CustomerDAOImpl();
     BookingDAO bookingDAO = new BookingDAOImpl();
 
+    BookingBO bookingBO = new BookingBOImpl();
+    CustomerBO customerBO = new CustomerBOImpl();
+    DashboardBO dashboardBO = new DashboardBOImpl();
+    EmployeeBO employeeBO = new EmployeeBOImpl();
+
     public DashboardFormController() {
 
         controller = this;
@@ -81,19 +94,19 @@ public class DashboardFormController {
     public void start() throws ClassNotFoundException {
 
         try {
-            txtEmployeeCount.setText(employeeDAO.totalEmployeeCount());
+            txtEmployeeCount.setText(employeeBO.totalEmployeeCount());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
         try {
-            txtCustomerCount.setText(customerDAO.totalCustomerCount());
+            txtCustomerCount.setText(customerBO.totalCustomerCount());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
         try {
-            txtBookingCount.setText(bookingDAO.totalBookingCount());
+            txtBookingCount.setText(bookingBO.totalBookingCount());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -105,7 +118,7 @@ public class DashboardFormController {
     private void loadAllData() throws ClassNotFoundException {
         ObservableList<DashboardTableDto> obList = FXCollections.observableArrayList();
         try {
-            List<DashboardTableDto> list = dashBoardDAO.dashbaordTableData();
+            List<DashboardTableDto> list = dashboardBO.dashboardTableData();
 
             for (DashboardTableDto dto : list){
                 DashboardTableDto  dashboardTableDto = new DashboardTableDto(dto.getBookingId(),

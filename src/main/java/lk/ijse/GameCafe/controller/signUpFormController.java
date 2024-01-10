@@ -11,6 +11,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.GameCafe.bo.custom.UserBO;
+import lk.ijse.GameCafe.bo.custom.impl.UserBOImpl;
 import lk.ijse.GameCafe.dao.custom.UserDAO;
 import lk.ijse.GameCafe.dao.custom.impl.UserDAOImpl;
 import lk.ijse.GameCafe.dto.UserDto;
@@ -36,7 +38,7 @@ public class signUpFormController {
     @FXML
     private JFXButton btnSignUp;
 
-    UserDAO userDAO = new UserDAOImpl();
+    UserBO userBO = new UserBOImpl();
 
     @FXML
     public void initialize() {
@@ -65,7 +67,7 @@ public class signUpFormController {
         UserDto dto = new UserDto(username, password, email);
 
         try {
-            boolean isSaved = userDAO.saveUser(dto);
+            boolean isSaved = userBO.saveUser(dto);
             if (isSaved) {
                 if (txtTerms.isSelected()) {
                     new Alert(Alert.AlertType.INFORMATION, "A confirmation email has been sent to your Email address.").show();

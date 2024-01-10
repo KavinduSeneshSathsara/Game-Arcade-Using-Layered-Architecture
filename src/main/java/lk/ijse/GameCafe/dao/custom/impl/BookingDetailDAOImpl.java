@@ -2,7 +2,7 @@ package lk.ijse.GameCafe.dao.custom.impl;
 
 import lk.ijse.GameCafe.dao.custom.BookingDetailDAO;
 import lk.ijse.GameCafe.dto.BookingDetailsDto;
-import lk.ijse.GameCafe.util.SQLUtil;
+import lk.ijse.GameCafe.dao.SQLUtil;
 
 import java.sql.SQLException;
 import java.util.List;

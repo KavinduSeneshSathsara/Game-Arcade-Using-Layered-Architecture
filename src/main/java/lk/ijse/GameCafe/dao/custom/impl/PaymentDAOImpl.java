@@ -2,7 +2,7 @@ package lk.ijse.GameCafe.dao.custom.impl;
 
 import lk.ijse.GameCafe.dao.custom.PaymentDAO;
 import lk.ijse.GameCafe.dto.PaymentDto;
-import lk.ijse.GameCafe.util.SQLUtil;
+import lk.ijse.GameCafe.dao.SQLUtil;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class PaymentDAOImpl implements PaymentDAO {
     @Override
-    public boolean savePayment(PaymentDto paymentDto) throws SQLException, ClassNotFoundException {
+    public boolean save(PaymentDto paymentDto) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("insert into payment value (?,?,?,?,?)",
                 paymentDto.getPaymentId(),
                 paymentDto.getBookingId(),
@@ -22,7 +22,7 @@ public class PaymentDAOImpl implements PaymentDAO {
     }
 
     @Override
-    public List<PaymentDto> getAllPayments() throws SQLException, ClassNotFoundException {
+    public List<PaymentDto> getAll() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM payment");
 
         List<PaymentDto> list = new ArrayList<>();
@@ -40,7 +40,17 @@ public class PaymentDAOImpl implements PaymentDAO {
     }
 
     @Override
-    public String generateNextId() throws SQLException, ClassNotFoundException {
+    public boolean update(PaymentDto dto) throws SQLException, ClassNotFoundException {
+        return false;
+    }
+
+    @Override
+    public PaymentDto search(String id) throws SQLException, ClassNotFoundException {
+        return null;
+    }
+
+    @Override
+    public String generateId() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM payment ORDER BY payment_id DESC LIMIT 1");
         String  current = null;
 
@@ -49,11 +59,6 @@ public class PaymentDAOImpl implements PaymentDAO {
             return splitId(current);
         }
         return splitId(null);
-    }
-
-    @Override
-    public boolean deletePayment(String id) throws SQLException, ClassNotFoundException {
-        return SQLUtil.execute("DELETE FROM payment WHERE payment_id = ?", id);
     }
 
     private String splitId(String current) {
@@ -66,5 +71,10 @@ public class PaymentDAOImpl implements PaymentDAO {
             else if (id > 99) return String.valueOf(id);
         }
         return "P001";
+    }
+
+    @Override
+    public boolean delete(String id) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("DELETE FROM payment WHERE payment_id = ?", id);
     }
 }

@@ -1,4 +1,4 @@
-package lk.ijse.GameCafe.util;
+package lk.ijse.GameCafe.dao;
 
 import lk.ijse.GameCafe.db.DbConnection;
 

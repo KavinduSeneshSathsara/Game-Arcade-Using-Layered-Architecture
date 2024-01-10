@@ -2,7 +2,7 @@ package lk.ijse.GameCafe.dao.custom.impl;
 
 import lk.ijse.GameCafe.dao.custom.EmployeeDAO;
 import lk.ijse.GameCafe.dto.EmployeeDto;
-import lk.ijse.GameCafe.util.SQLUtil;
+import lk.ijse.GameCafe.dao.SQLUtil;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +21,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public boolean updateEmployee(EmployeeDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(EmployeeDto dto) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("UPDATE employee SET emp_name = ?, emp_contact_num = ?, emp_salary = ?, emp_address = ? WHERE emp_id = ?",
             dto.getEmpName(),
             dto.getEmpContactNum(),
@@ -32,9 +32,9 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public String generateNewEmpId() throws SQLException, ClassNotFoundException {
+    public String generateId() throws SQLException, ClassNotFoundException {
         ResultSet rst= SQLUtil.execute("SELECT CONCAT('E', LPAD(IFNULL(MAX(SUBSTRING(emp_id, 2)), 0) + 1, 4, '0')) FROM employee");
-//        ResultSet rst = SQLUtil.execute("SELECT id FROM employee ORDER BY emp_id DESC LIMIT 1;");
+
         if (rst.next()){
             return rst.getString(1);
         }
@@ -42,7 +42,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public boolean saveEmployee(EmployeeDto dto) throws SQLException, ClassNotFoundException {
+    public boolean save(EmployeeDto dto) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("INSERT INTO employee VAlUES (?,?,?,?,?)",
                 dto.getEmpId(),
                 dto.getEmpName(),
@@ -53,7 +53,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public List<EmployeeDto> getAllEmployees() throws SQLException, ClassNotFoundException {
+    public List<EmployeeDto> getAll() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM employee");
 
         List<EmployeeDto> list = new ArrayList<>();
@@ -72,12 +72,12 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public boolean deleteEmployee(String id) throws SQLException, ClassNotFoundException {
+    public boolean delete(String id) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("DELETE FROM employee WHERE emp_id = ?", id);
     }
 
     @Override
-    public EmployeeDto SearchModel(String id) throws SQLException, ClassNotFoundException {
+    public EmployeeDto search(String id) throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM employee WHERE emp_id = ?", id);
 
         if (rst.next()){

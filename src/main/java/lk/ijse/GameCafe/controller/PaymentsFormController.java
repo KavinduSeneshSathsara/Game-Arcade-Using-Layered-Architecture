@@ -14,6 +14,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import lk.ijse.GameCafe.bo.custom.BookingBO;
+import lk.ijse.GameCafe.bo.custom.CustomerBO;
+import lk.ijse.GameCafe.bo.custom.PaymentBO;
+import lk.ijse.GameCafe.bo.custom.impl.BookingBOImpl;
+import lk.ijse.GameCafe.bo.custom.impl.CustomerBOImpl;
+import lk.ijse.GameCafe.bo.custom.impl.PaymentBOImpl;
 import lk.ijse.GameCafe.dao.custom.BookingDAO;
 import lk.ijse.GameCafe.dao.custom.CustomerDAO;
 import lk.ijse.GameCafe.dao.custom.PaymentDAO;
@@ -87,6 +93,10 @@ public class PaymentsFormController implements Initializable {
     PaymentDAO paymentDAO = new PaymentDAOImpl();
     BookingDAO bookingDAO = new BookingDAOImpl();
     CustomerDAO customerDAO = new CustomerDAOImpl();
+
+    PaymentBO paymentBO = new PaymentBOImpl();
+    BookingBO bookingBO = new BookingBOImpl();
+    CustomerBO customerBO = new CustomerBOImpl();
     @FXML
     void btnClearOnAction(ActionEvent event) {
         cmbBookingId.getItems().clear();
@@ -109,7 +119,7 @@ public class PaymentsFormController implements Initializable {
             connection = DbConnection.getInstance( ).getConnection( );
             connection.setAutoCommit( false );
 
-            boolean savePayment = paymentDAO.savePayment( new PaymentDto(
+            boolean savePayment = paymentBO.savePayment( new PaymentDto(
                     lblPaymentID.getText( ),
                     cmbBookingId.getValue(),
                     Date.valueOf( LocalDate.now( ) ),
@@ -118,7 +128,7 @@ public class PaymentsFormController implements Initializable {
             ) );
 
             if ( savePayment ) {
-                boolean isUpdated = bookingDAO.updateStatus(String.valueOf(cmbBookingId.getValue( )));
+                boolean isUpdated = bookingBO.updateStatus(cmbBookingId.getValue( ));
                 loadAllPayments();
 
                 if ( isUpdated ) {
@@ -145,7 +155,7 @@ public class PaymentsFormController implements Initializable {
         ObservableList<PaymentTm> obList = FXCollections.observableArrayList();
 
         try{
-            List<PaymentDto> list = paymentDAO.getAllPayments();
+            List<PaymentDto> list = paymentBO.getAllPayments();
 
             for (PaymentDto dto: list){
                 PaymentTm paymentTm = new PaymentTm(
@@ -168,11 +178,11 @@ public class PaymentsFormController implements Initializable {
     @FXML
     void cmbBookingIdOnAction(ActionEvent event) throws ClassNotFoundException {
         try {
-            BookingDto bookingData = bookingDAO.getBookingData((String) cmbBookingId.getValue());
+            BookingDto bookingData = bookingBO.getBookingData((String) cmbBookingId.getValue());
 
             if ( bookingData != null && bookingData.getStatus().equals( "Not Paid" ) ) {
 
-                CustomerDto dto = customerDAO.SearchModel( bookingData.getCus_id() );
+                CustomerDto dto = customerBO.searchCustomer( bookingData.getCus_id() );
                 lblCustomerName.setText( dto.getCusName() );
                 lblAmount.setText( String.valueOf( bookingData.getTotal() ) );
                 btnPay.setDisable( false );
@@ -209,7 +219,7 @@ public class PaymentsFormController implements Initializable {
 
     public void setPaymentId() throws ClassNotFoundException {
         try {
-            lblPaymentID.setText( paymentDAO.generateNextId() );
+            lblPaymentID.setText(paymentBO.generatePaymentId());
         } catch ( SQLException e ) {
             e.printStackTrace();
         }
@@ -253,7 +263,7 @@ public class PaymentsFormController implements Initializable {
     private void loadAllBookingId() throws ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<BookingDto> dtos = bookingDAO.getAllBooking();
+            List<BookingDto> dtos = bookingBO.getAllBookings();
             for (BookingDto dto : dtos) {
                 obList.add(dto.getBookingId());
             }
@@ -273,7 +283,7 @@ public class PaymentsFormController implements Initializable {
             String id = selectedPayment.getPaymentId();
 
             try {
-                boolean isDeleted = paymentDAO.deletePayment(id);
+                boolean isDeleted = paymentBO.deletePayment(id);
 
                 if (isDeleted) {
                     new Alert(Alert.AlertType.CONFIRMATION, "Payment Deleted Successfully").show();
