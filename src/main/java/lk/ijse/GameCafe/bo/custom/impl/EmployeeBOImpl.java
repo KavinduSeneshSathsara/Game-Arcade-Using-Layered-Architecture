@@ -1,6 +1,7 @@
 package lk.ijse.GameCafe.bo.custom.impl;
 
 import lk.ijse.GameCafe.bo.custom.EmployeeBO;
+import lk.ijse.GameCafe.dao.DAOFactory;
 import lk.ijse.GameCafe.dao.custom.EmployeeDAO;
 import lk.ijse.GameCafe.dao.custom.impl.EmployeeDAOImpl;
 import lk.ijse.GameCafe.dto.EmployeeDto;
@@ -9,7 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class EmployeeBOImpl implements EmployeeBO {
-    EmployeeDAO employeeDAO = new EmployeeDAOImpl();
+    EmployeeDAO employeeDAO = (EmployeeDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.EMPLOYEE);
     @Override
     public String totalEmployeeCount() throws SQLException, ClassNotFoundException {
         return employeeDAO.totalEmployeeCount();

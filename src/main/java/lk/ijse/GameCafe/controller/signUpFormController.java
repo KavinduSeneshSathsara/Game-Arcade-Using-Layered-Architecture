@@ -2,6 +2,7 @@ package lk.ijse.GameCafe.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,10 +12,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
+import lk.ijse.GameCafe.bo.BOFactory;
 import lk.ijse.GameCafe.bo.custom.UserBO;
-import lk.ijse.GameCafe.bo.custom.impl.UserBOImpl;
-import lk.ijse.GameCafe.dao.custom.UserDAO;
-import lk.ijse.GameCafe.dao.custom.impl.UserDAOImpl;
 import lk.ijse.GameCafe.dto.UserDto;
 
 import javax.mail.MessagingException;
@@ -38,7 +38,7 @@ public class signUpFormController {
     @FXML
     private JFXButton btnSignUp;
 
-    UserBO userBO = new UserBOImpl();
+    UserBO userBO = (UserBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.USER);
 
     @FXML
     public void initialize() {

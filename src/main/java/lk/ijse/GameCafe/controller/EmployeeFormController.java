@@ -9,12 +9,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import lk.ijse.GameCafe.bo.BOFactory;
 import lk.ijse.GameCafe.bo.custom.EmployeeBO;
-import lk.ijse.GameCafe.bo.custom.impl.EmployeeBOImpl;
-import lk.ijse.GameCafe.dao.custom.EmployeeDAO;
-import lk.ijse.GameCafe.dao.custom.impl.EmployeeDAOImpl;
 import lk.ijse.GameCafe.dto.EmployeeDto;
-import lk.ijse.GameCafe.dto.tm.EmployeeTm;
+import lk.ijse.GameCafe.view.tdm.tm.EmployeeTm;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -58,9 +56,7 @@ public class EmployeeFormController {
         @FXML
         private TextField txtSearchBar;
 
-        EmployeeDAO employeeDAO = new EmployeeDAOImpl();
-
-        EmployeeBO employeeBO = new EmployeeBOImpl();
+    EmployeeBO employeeBO = (EmployeeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.EMPLOYEE);
 
     @FXML
     void btnClearOnAction(ActionEvent event) throws ClassNotFoundException {

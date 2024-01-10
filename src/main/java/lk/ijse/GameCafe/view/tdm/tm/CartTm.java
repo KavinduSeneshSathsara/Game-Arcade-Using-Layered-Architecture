@@ -1,11 +1,9 @@
-package lk.ijse.GameCafe.dto.tm;
+package lk.ijse.GameCafe.view.tdm.tm;
 
 import javafx.scene.control.Button;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-
 
 @AllArgsConstructor
 @NoArgsConstructor

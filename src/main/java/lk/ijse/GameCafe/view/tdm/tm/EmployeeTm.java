@@ -1,4 +1,4 @@
-package lk.ijse.GameCafe.dto.tm;
+package lk.ijse.GameCafe.view.tdm.tm;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

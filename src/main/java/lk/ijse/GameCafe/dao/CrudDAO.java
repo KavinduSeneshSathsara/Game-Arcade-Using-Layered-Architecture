@@ -1,8 +1,5 @@
 package lk.ijse.GameCafe.dao;
 
-import lk.ijse.GameCafe.dto.BookingDto;
-import lk.ijse.GameCafe.dto.CustomerDto;
-
 import java.sql.SQLException;
 import java.util.List;
 

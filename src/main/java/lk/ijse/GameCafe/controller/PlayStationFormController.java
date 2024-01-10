@@ -1,6 +1,5 @@
 package lk.ijse.GameCafe.controller;
 
-import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,13 +9,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Pane;
+
+import lk.ijse.GameCafe.bo.BOFactory;
 import lk.ijse.GameCafe.bo.custom.PlayStationBO;
-import lk.ijse.GameCafe.bo.custom.impl.PlayStationBOImpl;
-import lk.ijse.GameCafe.dao.custom.PlayStationDAO;
-import lk.ijse.GameCafe.dao.custom.impl.PlayStationDAOImpl;
 import lk.ijse.GameCafe.dto.PlayStationDto;
-import lk.ijse.GameCafe.dto.tm.PlayStationTm;
+import lk.ijse.GameCafe.view.tdm.tm.PlayStationTm;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -51,9 +48,7 @@ public class PlayStationFormController {
     @FXML
     private TextField txtRate;
 
-    PlayStationDAO playStationDAO = new PlayStationDAOImpl();
-
-    PlayStationBO playStationBO = new PlayStationBOImpl();
+    PlayStationBO playStationBO = (PlayStationBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PLAYSTATION);
 
     public void initialize() throws ClassNotFoundException {
         setCellValueFactory();
@@ -240,7 +235,7 @@ public class PlayStationFormController {
         try{
             boolean isUpdated = playStationBO.updatePlayStation(dto);
             if (isUpdated){
-                new Alert(Alert.AlertType.CONFIRMATION, "PlayStation Updated Successfully");
+                new Alert(Alert.AlertType.CONFIRMATION, "PlayStation Updated Successfully").show();
 
                 loadAllPlayStations();
             }

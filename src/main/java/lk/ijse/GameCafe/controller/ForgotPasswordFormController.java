@@ -8,14 +8,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javax.mail.MessagingException;
+
+import lk.ijse.GameCafe.bo.BOFactory;
 import lk.ijse.GameCafe.bo.custom.UserBO;
-import lk.ijse.GameCafe.bo.custom.impl.UserBOImpl;
-import lk.ijse.GameCafe.dao.custom.UserDAO;
-import lk.ijse.GameCafe.dao.custom.impl.UserDAOImpl;
 import lk.ijse.GameCafe.dto.UserDto;
 import lk.ijse.GameCafe.util.Navigation;
 
-import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Random;
@@ -33,8 +32,8 @@ public class ForgotPasswordFormController {
     static String username;
     static int otp;
 
-    UserDAO userDAO = new UserDAOImpl();
-    UserBO userBO = new UserBOImpl();
+    UserBO userBO = (UserBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.USER);
+
     @FXML
     void btnBackOnAction(ActionEvent event) throws IOException {
         AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/login_form.fxml"));

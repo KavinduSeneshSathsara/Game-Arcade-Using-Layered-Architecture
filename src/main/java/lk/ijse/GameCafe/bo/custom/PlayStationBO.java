@@ -1,11 +1,12 @@
 package lk.ijse.GameCafe.bo.custom;
 
+import lk.ijse.GameCafe.bo.SuperBO;
 import lk.ijse.GameCafe.dto.PlayStationDto;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public interface PlayStationBO {
+public interface PlayStationBO extends SuperBO {
     String generatePlayStationId() throws SQLException, ClassNotFoundException;
     boolean deletePlayStation(String id) throws SQLException, ClassNotFoundException;
     List<PlayStationDto> getAllPlayStations() throws SQLException, ClassNotFoundException;

@@ -1,6 +1,7 @@
 package lk.ijse.GameCafe.controller;
 
 import com.jfoenix.controls.JFXButton;
+
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -15,15 +16,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
+import lk.ijse.GameCafe.bo.BOFactory;
 import lk.ijse.GameCafe.bo.custom.BookingBO;
 import lk.ijse.GameCafe.bo.custom.CustomerBO;
-import lk.ijse.GameCafe.bo.custom.impl.BookingBOImpl;
-import lk.ijse.GameCafe.bo.custom.impl.CustomerBOImpl;
-import lk.ijse.GameCafe.dao.custom.*;
-import lk.ijse.GameCafe.dao.custom.impl.*;
+import lk.ijse.GameCafe.bo.custom.PlayStationBO;
 import lk.ijse.GameCafe.db.DbConnection;
 import lk.ijse.GameCafe.dto.*;
-import lk.ijse.GameCafe.dto.tm.CartTm;
+import lk.ijse.GameCafe.view.tdm.tm.CartTm;
 
 import java.net.URL;
 import java.sql.*;
@@ -98,13 +98,9 @@ public class BookingFormController implements Initializable{
 
     private final ObservableList<CartTm> cart = FXCollections.observableArrayList();
 
-    CustomerDAO customerDAO = new CustomerDAOImpl();
-//    BookingDAO bookingDAO = new BookingDAOImpl();
-    PlayStationDAO playStationDAO = new PlayStationDAOImpl();
-    BookingDetailDAO bookingDetailDAO = new BookingDetailDAOImpl();
-    QuaryDAO queryDAO = new QueryDAOImpl();
-    BookingBO bookingBO = new BookingBOImpl();
-    CustomerBO customerBO = new CustomerBOImpl();
+    PlayStationBO playStationBO = (PlayStationBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PLAYSTATION);
+    CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
+    BookingBO bookingBO = (BookingBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.BOOKING);
 
     public void loadOrderId() throws ClassNotFoundException {
         try {
@@ -165,7 +161,7 @@ public class BookingFormController implements Initializable{
         double total=0;
 
         try {
-            total= getHours(cmbStartTime.getValue(), cmbEndTime.getValue()).doubleValue() * playStationDAO.getRate(station);
+            total= getHours(cmbStartTime.getValue(), cmbEndTime.getValue()).doubleValue() * playStationBO.getRate(station);
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -174,7 +170,7 @@ public class BookingFormController implements Initializable{
             cart.add(new CartTm(
                     station,
                     getHours(cmbStartTime.getValue(),cmbEndTime.getValue()),
-                    playStationDAO.getRate(station),
+                    playStationBO.getRate(station),
                     total,
                     btn
             ));
@@ -225,8 +221,10 @@ public class BookingFormController implements Initializable{
     private Time makeTime(String rawTime) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("h.mm aa");
+
             // Parse the string to get a Date object
             java.util.Date date = sdf.parse(rawTime + " " + cmbTimeZone.getValue());
+
             // Convert the Date object to a Time object
             System.out.println(new Time(date.getTime()));
             return new Time(date.getTime());
@@ -247,7 +245,7 @@ public class BookingFormController implements Initializable{
 
         try {
 
-            CustomerDto customerDto = customerDAO.getCustomer(String.valueOf(cmbCusNumbers.getValue()));
+            CustomerDto customerDto = customerBO.getCustomer(String.valueOf(cmbCusNumbers.getValue()));
 
             connection = DbConnection.getInstance( ).getConnection( );
             connection.setAutoCommit( false );
@@ -278,7 +276,7 @@ public class BookingFormController implements Initializable{
     private void loadAllStations() throws ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<PlayStationDto> dtos = playStationDAO.getAll();
+            List<PlayStationDto> dtos = playStationBO.getAllPlayStations();
             for (PlayStationDto dto : dtos) {
                 obList.add(dto.getPlayStationId());
             }
@@ -328,8 +326,7 @@ public class BookingFormController implements Initializable{
     @FXML
     void cmbStationOnAction(ActionEvent event) throws ClassNotFoundException {
         try {
-//            List<BookingDto> allBookings = bookingDAO.getAllBookings( cmbStation.getValue( ), Date.valueOf( datePicker.getValue( ) ) );
-            List<BookingDto> allBookings = queryDAO.getAllBookings( cmbStation.getValue( ), Date.valueOf( datePicker.getValue( ) ) );
+            List<BookingDto> allBookings = bookingBO.getAllBookings( cmbStation.getValue( ), Date.valueOf( datePicker.getValue( ) ) );
 
             boolean overlap = isOverlap( allBookings, makeTime( cmbStartTime.getValue() + " " + cmbTimeZone.getValue() ).toLocalTime(), makeTime( cmbEndTime.getValue() + " " + cmbTimeZone.getValue() ).toLocalTime() );
 
@@ -393,7 +390,7 @@ public class BookingFormController implements Initializable{
     private void loadAllNumbers() throws ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<CustomerDto> dtos = customerDAO.getAll();
+            List<CustomerDto> dtos = customerBO.getAllCustomers();
             for (CustomerDto dto : dtos) {
                 obList.add(dto.getCusContactNum());
             }

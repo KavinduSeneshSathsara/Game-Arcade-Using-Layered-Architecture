@@ -1,11 +1,12 @@
 package lk.ijse.GameCafe.bo.custom;
 
+import lk.ijse.GameCafe.bo.SuperBO;
 import lk.ijse.GameCafe.dto.EmployeeDto;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public interface EmployeeBO {
+public interface EmployeeBO extends SuperBO {
     String totalEmployeeCount() throws SQLException, ClassNotFoundException;
     boolean updateEmployee(EmployeeDto dto) throws SQLException, ClassNotFoundException;
     String generateEmployeeId() throws SQLException, ClassNotFoundException;

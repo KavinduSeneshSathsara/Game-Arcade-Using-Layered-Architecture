@@ -11,26 +11,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
+import lk.ijse.GameCafe.bo.BOFactory;
 import lk.ijse.GameCafe.bo.custom.BookingBO;
 import lk.ijse.GameCafe.bo.custom.CustomerBO;
 import lk.ijse.GameCafe.bo.custom.PaymentBO;
-import lk.ijse.GameCafe.bo.custom.impl.BookingBOImpl;
-import lk.ijse.GameCafe.bo.custom.impl.CustomerBOImpl;
-import lk.ijse.GameCafe.bo.custom.impl.PaymentBOImpl;
-import lk.ijse.GameCafe.dao.custom.BookingDAO;
-import lk.ijse.GameCafe.dao.custom.CustomerDAO;
-import lk.ijse.GameCafe.dao.custom.PaymentDAO;
-import lk.ijse.GameCafe.dao.custom.impl.BookingDAOImpl;
-import lk.ijse.GameCafe.dao.custom.impl.CustomerDAOImpl;
-import lk.ijse.GameCafe.dao.custom.impl.PaymentDAOImpl;
 import lk.ijse.GameCafe.db.DbConnection;
 import lk.ijse.GameCafe.dto.BookingDto;
 import lk.ijse.GameCafe.dto.CustomerDto;
 import lk.ijse.GameCafe.dto.PaymentDto;
-import lk.ijse.GameCafe.dto.tm.PaymentTm;
+import lk.ijse.GameCafe.view.tdm.tm.PaymentTm;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
@@ -90,13 +82,10 @@ public class PaymentsFormController implements Initializable {
     @FXML
     private JFXButton btnPay;
 
-    PaymentDAO paymentDAO = new PaymentDAOImpl();
-    BookingDAO bookingDAO = new BookingDAOImpl();
-    CustomerDAO customerDAO = new CustomerDAOImpl();
+    PaymentBO paymentBO = (PaymentBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PAYMENT);
+    BookingBO bookingBO = (BookingBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.BOOKING);
+    CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
 
-    PaymentBO paymentBO = new PaymentBOImpl();
-    BookingBO bookingBO = new BookingBOImpl();
-    CustomerBO customerBO = new CustomerBOImpl();
     @FXML
     void btnClearOnAction(ActionEvent event) {
         cmbBookingId.getItems().clear();

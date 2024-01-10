@@ -11,24 +11,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+
+import lk.ijse.GameCafe.bo.BOFactory;
 import lk.ijse.GameCafe.bo.custom.BookingBO;
 import lk.ijse.GameCafe.bo.custom.CustomerBO;
 import lk.ijse.GameCafe.bo.custom.DashboardBO;
 import lk.ijse.GameCafe.bo.custom.EmployeeBO;
-import lk.ijse.GameCafe.bo.custom.impl.BookingBOImpl;
-import lk.ijse.GameCafe.bo.custom.impl.CustomerBOImpl;
-import lk.ijse.GameCafe.bo.custom.impl.DashboardBOImpl;
-import lk.ijse.GameCafe.bo.custom.impl.EmployeeBOImpl;
-import lk.ijse.GameCafe.dao.custom.BookingDAO;
-import lk.ijse.GameCafe.dao.custom.CustomerDAO;
-import lk.ijse.GameCafe.dao.custom.DashBoardDAO;
-import lk.ijse.GameCafe.dao.custom.EmployeeDAO;
-import lk.ijse.GameCafe.dao.custom.impl.BookingDAOImpl;
-import lk.ijse.GameCafe.dao.custom.impl.CustomerDAOImpl;
-import lk.ijse.GameCafe.dao.custom.impl.DashBoardDAOImpl;
-import lk.ijse.GameCafe.dao.custom.impl.EmployeeDAOImpl;
 import lk.ijse.GameCafe.dto.DashboardTableDto;
 
 import java.sql.SQLException;
@@ -66,15 +55,10 @@ public class DashboardFormController {
 
     private static DashboardFormController controller;
 
-    DashBoardDAO dashBoardDAO = new DashBoardDAOImpl();
-    EmployeeDAO employeeDAO = new EmployeeDAOImpl();
-    CustomerDAO customerDAO = new CustomerDAOImpl();
-    BookingDAO bookingDAO = new BookingDAOImpl();
-
-    BookingBO bookingBO = new BookingBOImpl();
-    CustomerBO customerBO = new CustomerBOImpl();
-    DashboardBO dashboardBO = new DashboardBOImpl();
-    EmployeeBO employeeBO = new EmployeeBOImpl();
+    BookingBO bookingBO = (BookingBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.BOOKING);
+    CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
+    DashboardBO dashboardBO = (DashboardBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.DASHBOARD);
+    EmployeeBO employeeBO = (EmployeeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.EMPLOYEE);
 
     public DashboardFormController() {
 

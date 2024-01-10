@@ -9,14 +9,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Pane;
+
+import lk.ijse.GameCafe.bo.BOFactory;
 import lk.ijse.GameCafe.bo.custom.CustomerBO;
-import lk.ijse.GameCafe.bo.custom.impl.CustomerBOImpl;
-import lk.ijse.GameCafe.dao.custom.CustomerDAO;
-import lk.ijse.GameCafe.dao.custom.impl.CustomerDAOImpl;
 import lk.ijse.GameCafe.db.DbConnection;
 import lk.ijse.GameCafe.dto.CustomerDto;
-import lk.ijse.GameCafe.dto.tm.CustomerTm;
+import lk.ijse.GameCafe.view.tdm.tm.CustomerTm;
+
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
@@ -65,8 +64,7 @@ public class CustomerFormController {
     @FXML
     private TextField txtSearchBar;
 
-    CustomerDAO customerDAO = new CustomerDAOImpl();
-    CustomerBO customerBO = new CustomerBOImpl();
+    CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
 
     @FXML
     void ButtonDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
@@ -280,8 +278,7 @@ public class CustomerFormController {
             try {
                 boolean isUpdated = customerBO.updateCustomer(dto);
                 if (isUpdated){
-                    new Alert(Alert.AlertType.CONFIRMATION, "Customer Updated Successfully");
-
+                    new Alert(Alert.AlertType.CONFIRMATION, "Customer Updated Successfully").show();
                     loadAllCustomers();
                 }
             } catch (SQLException e) {

@@ -1,6 +1,7 @@
 package lk.ijse.GameCafe.bo.custom.impl;
 
 import lk.ijse.GameCafe.bo.custom.PlayStationBO;
+import lk.ijse.GameCafe.dao.DAOFactory;
 import lk.ijse.GameCafe.dao.custom.PlayStationDAO;
 import lk.ijse.GameCafe.dao.custom.impl.PlayStationDAOImpl;
 import lk.ijse.GameCafe.dto.PlayStationDto;
@@ -9,7 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class PlayStationBOImpl implements PlayStationBO {
-    PlayStationDAO playStationDAO = new PlayStationDAOImpl();
+    PlayStationDAO playStationDAO = (PlayStationDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.PLAYSTATION);
 
     @Override
     public String generatePlayStationId() throws SQLException, ClassNotFoundException {
