@@ -1,4 +1,4 @@
-package lk.ijse.GameCafe.dto;
+package lk.ijse.GameCafe.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class CustomerDto {
+public class Customer {
     private String cusId;
     private String cusContactNum;
     private String cusEmail;
