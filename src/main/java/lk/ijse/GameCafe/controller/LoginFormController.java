@@ -27,29 +27,21 @@ public class LoginFormController {
 
     UserBO userBO = (UserBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.USER);
 
-//    @FXML
-//    void btnContinueOnAction(ActionEvent event) throws IOException {
-//       if (userBO.verifyCredential(txtUsername.getText(),txtPassword.getText())){
-//
-//           try {
-//               AnchorPane anchorPane = FXMLLoader.load(this.getClass().getResource("/view/main_form.fxml"));
-//                    Scene scene = new Scene(anchorPane);
-//                    Stage stage = (Stage) root.getScene().getWindow();
-//                    stage.setScene(scene);
-//                    stage.setTitle("Main Form");
-//                    stage.centerOnScreen();
-//           }catch (IOException e){
-//               throw new RuntimeException(e);
-//           }
-//       }
-//    }
     @FXML
     void btnContinueOnAction(ActionEvent event) throws IOException {
-        AnchorPane anchorPane = FXMLLoader.load(this.getClass().getResource("/view/main_form.fxml"));
-        Scene scene = new Scene(anchorPane);
-        Stage stage = (Stage) root.getScene().getWindow();
-        stage.setScene(scene);
-        stage.setTitle("Signup Form");
+       if (userBO.verifyCredential(txtUsername.getText(),txtPassword.getText())){
+
+           try {
+               AnchorPane anchorPane = FXMLLoader.load(this.getClass().getResource("/view/main_form.fxml"));
+                    Scene scene = new Scene(anchorPane);
+                    Stage stage = (Stage) root.getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.setTitle("Main Form");
+                    stage.centerOnScreen();
+           }catch (IOException e){
+               throw new RuntimeException(e);
+           }
+       }
     }
 
     @FXML
