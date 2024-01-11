@@ -286,6 +286,7 @@ public class BookingFormController implements Initializable{
 
         if (b){
             new Alert(Alert.AlertType.INFORMATION, "Booking Successful").show();
+            loadOrderId();
         }else {
             new Alert(Alert.AlertType.ERROR,"Booking Failed. Please try again.").show();
         }

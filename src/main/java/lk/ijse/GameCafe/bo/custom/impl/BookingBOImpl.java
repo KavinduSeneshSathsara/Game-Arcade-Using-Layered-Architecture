@@ -58,27 +58,26 @@ public class BookingBOImpl implements BookingBO {
         return bookingDAO.generateId();
     }
 
-    @Override
-    public boolean saveBooking(BookingDto dto) throws SQLException, ClassNotFoundException {
-        return bookingDAO.save(new Booking(
-                dto.getBookingId(),
-                dto.getCus_id(),
-                dto.getBookingDate(),
-                dto.getBookingTime(),
-                dto.getStartTime(),
-                dto.getEndTime(),
-                dto.getStatus(),
-                dto.getTotal()));
-    }
+//    @Override
+//    public boolean saveBooking(BookingDto dto) throws SQLException, ClassNotFoundException {
+//        return bookingDAO.save(new Booking(
+//                dto.getBookingId(),
+//                dto.getCus_id(),
+//                dto.getBookingDate(),
+//                dto.getBookingTime(),
+//                dto.getStartTime(),
+//                dto.getEndTime(),
+//                dto.getStatus(),
+//                dto.getTotal()));
+//    }
 
-    @Override
-    public boolean updateStatus(String s) throws SQLException, ClassNotFoundException {
-        return bookingDAO.updateStatus(s);
-    }
+//    @Override
+//    public boolean updateStatus(String s) throws SQLException, ClassNotFoundException {
+//        return bookingDAO.updateStatus(s);
+//    }
 
     @Override
     public BookingDto getBookingData(String value) throws SQLException, ClassNotFoundException {
-//        return bookingDAO.getBookingData(value);
         Booking booking = bookingDAO.getBookingData(value);
 
         if (booking != null) {
@@ -120,11 +119,11 @@ public class BookingBOImpl implements BookingBO {
         return bookingDAO.totalBookingCount();
     }
 
-    @Override
-    public boolean saveDetails(List<BookingDetailsDto> detailList) throws SQLException, ClassNotFoundException {
-        return bookingDetailDAO.saveDetails(detailList);
-
-    }
+//    @Override
+//    public boolean saveDetails(List<BookingDetailsDto> detailList) throws SQLException, ClassNotFoundException {
+//        return bookingDetailDAO.saveDetails(detailList);
+//
+//    }
 
     @Override
     public List<BookingDto> getAllBookings(String value, Date date) throws SQLException, ClassNotFoundException {
