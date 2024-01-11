@@ -27,7 +27,7 @@ public class BookingDetailDAOImpl implements BookingDetailDAO{
     }
 
     @Override
-    public boolean save(BookingDetails entity) throws SQLException, ClassNotFoundException {
+    public boolean save(BookingDetails bookingDetails) throws SQLException, ClassNotFoundException {
         return false;
     }
 
@@ -37,7 +37,7 @@ public class BookingDetailDAOImpl implements BookingDetailDAO{
     }
 
     @Override
-    public boolean update(BookingDetails entity) throws SQLException, ClassNotFoundException {
+    public boolean update(BookingDetails bookingDetails) throws SQLException, ClassNotFoundException {
         return false;
     }
 

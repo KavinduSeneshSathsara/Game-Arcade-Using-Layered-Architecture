@@ -47,12 +47,12 @@ public class PlayStationDAOImpl implements PlayStationDAO {
     }
 
     @Override
-    public boolean save(PlayStation entity) throws SQLException, ClassNotFoundException {
+    public boolean save(PlayStation playStation) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("INSERT INTO play_station VALUES (?,?,?,?)",
-                entity.getPlayStationId(),
-                entity.getPlayStationNumber(),
-                entity.getStatus(),
-                entity.getRate()
+                playStation.getPlayStationId(),
+                playStation.getPlayStationNumber(),
+                playStation.getStatus(),
+                playStation.getRate()
         );
     }
 
@@ -72,12 +72,12 @@ public class PlayStationDAOImpl implements PlayStationDAO {
     }
 
     @Override
-    public boolean update(PlayStation entity) throws SQLException, ClassNotFoundException {
+    public boolean update(PlayStation playStation) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("UPDATE play_station SET play_station_number = ?, status = ?, rate = ? WHERE play_station_id = ?",
-                entity.getPlayStationNumber(),
-                entity.getStatus(),
-                entity.getRate(),
-                entity.getPlayStationId()
+                playStation.getPlayStationNumber(),
+                playStation.getStatus(),
+                playStation.getRate(),
+                playStation.getPlayStationId()
         );
     }
 

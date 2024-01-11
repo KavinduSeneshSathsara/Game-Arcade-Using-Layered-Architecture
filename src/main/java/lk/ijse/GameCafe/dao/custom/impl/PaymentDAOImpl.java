@@ -41,7 +41,7 @@ public class PaymentDAOImpl implements PaymentDAO {
     }
 
     @Override
-    public boolean update(Payment entity) throws SQLException, ClassNotFoundException {
+    public boolean update(Payment payment) throws SQLException, ClassNotFoundException {
         return false;
     }
 

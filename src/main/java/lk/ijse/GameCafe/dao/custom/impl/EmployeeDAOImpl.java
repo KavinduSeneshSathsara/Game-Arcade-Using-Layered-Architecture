@@ -22,13 +22,13 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public boolean update(Employee entity) throws SQLException, ClassNotFoundException {
+    public boolean update(Employee employee) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("UPDATE employee SET emp_name = ?, emp_contact_num = ?, emp_salary = ?, emp_address = ? WHERE emp_id = ?",
-            entity.getEmpName(),
-            entity.getEmpContactNum(),
-            entity.getEmpSalary(),
-            entity.getEmpAddress(),
-            entity.getEmpId()
+            employee.getEmpName(),
+            employee.getEmpContactNum(),
+            employee.getEmpSalary(),
+            employee.getEmpAddress(),
+            employee.getEmpId()
         );
     }
 
@@ -43,13 +43,13 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public boolean save(Employee entity) throws SQLException, ClassNotFoundException {
+    public boolean save(Employee employee) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("INSERT INTO employee VAlUES (?,?,?,?,?)",
-                entity.getEmpId(),
-                entity.getEmpName(),
-                entity.getEmpContactNum(),
-                entity.getEmpSalary(),
-                entity.getEmpAddress()
+                employee.getEmpId(),
+                employee.getEmpName(),
+                employee.getEmpContactNum(),
+                employee.getEmpSalary(),
+                employee.getEmpAddress()
         );
     }
 

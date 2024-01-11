@@ -5,6 +5,7 @@ import lk.ijse.GameCafe.dao.DAOFactory;
 import lk.ijse.GameCafe.dao.custom.UserDAO;
 import lk.ijse.GameCafe.dao.custom.impl.UserDAOImpl;
 import lk.ijse.GameCafe.dto.UserDto;
+import lk.ijse.GameCafe.entity.User;
 
 import java.sql.SQLException;
 
@@ -22,7 +23,7 @@ public class UserBOImpl implements UserBO {
 
     @Override
     public boolean saveUser(UserDto dto) throws SQLException, ClassNotFoundException {
-        return userDAO.save(new UserDto(
+        return userDAO.save(new User(
                 dto.getUserName(),
                 dto.getEmail(),
                 dto.getPassword()

@@ -4,6 +4,7 @@ import lk.ijse.GameCafe.dao.custom.UserDAO;
 import lk.ijse.GameCafe.db.DbConnection;
 import lk.ijse.GameCafe.dto.UserDto;
 import lk.ijse.GameCafe.dao.SQLUtil;
+import lk.ijse.GameCafe.entity.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -59,11 +60,11 @@ public class UserDAOImpl implements UserDAO {
 
 
     @Override
-    public boolean save(UserDto dto) throws SQLException, ClassNotFoundException {
+    public boolean save(User user) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("INSERT into user VALUES (?,?,?)",
-                dto.getUserName(),
-                dto.getPassword(),
-                dto.getEmail()
+                user.getUserName(),
+                user.getPassword(),
+                user.getEmail()
         );
     }
 
@@ -73,17 +74,17 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public List<UserDto> getAll() throws SQLException, ClassNotFoundException {
+    public List<User> getAll() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean update(UserDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(User user) throws SQLException, ClassNotFoundException {
         return false;
     }
 
     @Override
-    public UserDto search(String id) throws SQLException, ClassNotFoundException {
+    public User search(String id) throws SQLException, ClassNotFoundException {
         return null;
     }
 

@@ -29,13 +29,13 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public boolean save(Customer entity) throws SQLException, ClassNotFoundException {
+    public boolean save(Customer customer) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("INSERT INTO customer VALUES(?,?,?,?,?)",
-                entity.getCusId(),
-                entity.getCusContactNum(),
-                entity.getCusEmail(),
-                entity.getCusName(),
-                entity.getCusAddress()
+                customer.getCusId(),
+                customer.getCusContactNum(),
+                customer.getCusEmail(),
+                customer.getCusName(),
+                customer.getCusAddress()
         );
     }
 
@@ -61,13 +61,13 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public boolean update(Customer entity) throws SQLException, ClassNotFoundException {
+    public boolean update(Customer customer) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("UPDATE customer SET contact_num = ?, email = ?, cus_name = ?, customer_address = ? WHERE cus_id = ?",
-                entity.getCusContactNum(),
-                entity.getCusEmail(),
-                entity.getCusName(),
-                entity.getCusAddress(),
-                entity.getCusId()
+                customer.getCusContactNum(),
+                customer.getCusEmail(),
+                customer.getCusName(),
+                customer.getCusAddress(),
+                customer.getCusId()
         );
     }
 
