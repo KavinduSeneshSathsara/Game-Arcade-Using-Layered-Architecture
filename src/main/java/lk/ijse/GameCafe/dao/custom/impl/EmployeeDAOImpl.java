@@ -22,13 +22,13 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public boolean update(EmployeeDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(Employee entity) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("UPDATE employee SET emp_name = ?, emp_contact_num = ?, emp_salary = ?, emp_address = ? WHERE emp_id = ?",
-            dto.getEmpName(),
-            dto.getEmpContactNum(),
-            dto.getEmpSalary(),
-            dto.getEmpAddress(),
-            dto.getEmpId()
+            entity.getEmpName(),
+            entity.getEmpContactNum(),
+            entity.getEmpSalary(),
+            entity.getEmpAddress(),
+            entity.getEmpId()
         );
     }
 
@@ -43,24 +43,24 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public boolean save(EmployeeDto dto) throws SQLException, ClassNotFoundException {
+    public boolean save(Employee entity) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("INSERT INTO employee VAlUES (?,?,?,?,?)",
-                dto.getEmpId(),
-                dto.getEmpName(),
-                dto.getEmpContactNum(),
-                dto.getEmpSalary(),
-                dto.getEmpAddress()
+                entity.getEmpId(),
+                entity.getEmpName(),
+                entity.getEmpContactNum(),
+                entity.getEmpSalary(),
+                entity.getEmpAddress()
         );
     }
 
     @Override
-    public List<EmployeeDto> getAll() throws SQLException, ClassNotFoundException {
+    public List<Employee> getAll() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM employee");
 
-        List<EmployeeDto> list = new ArrayList<>();
+        List<Employee> list = new ArrayList<>();
 
         while (rst.next()){
-            EmployeeDto employee = new EmployeeDto(
+            Employee employee = new Employee(
                     rst.getString(1),
                     rst.getString(2),
                     rst.getString(3),
@@ -78,11 +78,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public EmployeeDto search(String id) throws SQLException, ClassNotFoundException {
+    public Employee search(String id) throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM employee WHERE emp_id = ?", id);
 
         if (rst.next()){
-            return new EmployeeDto(
+            return new Employee(
               rst.getString(1),
               rst.getString(2),
               rst.getString(3),

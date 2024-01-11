@@ -29,55 +29,55 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public boolean save(CustomerDto dto) throws SQLException, ClassNotFoundException {
+    public boolean save(Customer entity) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("INSERT INTO customer VALUES(?,?,?,?,?)",
-                dto.getCusId(),
-                dto.getCusContactNum(),
-                dto.getCusEmail(),
-                dto.getCusName(),
-                dto.getCusAddress()
+                entity.getCusId(),
+                entity.getCusContactNum(),
+                entity.getCusEmail(),
+                entity.getCusName(),
+                entity.getCusAddress()
         );
     }
 
     @Override
-    public List<CustomerDto> getAll() throws SQLException, ClassNotFoundException {
+    public List<Customer> getAll() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM customer");
 
-        List<CustomerDto> list = new ArrayList<>();
+        List<Customer> list = new ArrayList<>();
 
         while (rst.next()){
 
-            CustomerDto customerDto = new CustomerDto(
+            Customer entity = new Customer(
                     rst.getString(1),
                     rst.getString(2),
                     rst.getString(3),
                     rst.getString(4),
                     rst.getString(5)
             );
-            list.add(customerDto);
+            list.add(entity);
         }
 
         return list;
     }
 
     @Override
-    public boolean update(CustomerDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(Customer entity) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("UPDATE customer SET contact_num = ?, email = ?, cus_name = ?, customer_address = ? WHERE cus_id = ?",
-                dto.getCusContactNum(),
-                dto.getCusEmail(),
-                dto.getCusName(),
-                dto.getCusAddress(),
-                dto.getCusId()
+                entity.getCusContactNum(),
+                entity.getCusEmail(),
+                entity.getCusName(),
+                entity.getCusAddress(),
+                entity.getCusId()
         );
     }
 
 
     @Override
-    public CustomerDto search(String id) throws SQLException, ClassNotFoundException {
+    public Customer search(String id) throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM customer WHERE cus_id = ?" , (id + ""));
 
         if(rst.next()){
-            return new CustomerDto(
+            return new Customer(
                 rst.getString(1),
                 rst.getString(2),
                 rst.getString(3),
@@ -89,11 +89,11 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public CustomerDto getCustomer(String s) throws SQLException, ClassNotFoundException {
+    public Customer getCustomer(String s) throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM customer WHERE contact_num=?", s);
 
         if (rst.next()) {
-            return new CustomerDto(
+            return new Customer(
                 rst.getString(1),
                 rst.getString(2),
                 rst.getString(3),

@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class BookingDetailDAOImpl implements BookingDetailDAO{
+
     @Override
     public boolean saveDetails(List<BookingDetailsDto> detailList) throws SQLException, ClassNotFoundException {
         for (BookingDetailsDto details : detailList) {
@@ -26,22 +27,22 @@ public class BookingDetailDAOImpl implements BookingDetailDAO{
     }
 
     @Override
-    public boolean save(BookingDetailsDto dto) throws SQLException, ClassNotFoundException {
+    public boolean save(BookingDetails entity) throws SQLException, ClassNotFoundException {
         return false;
     }
 
     @Override
-    public List<BookingDetailsDto> getAll() throws SQLException, ClassNotFoundException {
+    public List<BookingDetails> getAll() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean update(BookingDetailsDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(BookingDetails entity) throws SQLException, ClassNotFoundException {
         return false;
     }
 
     @Override
-    public BookingDetailsDto search(String id) throws SQLException, ClassNotFoundException {
+    public BookingDetails search(String id) throws SQLException, ClassNotFoundException {
         return null;
     }
 

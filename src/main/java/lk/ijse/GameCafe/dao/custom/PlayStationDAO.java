@@ -6,6 +6,6 @@ import lk.ijse.GameCafe.entity.PlayStation;
 
 import java.sql.SQLException;
 
-public interface PlayStationDAO extends CrudDAO<PlayStationDto> {
+public interface PlayStationDAO extends CrudDAO<PlayStation> {
     double getRate(String station) throws SQLException, ClassNotFoundException;
 }

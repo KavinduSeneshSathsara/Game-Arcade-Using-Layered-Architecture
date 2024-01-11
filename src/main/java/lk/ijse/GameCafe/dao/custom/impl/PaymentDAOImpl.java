@@ -3,6 +3,7 @@ package lk.ijse.GameCafe.dao.custom.impl;
 import lk.ijse.GameCafe.dao.custom.PaymentDAO;
 import lk.ijse.GameCafe.dto.PaymentDto;
 import lk.ijse.GameCafe.dao.SQLUtil;
+import lk.ijse.GameCafe.entity.Payment;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,41 +12,41 @@ import java.util.List;
 
 public class PaymentDAOImpl implements PaymentDAO {
     @Override
-    public boolean save(PaymentDto paymentDto) throws SQLException, ClassNotFoundException {
+    public boolean save(Payment payment) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("insert into payment value (?,?,?,?,?)",
-                paymentDto.getPaymentId(),
-                paymentDto.getBookingId(),
-                paymentDto.getDate(),
-                paymentDto.getTime(),
-                paymentDto.getAmount()
+                payment.getPaymentId(),
+                payment.getBookingId(),
+                payment.getDate(),
+                payment.getTime(),
+                payment.getAmount()
         );
     }
 
     @Override
-    public List<PaymentDto> getAll() throws SQLException, ClassNotFoundException {
+    public List<Payment> getAll() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM payment");
 
-        List<PaymentDto> list = new ArrayList<>();
+        List<Payment> list = new ArrayList<>();
 
         while (rst.next()){
-            PaymentDto paymentDto = new PaymentDto(
+            Payment payment = new Payment(
                 rst.getString(1),
                 rst.getString(2),
                 rst.getDate(3),
                 rst.getTime(4),
                 rst.getDouble(5));
-            list.add(paymentDto);
+            list.add(payment);
         }
         return list;
     }
 
     @Override
-    public boolean update(PaymentDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(Payment entity) throws SQLException, ClassNotFoundException {
         return false;
     }
 
     @Override
-    public PaymentDto search(String id) throws SQLException, ClassNotFoundException {
+    public Payment search(String id) throws SQLException, ClassNotFoundException {
         return null;
     }
 

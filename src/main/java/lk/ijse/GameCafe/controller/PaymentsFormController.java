@@ -169,7 +169,7 @@ public class PaymentsFormController implements Initializable {
     @FXML
     void cmbBookingIdOnAction(ActionEvent event) throws ClassNotFoundException {
         try {
-            Booking bookingData = bookingBO.getBookingData((String) cmbBookingId.getValue());
+            BookingDto bookingData = bookingBO.getBookingData((String) cmbBookingId.getValue());
 
             if ( bookingData != null && bookingData.getStatus().equals( "Not Paid" ) ) {
 

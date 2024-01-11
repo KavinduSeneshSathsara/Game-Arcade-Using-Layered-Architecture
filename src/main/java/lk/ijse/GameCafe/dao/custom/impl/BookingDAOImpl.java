@@ -39,7 +39,7 @@ public class BookingDAOImpl implements BookingDAO {
     }
 
     @Override
-    public boolean save(BookingDto booking) throws SQLException, ClassNotFoundException {
+    public boolean save(Booking booking) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("INSERT INTO booking VALUES (?,?,?,?,?,?,?,?)",
                 booking.getBookingId(),
                 booking.getCus_id(),
@@ -77,13 +77,13 @@ public class BookingDAOImpl implements BookingDAO {
     }
 
     @Override
-    public List<BookingDto> getAll() throws SQLException, ClassNotFoundException {
+    public List<Booking> getAll() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM booking");
 
-        List<BookingDto> list = new ArrayList<>();
+        List<Booking> list = new ArrayList<>();
 
         while (rst.next()){
-            BookingDto bookingDto =new BookingDto(
+            Booking entity =new Booking(
                     rst.getString(1),
                     rst.getString(2),
                     rst.getDate(3),
@@ -93,7 +93,7 @@ public class BookingDAOImpl implements BookingDAO {
                     rst.getString(7),
                     rst.getDouble(8)
             );
-            list.add(bookingDto);
+            list.add(entity);
         }
         return list;
     }
@@ -109,12 +109,12 @@ public class BookingDAOImpl implements BookingDAO {
     }
 
     @Override
-    public boolean update(BookingDto booking) throws SQLException, ClassNotFoundException {
+    public boolean update(Booking booking) throws SQLException, ClassNotFoundException {
         return false;
     }
 
     @Override
-    public BookingDto search(String id) throws SQLException, ClassNotFoundException {
+    public Booking search(String id) throws SQLException, ClassNotFoundException {
         return null;
     }
 

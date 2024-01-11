@@ -11,6 +11,7 @@ import lk.ijse.GameCafe.entity.Booking;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BookingBOImpl implements BookingBO {
@@ -26,7 +27,7 @@ public class BookingBOImpl implements BookingBO {
 
     @Override
     public boolean saveBooking(BookingDto dto) throws SQLException, ClassNotFoundException {
-        return bookingDAO.save(new BookingDto(
+        return bookingDAO.save(new Booking(
                 dto.getBookingId(),
                 dto.getCus_id(),
                 dto.getBookingDate(),
@@ -43,13 +44,42 @@ public class BookingBOImpl implements BookingBO {
     }
 
     @Override
-    public Booking getBookingData(String value) throws SQLException, ClassNotFoundException {
-        return bookingDAO.getBookingData(value);
+    public BookingDto getBookingData(String value) throws SQLException, ClassNotFoundException {
+//        return bookingDAO.getBookingData(value);
+        Booking booking = bookingDAO.getBookingData(value);
+
+        if (booking != null){
+            return new BookingDto(
+              booking.getBookingId(),
+              booking.getCus_id(),
+              booking.getBookingDate(),
+              booking.getBookingTime(),
+              booking.getStartTime(),
+              booking.getEndTime(),
+              booking.getStatus(),
+              booking.getTotal()
+            );
+        }
+        return null;
     }
 
     @Override
     public List<BookingDto> getAllBookings() throws SQLException, ClassNotFoundException {
-        return bookingDAO.getAll();
+        List<Booking> bookings = bookingDAO.getAll();
+        List<BookingDto> bookingDtos = new ArrayList<>();
+        for (Booking booking : bookings){
+            bookingDtos.add(new BookingDto(
+                    booking.getBookingId(),
+                    booking.getCus_id(),
+                    booking.getBookingDate(),
+                    booking.getBookingTime(),
+                    booking.getStartTime(),
+                    booking.getEndTime(),
+                    booking.getStatus(),
+                    booking.getTotal()
+            ));
+        }
+        return bookingDtos;
     }
 
     @Override
@@ -60,6 +90,7 @@ public class BookingBOImpl implements BookingBO {
     @Override
     public boolean saveDetails(List<BookingDetailsDto> detailList) throws SQLException, ClassNotFoundException {
         return bookingDetailDAO.saveDetails(detailList);
+
     }
 
     @Override

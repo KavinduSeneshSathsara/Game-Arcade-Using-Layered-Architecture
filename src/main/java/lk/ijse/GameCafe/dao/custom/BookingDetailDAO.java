@@ -8,6 +8,6 @@ import lk.ijse.GameCafe.entity.BookingDetails;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface BookingDetailDAO extends CrudDAO<BookingDetailsDto> {
+public interface BookingDetailDAO extends CrudDAO<BookingDetails> {
     boolean saveDetails(List<BookingDetailsDto> collect) throws SQLException, ClassNotFoundException;
 }

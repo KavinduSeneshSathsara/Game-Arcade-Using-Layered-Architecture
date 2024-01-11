@@ -5,8 +5,10 @@ import lk.ijse.GameCafe.dao.DAOFactory;
 import lk.ijse.GameCafe.dao.custom.PlayStationDAO;
 import lk.ijse.GameCafe.dao.custom.impl.PlayStationDAOImpl;
 import lk.ijse.GameCafe.dto.PlayStationDto;
+import lk.ijse.GameCafe.entity.PlayStation;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlayStationBOImpl implements PlayStationBO {
@@ -24,12 +26,23 @@ public class PlayStationBOImpl implements PlayStationBO {
 
     @Override
     public List<PlayStationDto> getAllPlayStations() throws SQLException, ClassNotFoundException {
-        return playStationDAO.getAll();
+        List<PlayStation> playStations = playStationDAO.getAll();
+        List<PlayStationDto> playStationDtos = new ArrayList<>();
+
+        for (PlayStation playStation : playStations){
+            playStationDtos.add(new PlayStationDto(
+                    playStation.getPlayStationId(),
+                    playStation.getPlayStationNumber(),
+                    playStation.getStatus(),
+                    playStation.getRate()
+            ));
+        }
+        return playStationDtos;
     }
 
     @Override
     public boolean savePlayStation(PlayStationDto dto) throws SQLException, ClassNotFoundException {
-        return playStationDAO.save(new PlayStationDto(
+        return playStationDAO.save(new PlayStation(
                 dto.getPlayStationId(),
                 dto.getPlayStationNumber(),
                 dto.getStatus(),
@@ -39,12 +52,19 @@ public class PlayStationBOImpl implements PlayStationBO {
 
     @Override
     public PlayStationDto searchPlayStation(String id) throws SQLException, ClassNotFoundException {
-        return playStationDAO.search(id);
+        PlayStation playStation = playStationDAO.search(id);
+        PlayStationDto playStationDto = new PlayStationDto(
+          playStation.getPlayStationId(),
+          playStation.getPlayStationNumber(),
+          playStation.getStatus(),
+          playStation.getRate()
+        );
+        return playStationDto;
     }
 
     @Override
     public boolean updatePlayStation(PlayStationDto dto) throws SQLException, ClassNotFoundException {
-        return playStationDAO.update(new PlayStationDto(
+        return playStationDAO.update(new PlayStation(
                 dto.getPlayStationId(),
                 dto.getPlayStationNumber(),
                 dto.getStatus(),

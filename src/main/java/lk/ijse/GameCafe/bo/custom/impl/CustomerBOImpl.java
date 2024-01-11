@@ -7,6 +7,7 @@ import lk.ijse.GameCafe.dto.CustomerDto;
 import lk.ijse.GameCafe.entity.Customer;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerBOImpl implements CustomerBO {
@@ -19,7 +20,7 @@ public class CustomerBOImpl implements CustomerBO {
 
     @Override
     public boolean saveCustomer(CustomerDto dto) throws SQLException, ClassNotFoundException {
-        return customerDAO.save(new CustomerDto(
+        return customerDAO.save(new Customer(
                 dto.getCusId(),
                 dto.getCusContactNum(),
                 dto.getCusEmail(),
@@ -35,17 +36,36 @@ public class CustomerBOImpl implements CustomerBO {
 
     @Override
     public List<CustomerDto> getAllCustomers() throws SQLException, ClassNotFoundException {
-        return customerDAO.getAll();
+        List<Customer> customers = customerDAO.getAll();
+        List<CustomerDto> customerDtos = new ArrayList<>();
+        for (Customer customer : customers){
+            customerDtos.add(new CustomerDto(
+                    customer.getCusId(),
+                    customer.getCusContactNum(),
+                    customer.getCusEmail(),
+                    customer.getCusName(),
+                    customer.getCusAddress()
+            ));
+        }
+        return customerDtos;
     }
 
     @Override
     public CustomerDto searchCustomer(String id) throws SQLException, ClassNotFoundException {
-        return customerDAO.search(id);
+        Customer customer = customerDAO.search(id);
+        CustomerDto customerDto = new CustomerDto(
+              customer.getCusId(),
+              customer.getCusContactNum(),
+              customer.getCusEmail(),
+              customer.getCusName(),
+              customer.getCusAddress()
+        );
+        return customerDto;
     }
 
     @Override
     public boolean updateCustomer(CustomerDto dto) throws SQLException, ClassNotFoundException {
-        return customerDAO.update(new CustomerDto(
+        return customerDAO.update(new Customer(
                 dto.getCusId(),
                 dto.getCusContactNum(),
                 dto.getCusEmail(),
@@ -56,7 +76,15 @@ public class CustomerBOImpl implements CustomerBO {
 
     @Override
     public CustomerDto getCustomer(String s) throws SQLException, ClassNotFoundException {
-        return customerDAO.getCustomer(s);
+        Customer customer = customerDAO.getCustomer(s);
+        CustomerDto customerDto = new CustomerDto(
+                customer.getCusId(),
+                customer.getCusContactNum(),
+                customer.getCusEmail(),
+                customer.getCusName(),
+                customer.getCusAddress()
+        );
+        return customerDto;
     }
 
     @Override

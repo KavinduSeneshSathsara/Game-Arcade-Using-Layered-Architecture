@@ -3,6 +3,7 @@ package lk.ijse.GameCafe.dao.custom.impl;
 import lk.ijse.GameCafe.dao.custom.PlayStationDAO;
 import lk.ijse.GameCafe.dto.PlayStationDto;
 import lk.ijse.GameCafe.dao.SQLUtil;
+import lk.ijse.GameCafe.entity.PlayStation;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,40 +28,40 @@ public class PlayStationDAOImpl implements PlayStationDAO {
     }
 
     @Override
-    public List<PlayStationDto> getAll() throws SQLException, ClassNotFoundException {
+    public List<PlayStation> getAll() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM play_station");
 
-        List<PlayStationDto> list = new ArrayList<>();
+        List<PlayStation> list = new ArrayList<>();
 
         while(rst.next()){
 
-            PlayStationDto playStationDto = new PlayStationDto(
+            PlayStation playStation = new PlayStation(
               rst.getString(1),
               rst.getString(2),
               rst.getString(3),
               rst.getInt(4)
             );
-            list.add(playStationDto);
+            list.add(playStation);
         }
         return list;
     }
 
     @Override
-    public boolean save(PlayStationDto playStationDto) throws SQLException, ClassNotFoundException {
+    public boolean save(PlayStation entity) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("INSERT INTO play_station VALUES (?,?,?,?)",
-                playStationDto.getPlayStationId(),
-                playStationDto.getPlayStationNumber(),
-                playStationDto.getStatus(),
-                playStationDto.getRate()
+                entity.getPlayStationId(),
+                entity.getPlayStationNumber(),
+                entity.getStatus(),
+                entity.getRate()
         );
     }
 
     @Override
-    public PlayStationDto search(String id) throws SQLException, ClassNotFoundException {
+    public PlayStation search(String id) throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM play_station WHERE play_station_id = ?", id);
 
         if (rst.next()){
-            return new PlayStationDto(
+            return new PlayStation(
                 rst.getString(1),
                 rst.getString(2),
                 rst.getString(3),
@@ -71,12 +72,12 @@ public class PlayStationDAOImpl implements PlayStationDAO {
     }
 
     @Override
-    public boolean update(PlayStationDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(PlayStation entity) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("UPDATE play_station SET play_station_number = ?, status = ?, rate = ? WHERE play_station_id = ?",
-                dto.getPlayStationNumber(),
-                dto.getStatus(),
-                dto.getRate(),
-                dto.getPlayStationId()
+                entity.getPlayStationNumber(),
+                entity.getStatus(),
+                entity.getRate(),
+                entity.getPlayStationId()
         );
     }
 
