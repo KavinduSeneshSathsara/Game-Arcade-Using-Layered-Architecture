@@ -235,6 +235,39 @@ public class BookingFormController implements Initializable{
         return null;
     }
 
+//    @FXML
+//    void btnBookOnAction(ActionEvent event) throws ParseException, SQLException, ClassNotFoundException {
+//        Date nowDate = Date.valueOf( datePicker.getValue() );
+//        Time nowTime = Time.valueOf(LocalTime.now());
+//        Time startTime = makeTime(cmbStartTime.getValue());
+//        Time endTime = makeTime(cmbEndTime.getValue());
+//
+//        Connection connection = null;
+//
+//        try {
+//            CustomerDto customerdto = customerBO.getCustomer(String.valueOf(cmbCusNumbers.getValue()));
+//
+//            connection = DbConnection.getInstance( ).getConnection( );
+//            connection.setAutoCommit( false );
+//
+//            boolean b = bookingBO.saveBooking(new BookingDto(bookingBO.generateBookingId(), customerdto.getCusId(), nowDate, nowTime, startTime, endTime, "Not Paid", Double.parseDouble(lblNetTotal.getText())));
+//            if (b) {
+//                boolean saved = bookingBO.saveDetails( tblCart.getItems().stream().map(tm -> new BookingDetailsDto(lblOrderId.getText(), tm.getId())).collect(Collectors.toList()));
+//
+//                if ( saved ) {
+//                    connection.commit();
+//                    new Alert(Alert.AlertType.CONFIRMATION, "Saved Successfully").show();
+//                    loadOrderId();
+//                }
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            connection.rollback();
+//        } finally {
+//            connection.setAutoCommit( true );
+//        }
+//    }
+
     @FXML
     void btnBookOnAction(ActionEvent event) throws ParseException, SQLException, ClassNotFoundException {
         Date nowDate = Date.valueOf( datePicker.getValue() );
@@ -242,30 +275,31 @@ public class BookingFormController implements Initializable{
         Time startTime = makeTime(cmbStartTime.getValue());
         Time endTime = makeTime(cmbEndTime.getValue());
 
-        Connection connection = null;
+        boolean b = booking(
+                nowDate,
+                nowTime,
+                startTime,
+                endTime,
+                "Not Paid",
+                Double.parseDouble(lblNetTotal.getText())
+        );
 
-        try {
+        if (b){
+            new Alert(Alert.AlertType.INFORMATION, "Booking Successful").show();
+        }else {
+            new Alert(Alert.AlertType.ERROR,"Booking Failed. Please try again.").show();
+        }
+    }
 
-            CustomerDto customer = customerBO.getCustomer(String.valueOf(cmbCusNumbers.getValue()));
+    private boolean booking(Date nowDate, Time nowTime, Time startTime, Time endTime, String notPaid, double v) {
+        try{
+            tblCart.getItems().stream().map(tm -> new BookingDetailsDto(lblOrderId.getText(), tm.getId())).collect(Collectors.toList());
+            CustomerDto customerdto = customerBO.getCustomer(String.valueOf(cmbCusNumbers.getValue()));
 
-            connection = DbConnection.getInstance( ).getConnection( );
-            connection.setAutoCommit( false );
+            return bookingBO.bookAndSave(nowDate, nowTime, startTime, endTime, notPaid, v, customerdto, tblCart.getItems().stream().map(tm -> new BookingDetailsDto(lblOrderId.getText(), tm.getId())).collect(Collectors.toList()));
 
-            boolean isSaved = bookingBO.saveBooking(new BookingDto(bookingBO.generateBookingId(), customer.getCusId(), nowDate, nowTime, startTime, endTime, "Not Paid", Double.parseDouble(lblNetTotal.getText())));
-            if (isSaved) {
-                boolean saved = bookingBO.saveDetails( tblCart.getItems().stream().map(tm -> new BookingDetailsDto(lblOrderId.getText(), tm.getId())).collect(Collectors.toList()));
-
-                if ( saved ) {
-                    connection.commit();
-                    new Alert(Alert.AlertType.CONFIRMATION, "Saved Successfully").show();
-                    loadOrderId();
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            connection.rollback();
-        } finally {
-            connection.setAutoCommit( true );
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
