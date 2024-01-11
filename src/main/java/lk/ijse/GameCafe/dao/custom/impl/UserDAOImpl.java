@@ -22,7 +22,6 @@ public class UserDAOImpl implements UserDAO {
             String sql = "SELECT Password FROM user WHERE UserName = ?";
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
             preparedStatement.setString(1,UserName);
 
             ResultSet resultSet = preparedStatement.executeQuery();
