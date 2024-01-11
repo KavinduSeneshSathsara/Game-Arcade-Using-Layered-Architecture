@@ -3,8 +3,8 @@ package lk.ijse.GameCafe.bo.custom.impl;
 import lk.ijse.GameCafe.bo.custom.CustomerBO;
 import lk.ijse.GameCafe.dao.DAOFactory;
 import lk.ijse.GameCafe.dao.custom.CustomerDAO;
-import lk.ijse.GameCafe.dao.custom.impl.CustomerDAOImpl;
 import lk.ijse.GameCafe.dto.CustomerDto;
+import lk.ijse.GameCafe.entity.Customer;
 
 import java.sql.SQLException;
 import java.util.List;

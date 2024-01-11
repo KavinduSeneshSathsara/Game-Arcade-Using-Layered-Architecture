@@ -3,6 +3,7 @@ package lk.ijse.GameCafe.dao.custom.impl;
 import lk.ijse.GameCafe.dao.custom.EmployeeDAO;
 import lk.ijse.GameCafe.dto.EmployeeDto;
 import lk.ijse.GameCafe.dao.SQLUtil;
+import lk.ijse.GameCafe.entity.Employee;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -59,14 +60,14 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         List<EmployeeDto> list = new ArrayList<>();
 
         while (rst.next()){
-            EmployeeDto employeeDto = new EmployeeDto(
+            EmployeeDto employee = new EmployeeDto(
                     rst.getString(1),
                     rst.getString(2),
                     rst.getString(3),
                     rst.getString(4),
                     rst.getString(5)
             );
-            list.add(employeeDto);
+            list.add(employee);
         }
         return list;
     }

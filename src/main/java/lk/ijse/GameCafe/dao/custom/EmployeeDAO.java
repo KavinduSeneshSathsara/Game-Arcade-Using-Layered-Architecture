@@ -6,6 +6,6 @@ import lk.ijse.GameCafe.entity.Employee;
 
 import java.sql.SQLException;
 
-public interface EmployeeDAO extends CrudDAO<Employee> {
+public interface EmployeeDAO extends CrudDAO<EmployeeDto> {
     String totalEmployeeCount() throws SQLException, ClassNotFoundException;
 }

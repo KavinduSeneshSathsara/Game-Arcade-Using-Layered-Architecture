@@ -7,6 +7,7 @@ import lk.ijse.GameCafe.dao.custom.BookingDetailDAO;
 import lk.ijse.GameCafe.dao.custom.QuaryDAO;
 import lk.ijse.GameCafe.dto.BookingDetailsDto;
 import lk.ijse.GameCafe.dto.BookingDto;
+import lk.ijse.GameCafe.entity.Booking;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -42,7 +43,7 @@ public class BookingBOImpl implements BookingBO {
     }
 
     @Override
-    public BookingDto getBookingData(String value) throws SQLException, ClassNotFoundException {
+    public Booking getBookingData(String value) throws SQLException, ClassNotFoundException {
         return bookingDAO.getBookingData(value);
     }
 

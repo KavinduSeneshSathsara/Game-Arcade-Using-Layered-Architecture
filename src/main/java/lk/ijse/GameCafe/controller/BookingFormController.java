@@ -23,6 +23,7 @@ import lk.ijse.GameCafe.bo.custom.CustomerBO;
 import lk.ijse.GameCafe.bo.custom.PlayStationBO;
 import lk.ijse.GameCafe.db.DbConnection;
 import lk.ijse.GameCafe.dto.*;
+import lk.ijse.GameCafe.entity.Booking;
 import lk.ijse.GameCafe.view.tdm.tm.CartTm;
 
 import java.net.URL;
@@ -245,12 +246,12 @@ public class BookingFormController implements Initializable{
 
         try {
 
-            CustomerDto customerDto = customerBO.getCustomer(String.valueOf(cmbCusNumbers.getValue()));
+            CustomerDto customer = customerBO.getCustomer(String.valueOf(cmbCusNumbers.getValue()));
 
             connection = DbConnection.getInstance( ).getConnection( );
             connection.setAutoCommit( false );
 
-            boolean isSaved = bookingBO.saveBooking(new BookingDto(bookingBO.generateBookingId(), customerDto.getCusId(), nowDate, nowTime, startTime, endTime, "Not Paid", Double.parseDouble(lblNetTotal.getText())));
+            boolean isSaved = bookingBO.saveBooking(new BookingDto(bookingBO.generateBookingId(), customer.getCusId(), nowDate, nowTime, startTime, endTime, "Not Paid", Double.parseDouble(lblNetTotal.getText())));
             if (isSaved) {
                 boolean saved = bookingBO.saveDetails( tblCart.getItems().stream().map(tm -> new BookingDetailsDto(lblOrderId.getText(), tm.getId())).collect(Collectors.toList()));
 
@@ -315,9 +316,9 @@ public class BookingFormController implements Initializable{
     @FXML
     void cmbCusNumbersOnAction(Event event) throws ClassNotFoundException {
         try {
-            CustomerDto customerDto = customerBO.getCustomer(String.valueOf(cmbCusNumbers.getValue()));
-            lblCustomerName.setText(customerDto.getCusName());
-            lblCustomerEmail.setText(customerDto.getCusEmail());
+            CustomerDto customer = customerBO.getCustomer(String.valueOf(cmbCusNumbers.getValue()));
+            lblCustomerName.setText(customer.getCusName());
+            lblCustomerEmail.setText(customer.getCusEmail());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -390,9 +391,9 @@ public class BookingFormController implements Initializable{
     private void loadAllNumbers() throws ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<CustomerDto> dtos = customerBO.getAllCustomers();
-            for (CustomerDto dto : dtos) {
-                obList.add(dto.getCusContactNum());
+            List<CustomerDto> customers = customerBO.getAllCustomers();
+            for (CustomerDto customer : customers) {
+                obList.add(customer.getCusContactNum());
             }
             cmbCusNumbers.setItems(obList);
         } catch (SQLException e) {

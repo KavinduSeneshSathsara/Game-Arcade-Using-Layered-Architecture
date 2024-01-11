@@ -6,8 +6,8 @@ import lk.ijse.GameCafe.entity.Booking;
 
 import java.sql.SQLException;
 
-public interface BookingDAO extends CrudDAO<Booking> {
+public interface BookingDAO extends CrudDAO<BookingDto>{
     boolean updateStatus(String s) throws SQLException, ClassNotFoundException;
-    BookingDto getBookingData(String value) throws SQLException, ClassNotFoundException;
+    Booking getBookingData(String value) throws SQLException, ClassNotFoundException;
     String totalBookingCount() throws SQLException, ClassNotFoundException;
 }

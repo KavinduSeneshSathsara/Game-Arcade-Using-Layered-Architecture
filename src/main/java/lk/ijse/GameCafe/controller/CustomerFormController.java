@@ -14,6 +14,7 @@ import lk.ijse.GameCafe.bo.BOFactory;
 import lk.ijse.GameCafe.bo.custom.CustomerBO;
 import lk.ijse.GameCafe.db.DbConnection;
 import lk.ijse.GameCafe.dto.CustomerDto;
+import lk.ijse.GameCafe.entity.Customer;
 import lk.ijse.GameCafe.view.tdm.tm.CustomerTm;
 
 import net.sf.jasperreports.engine.*;
@@ -186,13 +187,13 @@ public class CustomerFormController {
          try{
              List <CustomerDto> list = customerBO.getAllCustomers();
 
-             for (CustomerDto dto : list){
+             for (CustomerDto customer : list){
                  CustomerTm customerTm = new CustomerTm(
-                         dto.getCusId(),
-                         dto.getCusContactNum(),
-                         dto.getCusEmail(),
-                         dto.getCusName(),
-                         dto.getCusAddress());
+                         customer.getCusId(),
+                         customer.getCusContactNum(),
+                         customer.getCusEmail(),
+                         customer.getCusName(),
+                         customer.getCusAddress());
 
                  obList.add(customerTm);
              }
@@ -254,9 +255,9 @@ public class CustomerFormController {
         void btnSearchOnAction (ActionEvent event) throws ClassNotFoundException {
             String id = txtSearchBar.getText();
             try {
-                CustomerDto dto = customerBO.searchCustomer(id);
-                if (dto != null){
-                    fillField(dto);
+                CustomerDto customer = customerBO.searchCustomer(id);
+                if (customer != null){
+                    fillField(customer);
                 }else {
                     new Alert(Alert.AlertType.INFORMATION,"Customer not found").show();
                 }

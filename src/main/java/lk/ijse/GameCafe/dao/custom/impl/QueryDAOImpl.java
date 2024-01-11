@@ -3,6 +3,7 @@ package lk.ijse.GameCafe.dao.custom.impl;
 import lk.ijse.GameCafe.dao.SQLUtil;
 import lk.ijse.GameCafe.dao.custom.QuaryDAO;
 import lk.ijse.GameCafe.dto.BookingDto;
+import lk.ijse.GameCafe.entity.Booking;
 
 import java.sql.Date;
 import java.sql.ResultSet;

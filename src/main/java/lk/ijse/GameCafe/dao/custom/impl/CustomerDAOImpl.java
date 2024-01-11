@@ -1,8 +1,8 @@
 package lk.ijse.GameCafe.dao.custom.impl;
 
 import lk.ijse.GameCafe.dao.custom.CustomerDAO;
-import lk.ijse.GameCafe.dto.CustomerDto;
 import lk.ijse.GameCafe.dao.SQLUtil;
+import lk.ijse.GameCafe.dto.CustomerDto;
 import lk.ijse.GameCafe.entity.Customer;
 
 import java.sql.ResultSet;
@@ -18,17 +18,6 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public boolean save(Customer customer) throws SQLException, ClassNotFoundException {
-        return SQLUtil.execute("INSERT INTO customer VALUES(?,?,?,?,?)",
-                customer.getCusId(),
-                customer.getCusContactNum(),
-                customer.getCusEmail(),
-                customer.getCusName(),
-                customer.getCusAddress()
-        );
-    }
-
-    @Override
     public String generateId() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT CONCAT('C', LPAD(IFNULL(MAX(SUBSTRING(cus_id, 2)), 0) + 1, 4, '0')) FROM customer");
 
@@ -40,32 +29,55 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public List<Customer> getAll() throws SQLException, ClassNotFoundException {
+    public boolean save(CustomerDto dto) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("INSERT INTO customer VALUES(?,?,?,?,?)",
+                dto.getCusId(),
+                dto.getCusContactNum(),
+                dto.getCusEmail(),
+                dto.getCusName(),
+                dto.getCusAddress()
+        );
+    }
+
+    @Override
+    public List<CustomerDto> getAll() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM customer");
 
-        List<Customer> list = new ArrayList<>();
+        List<CustomerDto> list = new ArrayList<>();
 
         while (rst.next()){
 
-            Customer customer = new Customer(
+            CustomerDto customerDto = new CustomerDto(
                     rst.getString(1),
                     rst.getString(2),
                     rst.getString(3),
                     rst.getString(4),
                     rst.getString(5)
             );
-            list.add(customer);
+            list.add(customerDto);
         }
 
         return list;
     }
 
     @Override
-    public Customer search(String id) throws SQLException, ClassNotFoundException {
+    public boolean update(CustomerDto dto) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("UPDATE customer SET contact_num = ?, email = ?, cus_name = ?, customer_address = ? WHERE cus_id = ?",
+                dto.getCusContactNum(),
+                dto.getCusEmail(),
+                dto.getCusName(),
+                dto.getCusAddress(),
+                dto.getCusId()
+        );
+    }
+
+
+    @Override
+    public CustomerDto search(String id) throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM customer WHERE cus_id = ?" , (id + ""));
 
         if(rst.next()){
-            return new Customer(
+            return new CustomerDto(
                 rst.getString(1),
                 rst.getString(2),
                 rst.getString(3),
@@ -74,17 +86,6 @@ public class CustomerDAOImpl implements CustomerDAO {
             );
         }
         return null;
-    }
-
-    @Override
-    public boolean update(Customer customer) throws SQLException, ClassNotFoundException {
-        return SQLUtil.execute("UPDATE customer SET contact_num = ?, email = ?, cus_name = ?, customer_address = ? WHERE cus_id = ?",
-                customer.getCusContactNum(),
-                customer.getCusEmail(),
-                customer.getCusName(),
-                customer.getCusAddress(),
-                customer.getCusId()
-        );
     }
 
     @Override

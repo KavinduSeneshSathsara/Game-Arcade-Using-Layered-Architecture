@@ -22,6 +22,8 @@ import lk.ijse.GameCafe.db.DbConnection;
 import lk.ijse.GameCafe.dto.BookingDto;
 import lk.ijse.GameCafe.dto.CustomerDto;
 import lk.ijse.GameCafe.dto.PaymentDto;
+import lk.ijse.GameCafe.entity.Booking;
+import lk.ijse.GameCafe.entity.Customer;
 import lk.ijse.GameCafe.view.tdm.tm.PaymentTm;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -167,12 +169,12 @@ public class PaymentsFormController implements Initializable {
     @FXML
     void cmbBookingIdOnAction(ActionEvent event) throws ClassNotFoundException {
         try {
-            BookingDto bookingData = bookingBO.getBookingData((String) cmbBookingId.getValue());
+            Booking bookingData = bookingBO.getBookingData((String) cmbBookingId.getValue());
 
             if ( bookingData != null && bookingData.getStatus().equals( "Not Paid" ) ) {
 
-                CustomerDto dto = customerBO.searchCustomer( bookingData.getCus_id() );
-                lblCustomerName.setText( dto.getCusName() );
+                CustomerDto customer = customerBO.searchCustomer( bookingData.getCus_id() );
+                lblCustomerName.setText( customer.getCusName() );
                 lblAmount.setText( String.valueOf( bookingData.getTotal() ) );
                 btnPay.setDisable( false );
             } else {
@@ -252,9 +254,9 @@ public class PaymentsFormController implements Initializable {
     private void loadAllBookingId() throws ClassNotFoundException {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<BookingDto> dtos = bookingBO.getAllBookings();
-            for (BookingDto dto : dtos) {
-                obList.add(dto.getBookingId());
+            List<BookingDto> bookings = bookingBO.getAllBookings();
+            for (BookingDto booking : bookings) {
+                obList.add(booking.getBookingId());
             }
             cmbBookingId.setItems(obList);
         } catch (SQLException e) {
