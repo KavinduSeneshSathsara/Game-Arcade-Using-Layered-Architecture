@@ -103,41 +103,69 @@ public class PaymentsFormController implements Initializable {
         colAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
     }
 
+//    @FXML
+//    void btnPayOnAction(ActionEvent event) throws SQLException, MessagingException, ClassNotFoundException {
+//        Connection connection = null;
+//        try {
+//            connection = DbConnection.getInstance( ).getConnection( );
+//            connection.setAutoCommit( false );
+//
+//            boolean savePayment = paymentBO.savePayment( new PaymentDto(
+//                    lblPaymentID.getText( ),
+//                    cmbBookingId.getValue(),
+//                    Date.valueOf( LocalDate.now( ) ),
+//                    Time.valueOf( LocalTime.now( ) ),
+//                    Double.parseDouble(lblAmount.getText( ) )
+//            ) );
+//
+//            if ( savePayment ) {
+//                boolean isUpdated = bookingBO.updateStatus(cmbBookingId.getValue( ));
+//                loadAllPayments();
+//
+//                if ( isUpdated ) {
+//                    connection.commit();
+//                    new Alert( Alert.AlertType.CONFIRMATION, "Payment Saved" ).show();
+//                    setPaymentId();
+//                    loadAllPayments();
+//                } else {
+//                    new Alert( Alert.AlertType.ERROR , "Something Went Wrong" ).show();
+//                }
+//            } else {
+//                new Alert( Alert.AlertType.ERROR , "Something Went Wrong" ).show();
+//            }
+//        } catch ( SQLException e ) {
+//            e.printStackTrace();
+//            connection.rollback();
+//        } finally {
+//            connection.setAutoCommit( true );
+//        }
+//    }
+
     @FXML
     void btnPayOnAction(ActionEvent event) throws SQLException, MessagingException, ClassNotFoundException {
-        Connection connection = null;
-        try {
-            connection = DbConnection.getInstance( ).getConnection( );
-            connection.setAutoCommit( false );
 
-            boolean savePayment = paymentBO.savePayment( new PaymentDto(
-                    lblPaymentID.getText( ),
-                    cmbBookingId.getValue(),
-                    Date.valueOf( LocalDate.now( ) ),
-                    Time.valueOf( LocalTime.now( ) ),
-                    Double.parseDouble(lblAmount.getText( ) )
-            ) );
+        boolean s = savePaying(
+                lblPaymentID.getText( ),
+                cmbBookingId.getValue(),
+                Date.valueOf( LocalDate.now( ) ),
+                Time.valueOf( LocalTime.now( ) ),
+                Double.parseDouble(lblAmount.getText( ) )
+        );
 
-            if ( savePayment ) {
-                boolean isUpdated = bookingBO.updateStatus(cmbBookingId.getValue( ));
-                loadAllPayments();
+        if (s){
+            new Alert(Alert.AlertType.INFORMATION, "Payment Successful").show();
+            loadAllPayments();
+            setPaymentId();
+        }else {
+            new Alert(Alert.AlertType.ERROR,"Payment Failed. Please try again.").show();
+        }
+    }
 
-                if ( isUpdated ) {
-                    connection.commit();
-                    new Alert( Alert.AlertType.CONFIRMATION, "Payment Saved" ).show();
-                    setPaymentId();
-                    loadAllPayments();
-                } else {
-                    new Alert( Alert.AlertType.ERROR , "Something Went Wrong" ).show();
-                }
-            } else {
-                new Alert( Alert.AlertType.ERROR , "Something Went Wrong" ).show();
-            }
-        } catch ( SQLException e ) {
-            e.printStackTrace();
-            connection.rollback();
-        } finally {
-            connection.setAutoCommit( true );
+    private boolean savePaying(String text, String value, Date date, Time time, double v) {
+        try{
+            return paymentBO.savePay(text, value, date, time, v);
+        }catch (Exception e){
+            throw new RuntimeException(e);
         }
     }
 

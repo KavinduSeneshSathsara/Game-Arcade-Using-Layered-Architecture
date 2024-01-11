@@ -31,7 +31,7 @@ public class BookingBOImpl implements BookingBO {
 
     @Override
     public boolean bookAndSave(Date nowDate, Time nowTime, Time startTime, Time endTime, String notPaid, double v, CustomerDto customerdto, List<BookingDetailsDto> collect) throws SQLException, ClassNotFoundException {
-        //Transaction
+
         TransactionUtil.startTransaction();
 
         boolean b = bookingDAO.save(new Booking(bookingDAO.generateId(), customerdto.getCusId(), nowDate, nowTime, startTime, endTime, "Not Paid", v));
@@ -52,6 +52,7 @@ public class BookingBOImpl implements BookingBO {
         TransactionUtil.endTransaction();
         return true;
     }
+
     @Override
     public String generateBookingId() throws SQLException, ClassNotFoundException {
         return bookingDAO.generateId();
