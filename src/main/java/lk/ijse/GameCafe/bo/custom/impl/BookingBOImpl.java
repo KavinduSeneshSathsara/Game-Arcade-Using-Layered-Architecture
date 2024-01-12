@@ -23,6 +23,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class BookingBOImpl implements BookingBO {
 
     BookingDetailDAO bookingDetailDAO = (BookingDetailDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.BOOKINGDETAIL);
@@ -32,24 +33,32 @@ public class BookingBOImpl implements BookingBO {
     @Override
     public boolean bookAndSave(Date nowDate, Time nowTime, Time startTime, Time endTime, String notPaid, double v, CustomerDto customerdto, List<BookingDetailsDto> collect) throws SQLException, ClassNotFoundException {
 
-        TransactionUtil.startTransaction();
+        try{
+            TransactionUtil.startTransaction();
 
-        boolean b = bookingDAO.save(new Booking(bookingDAO.generateId(), customerdto.getCusId(), nowDate, nowTime, startTime, endTime, "Not Paid", v));
+            boolean bookingSaved = bookingDAO.save(new Booking(bookingDAO.generateId(), customerdto.getCusId(), nowDate, nowTime, startTime, endTime, "Not Paid", v));
 
-        if (!b) {
+            if (!bookingSaved) {
+                System.err.println("Failed to save booking information.");
+
+                TransactionUtil.rollBack();
+                return false;
+            }
+
+            boolean bookingDetailSaved = bookingDetailDAO.saveDetails(collect);
+
+            if (!bookingDetailSaved) {
+                System.err.println("Failed to save booking details.");
+
+                TransactionUtil.rollBack();
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
             TransactionUtil.rollBack();
+        }finally {
             TransactionUtil.endTransaction();
-            return false;
         }
-
-        boolean b1 = bookingDetailDAO.saveDetails(collect);
-
-        if (!b1) {
-            TransactionUtil.rollBack();
-            TransactionUtil.endTransaction();
-            return false;
-        }
-        TransactionUtil.endTransaction();
         return true;
     }
 
@@ -57,24 +66,6 @@ public class BookingBOImpl implements BookingBO {
     public String generateBookingId() throws SQLException, ClassNotFoundException {
         return bookingDAO.generateId();
     }
-
-//    @Override
-//    public boolean saveBooking(BookingDto dto) throws SQLException, ClassNotFoundException {
-//        return bookingDAO.save(new Booking(
-//                dto.getBookingId(),
-//                dto.getCus_id(),
-//                dto.getBookingDate(),
-//                dto.getBookingTime(),
-//                dto.getStartTime(),
-//                dto.getEndTime(),
-//                dto.getStatus(),
-//                dto.getTotal()));
-//    }
-
-//    @Override
-//    public boolean updateStatus(String s) throws SQLException, ClassNotFoundException {
-//        return bookingDAO.updateStatus(s);
-//    }
 
     @Override
     public BookingDto getBookingData(String value) throws SQLException, ClassNotFoundException {
@@ -118,12 +109,6 @@ public class BookingBOImpl implements BookingBO {
     public String totalBookingCount() throws SQLException, ClassNotFoundException {
         return bookingDAO.totalBookingCount();
     }
-
-//    @Override
-//    public boolean saveDetails(List<BookingDetailsDto> detailList) throws SQLException, ClassNotFoundException {
-//        return bookingDetailDAO.saveDetails(detailList);
-//
-//    }
 
     @Override
     public List<BookingDto> getAllBookings(String value, Date date) throws SQLException, ClassNotFoundException {

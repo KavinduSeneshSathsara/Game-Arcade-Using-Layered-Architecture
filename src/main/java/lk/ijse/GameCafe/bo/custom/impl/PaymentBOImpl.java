@@ -1,5 +1,6 @@
 package lk.ijse.GameCafe.bo.custom.impl;
 
+import javafx.scene.control.Alert;
 import lk.ijse.GameCafe.bo.custom.PaymentBO;
 import lk.ijse.GameCafe.dao.DAOFactory;
 import lk.ijse.GameCafe.dao.custom.BookingDAO;
@@ -21,29 +22,33 @@ public class PaymentBOImpl implements PaymentBO {
 
     @Override
     public boolean savePay(String text, String value, Date date, Time time, double v) throws SQLException, ClassNotFoundException {
+        try{
+            TransactionUtil.startTransaction();
 
-        TransactionUtil.startTransaction();
+            boolean s1 = paymentDAO.save(new Payment(text, value, date, time, v));
+            if (!s1){
 
-        boolean s1 = paymentDAO.save(new Payment(text, value, date, time, v));
+                TransactionUtil.rollBack();
+                return false;
+            }
 
-        if (!s1){
+            boolean s2 = bookingDAO.updateStatus(value);
+
+            if(!s2){
+                TransactionUtil.rollBack();
+                return false;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
             TransactionUtil.rollBack();
+        }finally {
             TransactionUtil.endTransaction();
-            return false;
         }
-
-        boolean s2 = bookingDAO.updateStatus(value);
-
-        if(!s2){
-            TransactionUtil.rollBack();
-            TransactionUtil.endTransaction();
-            return false;
-        }
-        TransactionUtil.endTransaction();
         return true;
     }
 
-    @Override
+        @Override
     public boolean savePayment(PaymentDto dto) throws SQLException, ClassNotFoundException {
         return paymentDAO.save(new Payment(
                 dto.getPaymentId(),
