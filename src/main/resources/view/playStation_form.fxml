@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="pane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="662.0" prefWidth="913.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.GameCafe.controller.PlayStationFormController">
+<Pane fx:id="pane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="662.0" prefWidth="913.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.GameCafe.controller.PlayStationFormController">
     <children>
         <ImageView fitHeight="662.0" fitWidth="925.0" opacity="0.7" pickOnBounds="true" preserveRatio="true">
             <image>
@@ -41,7 +41,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </JFXButton>
-      <TextField fx:id="txtSearchBar" alignment="CENTER" layoutX="42.0" layoutY="33.0" opacity="0.64" prefHeight="30.0" prefWidth="718.0" promptText="Search Employee" style="-fx-background-color: white; -fx-background-radius: 15;">
+      <TextField fx:id="txtSearchBar" alignment="CENTER" layoutX="42.0" layoutY="33.0" opacity="0.64" prefHeight="30.0" prefWidth="718.0" promptText="Search PlayStation" style="-fx-background-color: white; -fx-background-radius: 15;">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
